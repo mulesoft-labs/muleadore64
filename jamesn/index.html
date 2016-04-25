@@ -90,6 +90,7 @@
         width: 80%; 
         float: left; 
         margin: 10px 10% 20px 10%;
+        max-width: 300px;
       }
 
       .typecolorbtn {
@@ -123,11 +124,13 @@
                           { "color": "grey3", "hex": "#BBBBBB", "poke": 15 },
                         ];
 
+       /*
        console.log("Log something");
 
        for(var i = 0; i < colorsArray.length; i++) {
          console.log(colorsArray[i]);
        }
+       */
 
 
        /*
@@ -212,8 +215,14 @@
          //var colorAttr = $(elementObj).attr('data-colorattr');
          console.log("In sendColor with value: " + newColor);
 
+         var colorType = "border";
+         if($("#backgroundbtn").hasClass("btn-primary")) {
+           colorType = "background";
+         }
+
          var data = {
-             color: newColor
+             color: newColor,
+             colortype: colorType
            };
 
          $.ajax({
@@ -370,7 +379,7 @@
     <div id="sendtweetdiv" class="parentdiv">
       <div style="width: 100%; float: left;">
         <h2 style="text-align: center; width: 85%;">Tweet @mulesoft </h2>
-        <!--<i class="fa fa-twitter" aria-hidden="true"> -->
+        <!--<i class="fa fa-twitter" aria-hidden="true">-->
       </div>      
 
       <div id="tweettextareadiv" style="width: 75%; float: left;"> 
@@ -394,28 +403,36 @@
       <div id="colorcontent" style="width: 100%; float: left;"></div>
     </div>
 
-    <div id="weatherdiv" style="width: 100%; float: left; margin-button: 15px;">
+    <div class="parentdiv">
+    <div id="weatherdiv" style="width: 100%; float: left; margin: 3px 0 15px 0;">
 
       <h2 style="float: left;">Weather</h2>
       
-      <div id="weathoffdiv" class="weatherspandiv">
-        <span id="weatherspanoff" class="weatherspan">Off</span>
-      </div>
+      <div style="padding-top: 12px;">
 
-      <div id="togglebtndiv" class="toggle-button">
-        <button></button>
-      </div>
+        <div id="weathoffdiv" class="weatherspandiv">
+          <span id="weatherspanoff" class="weatherspan">Off</span>
+        </div>
 
-      <div id="weathondiv" class="weatherspandiv">
-        <span id="weatherspanon" class="weatherspan">On</span>
+        <div id="togglebtndiv" class="toggle-button">
+          <button></button>
+        </div>
+
+        <div id="weathondiv" class="weatherspandiv">
+          <span id="weatherspanon" class="weatherspan">On</span>
+        </div>
+
       </div>
 
     </div>
+    </div>
+    
 
 
 
+    
     <div id="rebootbtndiv" style="width: 100%; float: left;">
-      <div style="margin-left: auto ; margin-right: auto; width: auto;">
+      <div style="margin-left: auto ; margin-right: auto; width: 196px;">
         <button id="rebootc64btn" type="button" class="btn btn-danger" style="font-size: 16px;">Reboot da Commodore</button>
       </div>
     </div>
