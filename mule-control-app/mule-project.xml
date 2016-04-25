@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-project xmlns="http://www.mulesoft.com/tooling/project" runtimeId="org.mule.tooling.server.3.7.3.ee" schemaVersion="5.3.0.0">
+    <name>c64-control-hub</name>
+    <description></description>
+    <muleExtension name="Anypoint MQ" qualifier="org.mule.tooling.messaging.contribution"/>
+    <muleExtension name="Twitter" qualifier="org.mule.tooling.ui.contribution.twitter.3.6.0"/>
+</mule-project>
