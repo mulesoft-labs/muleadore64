@@ -92,6 +92,10 @@
         margin: 10px 10% 20px 10%;
       }
 
+      .typecolorbtn {
+        width: 120px;
+        float: left;
+      }
 
     </style>
 
@@ -253,6 +257,58 @@
        }
 
 
+       // Function if the reboot button is clicked
+       function rebootC64(jqBtn) {
+
+         $(jqBtn).prop('disabled', true);
+
+         var data = {
+             reboot: "yes"
+         };
+
+         $.ajax({
+           type: "POST",
+           url: "./api/reboot",
+           data: data,
+           dataType: 'json',
+	   success: function(data, textStatus, jqXHR) {
+             //data - response from server
+           },
+           error: function (jqXHR, textStatus, errorThrown) {
+
+           }
+         });
+
+       }
+
+
+       // Function if the weather toggle button is clicked
+       function sendWeather(jqBtn) {
+
+         var weatherOn = "no";
+         if($(jqBtn).hasClass("toggle-button-selected")) {
+           weatherOn = "yes";
+         }
+
+         var data = {
+             weatheron: weatherOn
+         };
+
+         $.ajax({
+           type: "POST",
+           url: "./api/weather",
+           data: data,
+           dataType: 'json',
+	   success: function(data, textStatus, jqXHR) {
+             //data - response from server
+           },
+           error: function (jqXHR, textStatus, errorThrown) {
+
+           }
+         });
+
+       }
+
 
        // Sets the span to bold
        function changeWeatherSpanBold() {
@@ -269,11 +325,14 @@
        }
 
 
+
+
        $(document).ready(function() {
 
           $('.toggle-button').click( function() {
             $(this).toggleClass('toggle-button-selected'); 
             changeWeatherSpanBold();
+            sendWeather($(this));    // do an ajax call
           });
 
           changeWeatherSpanBold();
@@ -283,6 +342,19 @@
           $('#tweetsendbtndiv').click( function() {
             console.log("Have clicked the send button for a tweet");
             sendTweet();
+          });
+
+          $('#rebootc64btn').click( function() {
+            console.log("Have clicked the reboot button");
+            rebootC64($(this));
+          });
+
+
+          $(".typecolorbtn").click( function() {
+            $('.typecolorbtn').removeClass('btn-primary');
+            $('.typecolorbtn').addClass('btn-secondary');
+            $(this).removeClass('btn-secondary');
+            $(this).addClass('btn-primary');
           });
 
        });
@@ -297,8 +369,8 @@
 
     <div id="sendtweetdiv" class="parentdiv">
       <div style="width: 100%; float: left;">
-        <h2 style="text-align: center;">Tweet @mulesoft</h2>
-        <i class="fa fa-twitter" aria-hidden="true"></i>
+        <h2 style="text-align: center; width: 85%;">Tweet @mulesoft </h2>
+        <!--<i class="fa fa-twitter" aria-hidden="true"> -->
       </div>      
 
       <div id="tweettextareadiv" style="width: 75%; float: left;"> 
@@ -311,8 +383,14 @@
 
     </div>
 
-    <div style="width: 80%; float: left; margin: 10px 10% 20px 10%;">
+    <div class="parentdiv">
       <h2 style="text-align: center;">Change Color</h2>
+      <div style="width: 100%; float: left;">
+        <div id="colorbtndiv" style="width:240px; margin: 4px auto 10px auto; height: 30px;">
+          <button id="borderbtn" type="button" class="btn btn-primary typecolorbtn">Border</button>
+          <button id="backgroundbtn" type="button" class="btn btn-secondary typecolorbtn">Background</button>
+        </div>
+      </div>
       <div id="colorcontent" style="width: 100%; float: left;"></div>
     </div>
 
@@ -338,7 +416,7 @@
 
     <div id="rebootbtndiv" style="width: 100%; float: left;">
       <div style="margin-left: auto ; margin-right: auto; width: auto;">
-        <button type="button" class="btn btn-danger" style="font-size: 16px;">Reboot da Commodore</button>
+        <button id="rebootc64btn" type="button" class="btn btn-danger" style="font-size: 16px;">Reboot da Commodore</button>
       </div>
     </div>
 
