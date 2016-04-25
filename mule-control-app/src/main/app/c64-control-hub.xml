@@ -15,12 +15,32 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
         <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="2cc7b2ae1e6f47be9ed9638f489d2a13" clientSecret="80bed3adfe3b449eA866EC803C9C9A37"/>
     </anypoint-mq:config>
     <twitter:config name="Twitter__Configuration-c64" accessKey="1627285890-XfCvMumITmruODTbLfESFRnyW20knhN84SQHrel" accessSecret="6yW1QQYh4Fd6hh3vUmgAvYSmDnZTObeh6spa3YmFNY" consumerKey="v3TFFvEqkkUSMJhn91yPA" consumerSecret="sv8n88vbe9rDVwvrPTj7UhYVw9GP6TUQuDRADSIY6s" doc:name="Twitter: Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration" host="api.openweathermap.org" port="80" basePath="data/2.5/weather" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_OpenWeatherMap" host="api.openweathermap.org" port="80" doc:name="HTTP Request Configuration"/>
     <flow name="c64-control-hubFlow">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/hello" doc:name="HTTP">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/weather" doc:name="HTTP">
             <http:response-builder statusCode="200"/>
         </http:listener>
-        <set-payload value="message payload here" doc:name="Set Payload"/>
-        <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ - interactive queue"/>
+        <http:request config-ref="HTTP_Request_OpenWeatherMap" path="data/2.5/weather" method="GET" doc:name="HTTP">
+            <http:request-builder>
+                <http:query-param paramName="q" value="SanFrancisco,us"/>
+                <http:query-param paramName="appid" value="deb15d321034ef704f75416ff633b9a5"/>
+            </http:request-builder>
+        </http:request>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	type: "weather",
+	city: payload.name,
+	description: payload.weather[0].main,
+	currentTemp: payload.main.temp,
+	lowTemp: payload.main.temp_min,
+	highTemp: payload.main.temp_max
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
     </flow>
     <flow name="c64-control-hubFlow1">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/twitter" doc:name="HTTP">
@@ -28,17 +48,20 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
         </http:listener>
         <twitter:get-mentions-timeline config-ref="Twitter__Configuration-c64" count="5" doc:name="Twitter"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
-        <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:input-payload doc:sample="list_Status.dwl"/>
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
 ---
 {
-	something : payload[0]
+//	mentions: payload.items groupBy $.user.screenName pluck {
+//		user: $$,
+//		text: $.text
+	type: "tweet",
+	user: "@$(payload[0].user.screenName)",
+	text: payload[0].text
 }]]></dw:set-payload>
         </dw:transform-message>
-        <object-to-string-transformer doc:name="Object to String"/>
-        <logger message="Payload: #[payload]" level="INFO" doc:name="Logger"/>
+        <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ - interactive queue"/>
     </flow>
 </mule>
