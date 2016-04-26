@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://fb.me/react-0.14.8.js"></script>
+    <script src="https://fb.me/react-dom-0.14.8.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+    <style>
+
+      .colorclickdiv {
+        width: 22%;
+        min-height: 20px;
+        margin: 1% 1% 1% 1%;
+        border-width: 1px;
+        border-style: solid;
+        border-color: black;
+        float: left;
+      }
+
+      .toggle-button {
+        background-color: white;
+        margin: 5px 0;
+        border-radius: 20px;
+        border: 2px solid #D0D0D0;
+        height: 24px;
+        cursor: pointer;
+        width: 50px;
+        position: relative;
+        display: inline-block;
+        user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        float: left;
+       }
+
+      .toggle-button button {
+        cursor: pointer;
+        outline: 0;
+        display:block; position:
+        absolute; left: 0;
+        top: 0; border-radius: 100%;
+        width: 30px;
+        height: 30px;
+        background-color: white;
+        float: left;
+        margin: -3px 0 0 -3px;
+        border: 2px solid #D0D0D0;
+        transition: left 0.3s;
+      }
+
+      .toggle-button-selected {
+        background-color: #83B152;
+        border: 2px solid #7DA652;
+      }
+
+      .toggle-button-selected button {
+        left: 26px;
+        top: 0;
+        margin: 0;
+        border: none;
+        width: 24px;
+        height: 24px;
+        box-shadow: 0 0 4px rgba(0,0,0,0.1);
+      }
+
+      .weatherspandiv {
+        float: left;
+        margin: 4px; !important
+      }
+
+      .weatherspan {
+        float: left;
+        font-size: 16px;
+        margin: 4px; !important
+      }
+
+      .weatherspandbold {
+        font-weight: bold;
+      }
+
+      .parentdiv {
+        width: 80%;
+        float: left;
+        margin: 10px 10% 20px 10%;
+        max-width: 300px;
+      }
+
+      .typecolorbtn {
+        width: 120px;
+        float: left;
+      }
+
+    </style>
+
+    <script type="text/babel">
+
+      "use strict";
+
+      var baseUrl = window.location.protocol + '//' + window.location.host
+
+      // colors taken from https://www.c64-wiki.com/index.php/Color
+      var colorsArray = [
+                          { "color": "black", "hex": "#000000", "poke": 0 },
+                          { "color": "white", "hex": "#FFFFFF", "poke": 1 },
+                          { "color": "red", "hex": "#880000", "poke": 2 },
+                          { "color": "cyan", "hex": "#AAFFEE", "poke": 3 },
+                          { "color": "violet", "hex": "#CC44CC", "poke": 4 },
+                          { "color": "green", "hex": "#00CC55", "poke": 5 },
+                          { "color": "blue", "hex": "#0000AA", "poke": 6 },
+                          { "color": "yellow", "hex": "#EEEE77", "poke": 7 },
+                          { "color": "orange", "hex": "#DD8855", "poke": 8 },
+                          { "color": "brown", "hex": "#664400", "poke": 9 },
+                          { "color": "lightred", "hex": "#FF7777", "poke": 10 },
+                          { "color": "grey1", "hex": "#333333", "poke": 11 },
+                          { "color": "grey2", "hex": "#777777", "poke": 12 },
+                          { "color": "lightgreen", "hex": "#AAFF66", "poke": 13 },
+                          { "color": "lightblue", "hex": "#0088FF", "poke": 14 },
+                          { "color": "grey3", "hex": "#BBBBBB", "poke": 15 },
+                        ];
+
+       /*
+       console.log("Log something");
+
+       for(var i = 0; i < colorsArray.length; i++) {
+         console.log(colorsArray[i]);
+       }
+       */
+
+
+       /*
+       var CommentList = React.createClass({
+         render: function() {
+           var colorNodes = this.props.data.map(function(colormap) {
+             return (
+               <Comment color={colormap.color} key={colormap.poke}>
+                 {colormap.color}
+               </Comment>
+             );
+           });
+           return (
+             <div className="commentList">
+               {colorNodes}
+             </div>
+           );
+         }
+       });
+               <label className="chatclientlabel" onClick={ this.clickHandler }>{this.props.firstname} {this.props.lastname}</label>
+       */
+
+       // tutorial4.js
+       var Comment = React.createClass({
+
+         clickHandler: function clickHandler(e) {
+           //var attribute = event.target.attributes.getNamedItem('data-colorattr');
+           //console.log("Clicked a label, need to load up the messages dialog: " + attribute);
+           console.log("Clicked a label, need to load up the messages dialog: " + this.props.name);
+           sendColor(this.props.name);
+         },
+
+         render: function() {
+           //var divStyle = { color: this.props.hex };
+           var divStyle = { backgroundColor: this.props.hex };
+
+           return (
+             <div className="colorclickdiv" onClick={ this.clickHandler } style={divStyle} data-colorattr={this.props.name} >
+             </div>
+           );
+         }
+       });
+
+
+       var CommentList = React.createClass({
+         render: function() {
+           var commentNodes = this.props.data.map(function(comment) {
+             return (
+               <Comment name={comment.color} key={comment.poke} hex={comment.hex}>
+                 {comment.color}
+               </Comment>
+             );
+           });
+           return (
+             <div className="commentList">
+               {commentNodes}
+             </div>
+           );
+         }
+       });
+
+
+       // tutorial9.js
+       var CommentBox = React.createClass({
+         render: function() {
+           return (
+             <div className="commentBox">
+               <CommentList data={this.props.data} />
+             </div>
+           );
+         }
+       });
+
+       ReactDOM.render(
+         <CommentBox data={colorsArray} />,
+         document.getElementById('colorcontent')
+       );
+
+
+       function sendColor(newColor) {
+
+         //var colorAttr = $(elementObj).attr('data-colorattr');
+         console.log("In sendColor with value: " + newColor);
+
+         var colorType = "border";
+         if($("#backgroundbtn").hasClass("btn-primary")) {
+           colorType = "background";
+         }
+
+         var data = {
+             color: newColor,
+             colortype: colorType
+           };
+
+         $.ajax({
+           type: "POST",
+           url: baseUrl + "/api/color",
+           data: data,
+           dataType: 'json',
+	   success: function(data, textStatus, jqXHR) {
+             //data - response from server
+           },
+           error: function (jqXHR, textStatus, errorThrown) {
+
+           }
+         });
+
+       }
+
+
+       function sendTweet() {
+
+         var tweetContent = $("#tweettextarea").val();
+         console.log("In sendTweet with value: " + tweetContent);
+
+         var data = { tweet: tweetContent };
+
+         $.ajax({
+           type: "POST",
+           url: baseUrl + "/api/tweet",
+           data: data,
+           dataType: 'json',
+	   success: function(data, textStatus, jqXHR) {
+             //data - response from server
+           },
+           error: function (jqXHR, textStatus, errorThrown) {
+
+           }
+         });
+
+       }
+
+
+       // Function if the reboot button is clicked
+       function rebootC64(jqBtn) {
+
+         $(jqBtn).prop('disabled', true);
+
+         var data = {
+             reboot: "yes"
+         };
+
+         $.ajax({
+           type: "PUT",
+           url: baseUrl + "/api/reboot",
+           data: data,
+           dataType: 'json',
+	   success: function(data, textStatus, jqXHR) {
+             //data - response from server
+             $(jqBtn).prop('disabled', false);
+           },
+           error: function (jqXHR, textStatus, errorThrown) {
+             $(jqBtn).prop('disabled', false);
+           }
+         });
+
+       }
+
+
+       // Function if the weather toggle button is clicked
+       function sendWeather(jqBtn) {
+
+         var weatherOn = "no";
+         if($(jqBtn).hasClass("toggle-button-selected")) {
+           weatherOn = "yes";
+         }
+
+         var data = {
+             weatheron: weatherOn
+         };
+
+         $.ajax({
+           type: "POST",
+           url: baseUrl + "/api/weather",
+           data: data,
+           dataType: 'json',
+	   success: function(data, textStatus, jqXHR) {
+             //data - response from server
+           },
+           error: function (jqXHR, textStatus, errorThrown) {
+
+           }
+         });
+
+       }
+
+
+       // Sets the span to bold
+       function changeWeatherSpanBold() {
+
+          if($("#togglebtndiv").hasClass("toggle-button-selected")) {
+            $("#weatherspanoff").removeClass("weatherspandbold");
+            $("#weatherspanon").addClass("weatherspandbold");
+          }
+          else {
+            $("#weatherspanon").removeClass("weatherspandbold");
+            $("#weatherspanoff").addClass("weatherspandbold");
+          }
+
+       }
+
+
+
+
+       $(document).ready(function() {
+
+          $('.toggle-button').click( function() {
+            $(this).toggleClass('toggle-button-selected');
+            changeWeatherSpanBold();
+            sendWeather($(this));    // do an ajax call
+          });
+
+          changeWeatherSpanBold();
+
+
+
+          $('#tweetsendbtndiv').click( function() {
+            console.log("Have clicked the send button for a tweet");
+            sendTweet();
+          });
+
+          $('#rebootc64btn').click( function() {
+            console.log("Have clicked the reboot button");
+            rebootC64($(this));
+          });
+
+
+          $(".typecolorbtn").click( function() {
+            $('.typecolorbtn').removeClass('btn-primary');
+            $('.typecolorbtn').addClass('btn-secondary');
+            $(this).removeClass('btn-secondary');
+            $(this).addClass('btn-primary');
+          });
+
+       });
+
+
+
+    </script>
+
+  </head>
+
+  <body>
+
+    <div id="sendtweetdiv" class="parentdiv">
+      <div style="width: 100%; float: left;">
+        <h2 style="text-align: center; width: 85%;">Tweet @mulesoft </h2>
+        <!--<i class="fa fa-twitter" aria-hidden="true">-->
+      </div>
+
+      <div id="tweettextareadiv" style="width: 75%; float: left;">
+        <textarea id="tweettextarea" rows="4" cols="50" style="resize: none;"></textarea>
+      </div>
+
+      <div id="tweetsendbtndiv" style="width: 25%; float: left;">
+        <button type="button" class="btn btn-success">Send</button>
+      </div>
+
+    </div>
+
+    <div class="parentdiv">
+      <h2 style="text-align: center;">Change Color</h2>
+      <div style="width: 100%; float: left;">
+        <div id="colorbtndiv" style="width:240px; margin: 4px auto 10px auto; height: 30px;">
+          <button id="borderbtn" type="button" class="btn btn-primary typecolorbtn">Border</button>
+          <button id="backgroundbtn" type="button" class="btn btn-secondary typecolorbtn">Background</button>
+        </div>
+      </div>
+      <div id="colorcontent" style="width: 100%; float: left;"></div>
+    </div>
+
+    <div class="parentdiv">
+    <div id="weatherdiv" style="width: 100%; float: left; margin: 3px 0 15px 0;">
+
+      <h2 style="float: left;">Weather</h2>
+
+      <div style="padding-top: 12px;">
+
+        <div id="weathoffdiv" class="weatherspandiv">
+          <span id="weatherspanoff" class="weatherspan">Off</span>
+        </div>
+
+        <div id="togglebtndiv" class="toggle-button">
+          <button></button>
+        </div>
+
+        <div id="weathondiv" class="weatherspandiv">
+          <span id="weatherspanon" class="weatherspan">On</span>
+        </div>
+
+      </div>
+
+    </div>
+    </div>
+
+
+
+
+
+    <div id="rebootbtndiv" style="width: 100%; float: left;">
+      <div style="margin-left: auto ; margin-right: auto; width: 196px;">
+        <button id="rebootc64btn" type="button" class="btn btn-danger" style="font-size: 16px;">Reboot da Commodore</button>
+      </div>
+    </div>
+
+  </body>
+
+</html>

@@ -20,7 +20,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     <http:request-config name="HTTP_Request_OpenWeatherMap" host="api.openweathermap.org" port="80" doc:name="HTTP Request Configuration"/>
     <flow name="control-static-content">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP"/>
-        <http:static-resource-handler resourceBase="/Users/stevenbutt/Documents/workspace/mulesoft/hackathons/c64-hackathon/mule-control-app/static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
+        <http:static-resource-handler resourceBase="${app.home}/static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
     <flow name="weather">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/weather" doc:name="HTTP" allowedMethods="POST">
