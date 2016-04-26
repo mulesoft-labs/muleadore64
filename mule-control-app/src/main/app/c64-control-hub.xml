@@ -20,7 +20,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     <http:request-config name="HTTP_Request_OpenWeatherMap" host="api.openweathermap.org" port="80" doc:name="HTTP Request Configuration"/>
     <flow name="control-static-content">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP"/>
-        <http:static-resource-handler resourceBase="${app.home}/static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
+        <http:static-resource-handler resourceBase="static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
     <flow name="weather">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/weather" doc:name="HTTP" allowedMethods="POST">
@@ -38,6 +38,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 ---
 {
 	type: "weather",
+	id: message.id,
 	city: payload.name,
 	description: payload.weather[0].main,
 	currentTemp: payload.main.temp,
@@ -60,10 +61,8 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 %output application/json
 ---
 {
-//	mentions: payload.items groupBy $.user.screenName pluck {
-//		user: $$,
-//		text: $.text
 	type: "tweet",
+	id: message.id,
 	user: "@$(payload.user.screenName)",
 	text: payload.text
 }]]></dw:set-payload>
@@ -79,7 +78,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     </flow>
     <flow name="reboot">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/reboot" allowedMethods="PUT" doc:name="HTTP"/>
-        <set-payload value="{&quot;type&quot;:&quot;reboot&quot;}" mimeType="application/json" doc:name="Set Payload"/>
+        <set-payload value="{&quot;type&quot;:&quot;reboot&quot;, &quot;id&quot;:#[message.id]}" mimeType="application/json" doc:name="Set Payload"/>
         <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
     </flow>
@@ -93,8 +92,12 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 ---
 {
 	type: "color",
+	id: message.id,
 	entity: payload.colortype,
-	value: payload.color
+	value: payload.color,
+	hex: payload.hex,
+	poke: payload.poke,
+	c64command: ("2"+payload.poke) when payload.colortype == "background" otherwise ("3" + payload.poke)	
 }]]></dw:set-payload>
         </dw:transform-message>
         <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>

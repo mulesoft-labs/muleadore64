@@ -161,8 +161,8 @@
          clickHandler: function clickHandler(e) {
            //var attribute = event.target.attributes.getNamedItem('data-colorattr');
            //console.log("Clicked a label, need to load up the messages dialog: " + attribute);
-           console.log("Clicked a label, need to load up the messages dialog: " + this.props.name);
-           sendColor(this.props.name);
+           console.log("Clicked a label, need to load up the messages dialog: " + JSON.stringify(this.props));
+           sendColor(this.props.name, this.props.hex, this.props.poke);
          },
 
          render: function() {
@@ -181,7 +181,7 @@
          render: function() {
            var commentNodes = this.props.data.map(function(comment) {
              return (
-               <Comment name={comment.color} key={comment.poke} hex={comment.hex}>
+               <Comment name={comment.color} key={comment.poke} hex={comment.hex} poke={comment.poke}>
                  {comment.color}
                </Comment>
              );
@@ -212,7 +212,7 @@
        );
 
 
-       function sendColor(newColor) {
+       function sendColor(newColor, hex, poke) {
 
          //var colorAttr = $(elementObj).attr('data-colorattr');
          console.log("In sendColor with value: " + newColor);
@@ -223,16 +223,18 @@
          }
 
          var data = {
-             color: newColor,
-             colortype: colorType
-           };
+           colortype: colorType,
+           color: newColor,
+           hex: hex,
+           poke: poke
+         };
 
          $.ajax({
            type: "POST",
            url: baseUrl + "/api/color",
            data: data,
            dataType: 'json',
-	   success: function(data, textStatus, jqXHR) {
+           success: function(data, textStatus, jqXHR) {
              //data - response from server
            },
            error: function (jqXHR, textStatus, errorThrown) {
