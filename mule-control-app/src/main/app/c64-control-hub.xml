@@ -15,7 +15,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     <anypoint-mq:config name="Anypoint_MQ_Configuration-c64-control-hub" doc:name="Anypoint MQ Configuration">
         <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="2cc7b2ae1e6f47be9ed9638f489d2a13" clientSecret="80bed3adfe3b449eA866EC803C9C9A37"/>
     </anypoint-mq:config>
-    <twitter:config name="Twitter__Configuration-c64" accessKey="1627285890-XfCvMumITmruODTbLfESFRnyW20knhN84SQHrel" accessSecret="6yW1QQYh4Fd6hh3vUmgAvYSmDnZTObeh6spa3YmFNY" consumerKey="v3TFFvEqkkUSMJhn91yPA" consumerSecret="sv8n88vbe9rDVwvrPTj7UhYVw9GP6TUQuDRADSIY6s" doc:name="Twitter: Configuration"/>
+    <twitter:config name="Twitter__Configuration-c64" accessKey="724851736842756100-kyTVBaK1jNNXaIEbAwUED5o7IR1nVQT" accessSecret="CJvzXQFJJV5IS4orXghM6PiliL0NK36gnrBUxWw77KGwu" consumerKey="84ZvnEtJdEzY2yeLLaWfCAsSC" consumerSecret="fgN4GTb6rVQPp1AaHQ4EJH4E75CJgAk1TxENPGVVsNgRgQUPZZ" doc:name="Twitter: Configuration"/>
     <http:request-config name="HTTP_Request_Configuration" host="api.openweathermap.org" port="80" basePath="data/2.5/weather" doc:name="HTTP Request Configuration"/>
     <http:request-config name="HTTP_Request_OpenWeatherMap" host="api.openweathermap.org" port="80" doc:name="HTTP Request Configuration"/>
     <flow name="control-static-content">
@@ -48,8 +48,12 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
     </flow>
     <flow name="stream-recieve-tweets">
+        <twitter:filtered-stream config-ref="Twitter__Configuration-c64" doc:name="Twitter (Streaming)">
+            <twitter:keywords>
+                <twitter:keyword>@muleadore64</twitter:keyword>
+            </twitter:keywords>
+        </twitter:filtered-stream>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
-        <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:input-payload doc:sample="list_Status.dwl"/>
             <dw:set-payload><![CDATA[%dw 1.0
@@ -64,12 +68,14 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 	text: payload.text
 }]]></dw:set-payload>
         </dw:transform-message>
+        <logger message="New Tweet Detected: #[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ - interactive queue"/>
     </flow>
     <flow name="send-tweet">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/tweet" allowedMethods="POST" doc:name="HTTP"/>
-        <twitter:update-status config-ref="Twitter__Configuration-c64"  doc:name="Twitter" status="@stevenbutt24 created with api bot #[message.id]"/>
-        <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>
+        <set-payload value="@muleadore64: #[message.payload.tweet]" mimeType="text/plain" doc:name="Set Payload"/>
+        <twitter:update-status config-ref="Twitter__Configuration-c64"  doc:name="Twitter" status="#[message.payload]"/>
+        <logger message="Tweet status sent: #[message.payload]" level="INFO" doc:name="Logger"/>
     </flow>
     <flow name="reboot">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/reboot" allowedMethods="PUT" doc:name="HTTP"/>
@@ -77,7 +83,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
     </flow>
-    <flow name="c64-control-hubFlow">
+    <flow name="color">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/color" allowedMethods="POST" doc:name="HTTP"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>
