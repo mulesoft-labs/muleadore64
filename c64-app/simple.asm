@@ -1,0 +1,1 @@
+0 rem !to "build/hello_world_asm.prg"
