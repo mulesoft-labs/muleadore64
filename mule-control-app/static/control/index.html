@@ -255,11 +255,13 @@
            url: baseUrl + "/api/tweet",
            data: data,
            dataType: 'json',
-	   success: function(data, textStatus, jqXHR) {
-             //data - response from server
+	          success: function(data, textStatus, jqXHR) {
+              console.log('succeeded tweeting')
+              $("#tweettextarea").val('')
            },
            error: function (jqXHR, textStatus, errorThrown) {
-
+             console.log('failed tweeting');
+             $("#tweettextarea").val('')
            }
          });
 
@@ -379,7 +381,7 @@
 
     <div id="sendtweetdiv" class="parentdiv">
       <div style="width: 100%; float: left;">
-        <h2 style="text-align: center; width: 85%;">Tweet @mulesoft </h2>
+        <h2 style="text-align: center; width: 85%;">Tweet @muleadore64 here or on your own</h2>
         <!--<i class="fa fa-twitter" aria-hidden="true">-->
       </div>
 
