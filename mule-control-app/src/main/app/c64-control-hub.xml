@@ -20,7 +20,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     <http:request-config name="HTTP_Request_OpenWeatherMap" host="api.openweathermap.org" port="80" doc:name="HTTP Request Configuration"/>
     <flow name="control-static-content">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP"/>
-        <http:static-resource-handler resourceBase="static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
+        <http:static-resource-handler resourceBase="${app.home}/static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
     <flow name="weather">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/weather" doc:name="HTTP" allowedMethods="POST">
@@ -84,23 +84,26 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     </flow>
     <flow name="color">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/color" allowedMethods="POST" doc:name="HTTP"/>
+        <set-variable variableName="messageId" value="#[message.id]" doc:name="Variable"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
-        <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>
+        <logger message="Incoming color command: #[message.payload]" level="INFO" doc:name="Logger"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
 ---
 {
 	type: "color",
-	id: message.id,
+	id: flowVars.messageId,
 	entity: payload.colortype,
 	value: payload.color,
 	hex: payload.hex,
 	poke: payload.poke,
-	c64command: ("2"+payload.poke) when payload.colortype == "background" otherwise ("3" + payload.poke)	
+	c64command: ("2" ++ payload.poke as :string) when payload.colortype == "background" otherwise ("3" ++ payload.poke as :string)	
 }]]></dw:set-payload>
         </dw:transform-message>
-        <logger message="#[message.payload]" level="INFO" doc:name="Logger"/>
+        <object-to-string-transformer doc:name="Object to String"/>
+        <logger message="Queueing transformed color command: #[message.payload]" level="INFO" doc:name="Logger"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
     </flow>
 </mule>
