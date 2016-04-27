@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<<<<<<< Updated upstream
-<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:twitter="http://www.mulesoft.org/schema/mule/twitter" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" 
+<mule
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:twitter="http://www.mulesoft.org/schema/mule/twitter"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-=======
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:twitter="http://www.mulesoft.org/schema/mule/twitter" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+	xmlns:core="http://www.mulesoft.org/schema/mule/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-current.xsd
+	http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
->>>>>>> Stashed changes
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/twitter http://www.mulesoft.org/schema/mule/twitter/current/mule-twitter.xsd
 http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
-<<<<<<< Updated upstream
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
-=======
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
->>>>>>> Stashed changes
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <anypoint-mq:config name="Anypoint_MQ_Configuration-c64-control-hub" doc:name="Anypoint MQ Configuration">
         <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="2cc7b2ae1e6f47be9ed9638f489d2a13" clientSecret="80bed3adfe3b449eA866EC803C9C9A37"/>
@@ -32,8 +35,7 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
         <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP"/>
         <http:static-resource-handler resourceBase="${app.home}/static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
-<<<<<<< Updated upstream
-    <flow name="c64-control-hubFlow">
+    <flow name="weather-poll">
         <poll doc:name="Poll">
             <fixed-frequency-scheduler frequency="10" timeUnit="MINUTES"/>
             <flow-ref name="weather-api" doc:name="weather-api"/>
@@ -46,15 +48,10 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
     </flow>
     <flow name="weather-produce-msg">
         <vm:inbound-endpoint exchange-pattern="one-way" path="weather" doc:name="VM"/>
-=======
-    <flow name="weather">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/weather" allowedMethods="POST" doc:name="HTTP">
-            <http:response-builder/>
-        </http:listener>
->>>>>>> Stashed changes
-        <http:request config-ref="HTTP_Request_OpenWeatherMap" path="data/2.5/weather" method="GET" doc:name="HTTP">
+        <http:request config-ref="HTTP_Request_OpenWeatherMap" path="data/2.5/group" method="GET" doc:name="HTTP">
             <http:request-builder>
-                <http:query-param paramName="q" value="SanFrancisco,us"/>
+                <http:query-param paramName="id" value="5391959,3435910"/>
+                <http:query-param paramName="units" value="imperial"/>
                 <http:query-param paramName="appid" value="deb15d321034ef704f75416ff633b9a5"/>
             </http:request-builder>
         </http:request>
@@ -62,16 +59,13 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
         <dw:transform-message doc:name="Transform Message">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
+%var weatherString = () -> "SF: " ++ payload.list[0].main.temp as :string {format: "#"} ++ "F $(payload.list[0].weather[0].main), BA: " ++ (((payload.list[1].main.temp as :number) -32)*5/9) as :string {format: "#"} ++ "C $(payload.list[1].weather[0].main)"
 ---
 {
 	type: "weather",
 	id: flowVars.messageId,
-	city: payload.name,
-	description: payload.weather[0].main,
-	currentTemp: payload.main.temp,
-	lowTemp: payload.main.temp_min,
-	highTemp: payload.main.temp_max,
-	c64command: "7"
+	value: weatherString(),
+	c64command: "7" ++ weatherString()
 }]]></dw:set-payload>
         </dw:transform-message>
         <object-to-string-transformer doc:name="Object to String"/>
@@ -134,7 +128,7 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 	value: payload.color,
 	hex: payload.hex,
 	poke: payload.poke,
-	c64command: ("3" ++ payload.poke as :string) when payload.colortype == "background" otherwise ("2" ++ payload.poke as :string)	
+	c64command: ("3" ++ payload.poke as :string) when payload.colortype == "background" otherwise ("2" ++ payload.poke as :string)
 }]]></dw:set-payload>
         </dw:transform-message>
         <object-to-string-transformer doc:name="Object to String"/>
