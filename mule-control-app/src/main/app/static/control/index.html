@@ -270,19 +270,14 @@
        }
 
 
-       // Function if the reboot button is clicked
-       function rebootC64(jqBtn) {
+       // Function if the welcome button is clicked
+       function welcome(jqBtn) {
 
          $(jqBtn).prop('disabled', true);
 
-         var data = {
-             reboot: "yes"
-         };
-
          $.ajax({
            type: "PUT",
-           url: baseUrl + "/api/reboot",
-           data: data,
+           url: baseUrl + "/api/welcome",
            dataType: 'json',
 	   success: function(data, textStatus, jqXHR) {
              //data - response from server
@@ -295,6 +290,23 @@
 
        }
 
+       // Function if the beep button is clicked
+       function beep(jqBtn) {
+         $(jqBtn).prop('disabled', true);
+         $.ajax({
+           type: "PUT",
+           url: baseUrl + "/api/beep",
+           dataType: 'json',
+	   success: function(data, textStatus, jqXHR) {
+             //data - response from server
+             $(jqBtn).prop('disabled', false);
+           },
+           error: function (jqXHR, textStatus, errorThrown) {
+             $(jqBtn).prop('disabled', false);
+           }
+         });
+
+       }
 
        // Function if the weather toggle button is clicked
        function sendWeather(jqBtn) {
@@ -358,11 +370,15 @@
             sendTweet();
           });
 
-          $('#rebootc64btn').click( function() {
-            console.log("Have clicked the reboot button");
-            rebootC64($(this));
+          $('#welcomebtn').click( function() {
+            console.log("Have clicked the welcome button");
+            welcome($(this));
           });
 
+          $('#beepbtn').click( function() {
+            console.log("Have clicked the beep button");
+            beep($(this));
+          });
 
           $(".typecolorbtn").click( function() {
             $('.typecolorbtn').removeClass('btn-primary');
@@ -432,13 +448,15 @@
     </div>
     </div>
 
+    <div id="welcomebtndiv" style="width: 100%; float: left;">
+      <div style="margin-top: 10px; margin-bottom: 10px; margin-left: auto ; margin-right: auto; width: 196px;">
+        <button id="welcomebtn" type="button" class="btn btn-danger" style="font-size: 16px;">Show welcome screen</button>
+      </div>
+    </div>
 
-
-
-
-    <div id="rebootbtndiv" style="width: 100%; float: left;">
-      <div style="margin-left: auto ; margin-right: auto; width: 196px;">
-        <button id="rebootc64btn" type="button" class="btn btn-danger" style="font-size: 16px;">Reboot da Commodore</button>
+    <div id="beepdiv" style="width: 100%; float: left;">
+      <div style="margin-top: 10px; margin-bottom: 10px; margin-left: auto ; margin-right: auto; width: 196px;">
+        <button id="beepbtn" type="button" class="btn btn-danger" style="font-size: 16px;">Beep</button>
       </div>
     </div>
 
