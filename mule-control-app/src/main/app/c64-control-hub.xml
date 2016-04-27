@@ -13,9 +13,8 @@
 	xmlns:spring="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:core="http://www.mulesoft.org/schema/mule/core"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-	http://www.springframework.org/schema/beans/spring-beans-current.xsd
-	http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/twitter http://www.mulesoft.org/schema/mule/twitter/current/mule-twitter.xsd
@@ -91,7 +90,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 	id: flowVars.messageId,
 	user: "@$(payload.user.screenName)",
 	text: payload.text,
-	c64command: "1@$(payload.user.screenName), at " ++ payload.createdAt as :datetime ++ "\x0d\x1c$(payload.text)"
+	c64command: "1$(payload.text)\n   - @$(payload.user.screenName), at " ++ payload.createdAt as :datetime {format: "HH:mm"}
 }]]></dw:set-payload>
         </dw:transform-message>
         <object-to-string-transformer doc:name="Object to String"/>
