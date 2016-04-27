@@ -17,22 +17,39 @@ def finishLine():
 
 if __name__ == "__main__":
 
-  r=png.Reader(filename='./Mooshy-logo.png')
+  #filePrefix = 'Tight-logo'
+  filePrefix = 'tight-clean-logo'
+
+  r=png.Reader(filename='./' + filePrefix + '.png')
   imageTuple = r.read()
   print(imageTuple)
   l = list(imageTuple[2])
   #print(l[100])
 
-  outFile = open("./Mooshy-logo.txt", "a")
+  outFile = open("./" + filePrefix + ".txt", "a")
 
   colorCount = {}
   for lineArray in l:
+    print(lineArray)
+    counter = 0
+    #lineString = ""
     lineString = "data "
-    for pixel in lineArray:
-      if pixel == 0:
+    pixelPos = 0
+    while pixelPos < len(lineArray):
+    #for pixel in lineArray:
+      ele1 = lineArray[pixelPos]
+      ele2 = lineArray[pixelPos + 1]
+      ele3 = lineArray[pixelPos + 2]
+      ele4 = lineArray[pixelPos + 3]
+      pixel = ele1 + ele2 + ele3 + ele4
+      pixelPos = pixelPos + 4
+      counter = counter + 1
+      if pixel == 765:
         lineString = lineString + "32"
+        #lineString = lineString + "  "
       else:
         lineString = lineString + "35"
+        #lineString = lineString + "1"
       #print(type(pixel))
       if pixel in colorCount:
         colorCount[pixel] = colorCount[pixel] + 1
@@ -41,10 +58,13 @@ if __name__ == "__main__":
 
       if len(lineString) > 70:
         finishLine()
-      else:
+      elif pixelPos < len(lineArray):
         lineString = lineString + ","
 
-    outFile.write(lineString + "13\n")
+    #outFile.write(lineString + "13\n")
+    outFile.write(lineString + "\n")
+    print("pixels: %d" %counter)
+    #outFile.write(lineString + "\n")
 
 
   print(colorCount)

@@ -1,0 +1,31 @@
+[ {
+  "type": "color",
+  "id": "bdc80d30-0c20-11e6-90f6-0a8151c76db1",
+  "entity": "background",
+  "value": "blue",
+  "hex": "#0000AA",
+  "poke": "6",
+  "c64command": "26"
+},
+{
+  "type": "weather",
+  "id": "c9dab820-0c20-11e6-90f6-0a8151c76db1",
+  "city": "San Francisco",
+  "description": "Mist",
+  "currentTemp": 287.76,
+  "lowTemp": 283.15,
+  "highTemp": 294.15,
+  "c64command": "7"
+},
+{"type":"beep", "id":"ce2fb300-0c23-11e6-90f6-0a8151c76db1", "c64command": "5"},
+{
+  "type": "tweet",
+  "id": "bc3e5330-0c10-11e6-90f6-0a8151c76db1",
+  "user": "@muleadore64",
+  "text": "@muleadore64: asdlfkajsdfk jasdkf jas",
+  "c64command": "1@muleadore64, at +48289-12-27T13:50:00Z\\x0d\\x1c@muleadore64: asdlfkajsdfk jasdkf jas"
+}
+]
+
+
+

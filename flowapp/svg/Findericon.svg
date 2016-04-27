@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="195px" height="250px" viewBox="0 0 195 250" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
+    <title>Finder icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="10" y="215" width="175" height="35"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="175" height="35" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-451.000000, -258.000000)">
+            <g id="Finder-icon" transform="translate(451.000000, 258.000000)">
+                <polygon id="white-back" fill="#FFFFFF" points="16.7615519 5.40512048 179.338919 5.40512048 192.374183 18.4403841 192.374183 205.611827 180.986517 216.999493 180.986517 244.42516 14.0595481 244.42516 14.0595481 216.511107 4.68312643 207.134686 4.68312643 16.2048379"></polygon>
+                <path d="M167.5,32.7631579 L167.5,132.390229" id="Line" stroke="#000000" stroke-width="5" stroke-linecap="square"></path>
+                <path d="M17.5,5 L177.812195,5" id="Line" stroke="#000000" stroke-width="10" stroke-linecap="square"></path>
+                <path d="M12.6515152,215 L182.679601,215" id="Line" stroke="#000000" stroke-width="10" stroke-linecap="square"></path>
+                <path d="M5,17.3780488 L5,207.621951" id="Line" stroke="#000000" stroke-width="10" stroke-linecap="square"></path>
+                <path d="M190,17.3780488 L190,207.621951" id="Line" stroke="#000000" stroke-width="10" stroke-linecap="square"></path>
+                <polyline id="nose" stroke="#000000" stroke-width="5" points="97.4824368 55.8028777 97.4824368 91.8226314 85.1470363 91.8226314"></polyline>
+                <g id="mouth" transform="translate(65.000000, 100.000000)">
+                    <path d="M16.7857143,12.5 L38.2142857,12.5" id="Line" stroke="#000000" stroke-width="10" stroke-linecap="square"></path>
+                    <rect id="Rectangle-610" fill="#000000" x="0" y="0" width="10" height="10"></rect>
+                    <rect id="Rectangle-611" fill="#000000" x="45" y="0" width="10" height="10"></rect>
+                </g>
+                <use id="base" stroke="#000000" mask="url(#mask-2)" stroke-width="20" stroke-linecap="round" xlink:href="#path-1"></use>
+                <path d="M117.777778,180 L162.222222,180" id="Line" stroke="#000000" stroke-width="10" stroke-linecap="square"></path>
+                <path d="M20.8333333,185 L34.1666667,185" id="Line" stroke="#000000" stroke-width="10" stroke-linecap="square"></path>
+                <path d="M32.5,27.5 L162.5,27.5" id="Line" stroke="#000000" stroke-width="5" stroke-linecap="square"></path>
+                <path d="M32.5,137.5 L162.5,137.5" id="Line" stroke="#000000" stroke-width="5" stroke-linecap="square"></path>
+                <path d="M27.5,32.7631579 L27.5,132.390229" id="Line" stroke="#000000" stroke-width="5" stroke-linecap="square"></path>
+                <g id="eye" transform="translate(58.000000, 58.000000)" fill="#000000">
+                    <rect id="Rectangle-606" x="6" y="0" width="6" height="7"></rect>
+                    <rect id="Rectangle-606" x="0" y="7" width="12" height="6"></rect>
+                </g>
+                <g id="eye" transform="translate(120.000000, 58.000000)" fill="#000000">
+                    <rect id="Rectangle-606" x="6" y="0" width="6" height="7"></rect>
+                    <rect id="Rectangle-606" x="0" y="7" width="12" height="6"></rect>
+                </g>
+                <rect id="Rectangle-612" fill="#000000" x="179" y="5" width="10" height="10"></rect>
+                <rect id="Rectangle-612" fill="#000000" x="6" y="5" width="10" height="10"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

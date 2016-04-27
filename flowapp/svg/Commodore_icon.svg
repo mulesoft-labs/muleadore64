@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="248px" height="279px" viewBox="0 0 248 279" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="211" width="248" height="66"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="248" height="66" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <rect id="path-3" x="0" y="256" width="248" height="17"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="248" height="17" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <rect id="path-5" x="73" y="52" width="96" height="64"></rect>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-16" y="-16" width="128" height="96">
+            <rect x="57" y="36" width="128" height="96" fill="white"></rect>
+            <use xlink:href="#path-5" fill="black"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-50.000000, -387.000000)">
+            <g id="Group" transform="translate(50.000000, 389.000000)">
+                <g id="mac-icon" transform="translate(21.000000, 0.000000)" stroke="#000000">
+                    <g id="body" stroke-width="12" stroke-linecap="square">
+                        <path d="M14,4.69090909 L186.047607,4.69090909" id="Line"></path>
+                        <path d="M14,167.309091 L186.047607,167.309091" id="Line"></path>
+                        <path d="M194,7.81818182 L194,164.181818" id="Line"></path>
+                        <path d="M6,7.81818182 L6,164.181818" id="Line"></path>
+                    </g>
+                    <polyline id="bottom" stroke-width="12" points="16 169 16 199.517175 185.389098 199.517175 185.389098 171.830345"></polyline>
+                    <g id="screen" transform="translate(28.000000, 28.000000)" stroke-width="8" stroke-linecap="square">
+                        <path d="M10,4 L134.579292,4" id="Line"></path>
+                        <path d="M10,108 L134.579292,108" id="Line"></path>
+                        <path d="M140,10 L140,102.086914" id="Line"></path>
+                        <path d="M4,10 L4,102.086914" id="Line"></path>
+                    </g>
+                </g>
+                <use id="Rectangle-81" stroke="#000000" mask="url(#mask-2)" stroke-width="24" xlink:href="#path-1"></use>
+                <use id="Rectangle-81-Copy" stroke="#000000" mask="url(#mask-4)" stroke-width="24" xlink:href="#path-3"></use>
+                <rect id="Rectangle-4" fill="#000000" x="64" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-7" fill="#000000" x="64" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy" fill="#000000" x="204" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-9" fill="#000000" x="204" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4" fill="#000000" x="126" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-11" fill="#000000" x="126" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-2" fill="#000000" x="111" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-12" fill="#000000" x="111" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4" fill="#000000" x="33" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-13" fill="#000000" x="33" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-4" fill="#000000" x="48" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-14" fill="#000000" x="48" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-3" fill="#000000" x="189" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-15" fill="#000000" x="189" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4" fill="#000000" x="95" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-16" fill="#000000" x="95" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4" fill="#000000" x="17" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-17" fill="#000000" x="17" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-5" fill="#000000" x="158" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-18" fill="#000000" x="158" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4" fill="#000000" x="79" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-19" fill="#000000" x="79" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-6" fill="#000000" x="220" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-20" fill="#000000" x="220" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-10" fill="#000000" x="173" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-21" fill="#000000" x="173" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-8" fill="#000000" x="142" y="225" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-22" fill="#000000" x="142" y="235" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-36" fill="#000000" x="64" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-35" fill="#000000" x="204" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-34" fill="#000000" x="126" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-33" fill="#000000" x="111" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-32" fill="#000000" x="33" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-31" fill="#000000" x="48" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-30" fill="#000000" x="189" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-29" fill="#000000" x="95" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-28" fill="#000000" x="17" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-27" fill="#000000" x="158" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-26" fill="#000000" x="79" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-25" fill="#000000" x="220" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-24" fill="#000000" x="173" y="245" width="11.0058594" height="8"></rect>
+                <rect id="Rectangle-4-Copy-23" fill="#000000" x="142" y="245" width="11.0058594" height="8"></rect>
+                <g id="Rectangle-108">
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-5"></use>
+                    <use stroke="#000000" mask="url(#mask-6)" stroke-width="32" xlink:href="#path-5"></use>
+                </g>
+                <path d="M79,62.5 L120.512047,62.5" id="Path-55" stroke="#000000" stroke-width="3"></path>
+                <path d="M79,72.5 L153.5,72.5" id="Path-55-Copy" stroke="#000000" stroke-width="3"></path>
+                <path d="M79,82.5 L143.5,82.5" id="Path-55-Copy-2" stroke="#000000" stroke-width="3"></path>
+                <path d="M79,92.5 L98.9060287,92.5" id="Path-55-Copy-3" stroke="#000000" stroke-width="3"></path>
+                <path d="M79,102.5 L148.5,102.5" id="Path-55-Copy-4" stroke="#000000" stroke-width="3"></path>
+            </g>
+        </g>
+    </g>
+</svg>
