@@ -7,7 +7,7 @@ public class Reader implements Callable {
 	@Override
 	public Object onCall(MuleEventContext eventContext) throws Exception {
 		eventContext.getMessage().setPayload(Memory.json);
-		return eventContext;
+		return eventContext.getMessage();
 	}
 
 }

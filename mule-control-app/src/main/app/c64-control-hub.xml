@@ -71,6 +71,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Weather command sent: #[message.payload]" level="INFO" doc:name="Logger"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
+        <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
     <flow name="stream-recieve-tweets">
         <twitter:filtered-stream config-ref="Twitter__Configuration-c64" doc:name="Twitter (Streaming)">
@@ -97,6 +98,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="New Tweet Detected.  Sending message: #[message.payload]" level="INFO" doc:name="Logger"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ - interactive queue"/>
+        <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
     <flow name="send-tweet">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/tweet" allowedMethods="POST" doc:name="HTTP"/>
@@ -110,6 +112,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="Welcome command sent: #[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
+        <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
     <flow name="color">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/color" allowedMethods="POST" doc:name="HTTP"/>
@@ -134,6 +137,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Queueing transformed color command: #[message.payload]" level="INFO" doc:name="Logger"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
+        <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
     <flow name="beep">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/beep" doc:name="HTTP"/>
@@ -141,10 +145,10 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="Sending beep command: #[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
+        <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
     <flow name="last-message-sent">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/lastMsg" doc:name="HTTP"/>
         <component class="com.mulesoft.c64.Reader" doc:name="Java"/>
-        <json:object-to-json-transformer doc:name="Object to JSON"/>
     </flow>
 </mule>
