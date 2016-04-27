@@ -25,7 +25,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     </flow>
     <flow name="weather">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="30" timeUnit="SECONDS"/>
+            <fixed-frequency-scheduler frequency="10" timeUnit="MINUTES"/>
             <http:request config-ref="HTTP_Request_OpenWeatherMap" path="data/2.5/weather" method="GET" doc:name="HTTP">
                 <http:request-builder>
                     <http:query-param paramName="q" value="SanFrancisco,us"/>
@@ -123,5 +123,10 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="Sending beep command: #[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
+    </flow>
+    <flow name="last-message-sent">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/lastMsg" doc:name="HTTP"/>
+        <component class="com.mulesoft.c64.Reader" doc:name="Java"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
     </flow>
 </mule>
