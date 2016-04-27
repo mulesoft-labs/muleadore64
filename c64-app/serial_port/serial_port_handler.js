@@ -2,51 +2,44 @@
 'use strict';
 var child_process = require('child_process');
 var Promise = require('bluebird');
+var amqService = require('./amqService.js')
 
 
 process.stdin.setEncoding('ascii');
 
 var delay = 100;
-write(' ');
-
-Promise.delay(1)
-  .then(() => {
-    write('4Z');
-    return Promise.delay(4000);
-  })
-  .then(() => {
-    write(formatTweet({
-      user: '@jeff',
-      text: 'This is super cool #c64\x0danother line'
-    }));
-    return Promise.delay(10000);
-  })
-  .then(() => {
-    write('1' + convertToPetscii('another tweet........................................................z'));
-    return Promise.delay(4000);
-  })
-  .then(() => {
-    write('29Z');
-    return Promise.delay(4000);
-  })
-  .then(() => {
-    write('37Z');
-    return Promise.delay(4000);
-  })
-  
+write(' ');  // seems to be needed to 'wake up' the connection
 
 
-function formatTweet(tweet) {
-  return '1' + convertToPetscii(tweet.user + ', at ' + '12:39:07') + '\x0d\x1c' + convertToPetscii(tweet.text) + 'Z';
+function timeout () {
+  setTimeout(function () {
+    amqService.getMessage()
+      .then(function (msg) {
+        if (msg) {
+          write(msg.c64command);
+        }
+      });
+    timeout();
+  }, 1000)
 }
 
+function heartbeat() {
+  setTimeout(function () {
+    write('6');
+    heartbeat();
+  }, 1000)
+}
+
+timeout();
+heartbeat();
+
+
 function write(str) {
+  var str = str[0] + convertToPetscii(str.substring(1));
+  str += 'Z';  // add end marker
+  process.stderr.write("writing " + str + ":\n");
   process.stdout.write(str);
   return;
-  // var arr = str.split('');
-  // for (var i = 0; i < arr.length; i++) {
-  //   process.stdout.write(String(str[i]));
-  // }
 }
 
 function convertToPetscii(input) {
@@ -59,7 +52,16 @@ function convertToPetscii(input) {
   return String(output);
 }
 
+process.stdin.on('readable', function() {
+  //this is required
+});
 
-// process.stdin.on('end', function () {
-
-// });
+process.stdin.on('end', function () {
+  process.exit(0);
+});
+process.stdin.on('close', function () {
+  process.exit(0);
+});
+process.stdout.on('error', function () {
+  process.stderr.write('error');
+});
