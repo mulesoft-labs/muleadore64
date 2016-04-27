@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:twitter="http://www.mulesoft.org/schema/mule/twitter" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:twitter="http://www.mulesoft.org/schema/mule/twitter" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
@@ -10,7 +10,8 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/twitter http://www.mulesoft.org/schema/mule/twitter/current/mule-twitter.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
-http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <anypoint-mq:config name="Anypoint_MQ_Configuration-c64-control-hub" doc:name="Anypoint MQ Configuration">
         <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="2cc7b2ae1e6f47be9ed9638f489d2a13" clientSecret="80bed3adfe3b449eA866EC803C9C9A37"/>
@@ -23,16 +24,25 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP"/>
         <http:static-resource-handler resourceBase="${app.home}/static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
-    <flow name="weather">
+    <flow name="c64-control-hubFlow">
         <poll doc:name="Poll">
             <fixed-frequency-scheduler frequency="10" timeUnit="MINUTES"/>
-            <http:request config-ref="HTTP_Request_OpenWeatherMap" path="data/2.5/weather" method="GET" doc:name="HTTP">
-                <http:request-builder>
-                    <http:query-param paramName="q" value="SanFrancisco,us"/>
-                    <http:query-param paramName="appid" value="deb15d321034ef704f75416ff633b9a5"/>
-                </http:request-builder>
-            </http:request>
+            <flow-ref name="weather-api" doc:name="weather-api"/>
         </poll>
+        <logger message="Invoked weather flow from poll" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="weather-api">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/weather" doc:name="HTTP"/>
+        <vm:outbound-endpoint exchange-pattern="one-way" path="weather" doc:name="VM"/>
+    </flow>
+    <flow name="weather-produce-msg">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="weather" doc:name="VM"/>
+        <http:request config-ref="HTTP_Request_OpenWeatherMap" path="data/2.5/weather" method="GET" doc:name="HTTP">
+            <http:request-builder>
+                <http:query-param paramName="q" value="SanFrancisco,us"/>
+                <http:query-param paramName="appid" value="deb15d321034ef704f75416ff633b9a5"/>
+            </http:request-builder>
+        </http:request>
         <set-variable variableName="messageId" value="#[message.id]" doc:name="Variable"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:set-payload><![CDATA[%dw 1.0
@@ -109,7 +119,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 	value: payload.color,
 	hex: payload.hex,
 	poke: payload.poke,
-	c64command: ("2" ++ payload.poke as :string) when payload.colortype == "background" otherwise ("3" ++ payload.poke as :string)	
+	c64command: ("3" ++ payload.poke as :string) when payload.colortype == "background" otherwise ("2" ++ payload.poke as :string)	
 }]]></dw:set-payload>
         </dw:transform-message>
         <object-to-string-transformer doc:name="Object to String"/>
