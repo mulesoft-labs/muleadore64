@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://fb.me/react-0.14.8.js"></script>
+    <script src="https://fb.me/react-dom-0.14.8.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+    <style>
+
+      .elementdiv {
+        float: left;
+        width: auto;
+        max-width: 100px;
+        height: 100px;
+        margin: auto;
+      }
+
+      .outerelementdiv {
+        float: left;
+        width: 120px;
+        height: 100px;
+      }
+
+
+      i.arrowhighlight {
+        color: #0090d4; 
+        font-size: 6em;
+        margin: auto; 
+      }
+
+      .arrowanimatediv:hover {
+        color: #0090d4;
+        font-size: 5em;
+        margin: auto;
+      }
+
+      .arrowanimatediv {
+        display:inline-block;
+        color: #666666;
+        font-size: 4em;
+        margin: auto;
+        text-align: center;
+        vertical-align: bottom;
+      }
+
+      .customsvg {
+        stroke: blue;
+        fill: blue;
+      }
+
+      .twittericon {
+        color: #3333cc;
+      }
+
+    </style>
+
+    <script>
+
+    </script>
+
+
+    <script type="text/babel">
+
+      "use strict";
+
+      var testMessages = [ {
+        "type": "color",
+        "id": "bdc80d30-0c20-11e6-90f6-0a8151c76db1",
+        "entity": "background",
+        "value": "blue",
+        "hex": "#0000AA",
+        "poke": "6",
+        "c64command": "26"
+      },
+      {
+        "type": "weather",
+        "id": "c9dab820-0c20-11e6-90f6-0a8151c76db1",
+        "city": "San Francisco",
+        "description": "Mist",
+        "currentTemp": 287.76,
+        "lowTemp": 283.15,
+        "highTemp": 294.15,
+        "c64command": "7"
+      },
+      {"type":"beep", "id":"ce2fb300-0c23-11e6-90f6-0a8151c76db1", "c64command": "5"},
+      {
+        "type": "tweet",
+        "id": "bc3e5330-0c10-11e6-90f6-0a8151c76db1",
+        "user": "@muleadore64",
+        "text": "@muleadore64: asdlfkajsdfk jasdkf jas",
+        "c64command": "1@muleadore64, at +48289-12-27T13:50:00Z\\x0d\\x1c@muleadore64: asdlfkajsdfk jasdkf jas"
+      } ];
+
+       /*
+       console.log("Log something");
+
+       for(var i = 0; i < colorsArray.length; i++) {
+         console.log(colorsArray[i]);
+       }
+       */
+
+
+       /*
+       var CommentList = React.createClass({
+         render: function() {
+           var colorNodes = this.props.data.map(function(colormap) {
+             return (
+               <Comment color={colormap.color} key={colormap.poke}>
+                 {colormap.color}
+               </Comment>
+             );
+           });
+           return (
+             <div className="commentList">
+               {colorNodes}
+             </div>
+           );
+         }
+       });
+               <label className="chatclientlabel" onClick={ this.clickHandler }>{this.props.firstname} {this.props.lastname}</label>
+       */
+
+       /*
+       // tutorial4.js
+       var Comment = React.createClass({
+
+         clickHandler: function clickHandler(e) {
+           //var attribute = event.target.attributes.getNamedItem('data-colorattr');
+           //console.log("Clicked a label, need to load up the messages dialog: " + attribute);
+           console.log("Clicked a label, need to load up the messages dialog: " + this.props.name);
+           sendColor(this.props.name);
+         },
+
+         render: function() {
+           //var divStyle = { color: this.props.hex };
+           var divStyle = { backgroundColor: this.props.hex };
+
+           return (
+             <div className="colorclickdiv" onClick={ this.clickHandler } style={divStyle} data-colorattr={this.props.name} >
+             </div>
+           );
+         }
+       });
+
+
+       var CommentList = React.createClass({
+         render: function() {
+           var commentNodes = this.props.data.map(function(comment) {
+             return (
+               <Comment name={comment.color} key={comment.poke} hex={comment.hex}>
+                 {comment.color}
+               </Comment>
+             );
+           });
+           return (
+             <div className="commentList">
+               {commentNodes}
+             </div>
+           );
+         }
+       });
+
+       
+       // tutorial9.js
+       var CommentBox = React.createClass({
+         render: function() {
+           return (
+             <div className="commentBox">
+               <CommentList data={this.props.data} />
+             </div>
+           );
+         }
+       });
+
+       ReactDOM.render(
+         <CommentBox data={colorsArray} />,
+         document.getElementById('colorcontent')
+       );
+       */
+
+       function highlightArrow(arrowName) {
+         console.log("Add class");
+         $("#" + arrowName).addClass("arrowhighlight");
+         setTimeout( function() { $("#" + arrowName).removeClass("arrowhighlight"); }, 1000);
+       }
+
+
+       function beepTrigger(messageJson) {
+         highlightArrow("phonearrow");
+         var divInfo = "<div>Have received a beep event: " + messageJson + "</div>";
+         //$("#scrollmsgdiv").prepend(divInfo);
+       }
+
+
+       function colorTrigger(messageJson) {
+         highlightArrow("phonearrow");
+       }
+
+
+       function tweetTrigger(messageJson) {
+         if("user" in messageJson && messageJson.user == "@muleadore64") {
+           highlightArrow("phonearrow");
+         }
+         else {
+           highlightArrow("twitterarrow");
+         }
+     
+       }
+
+
+       function weatherTrigger(messageJson) {
+
+       }
+
+
+       function processMessage(messageJson) {
+         if("type" in messageJson) {
+           switch(messageJson.type) {
+             case "color":
+               colorTrigger(messageJson);
+               break;
+             case "weather":
+               weatherTrigger(messageJson);
+               break;
+             case "tweet":
+               tweetTrigger(messageJson);
+               break;
+             case "beep":
+               beepTrigger(messageJson);
+               break;
+             default:
+               console.log("Unrecognized type: " + messageJson.type);
+           }
+         }  
+       }
+
+
+
+       function pollObjectStore() {
+
+         $.ajax({
+           type: "GET",
+           url: "/api/lastMsg",
+           dataType: 'json',
+	   success: function(data, textStatus, jqXHR) {
+
+           },
+           error: function (jqXHR, textStatus, errorThrown) {
+
+           }
+         });
+
+       }
+
+
+       console.log("Above document ready");
+
+       $( document ).ready(function() {
+
+         var counter = 0;
+
+         console.log("in document ready");
+         var arrowName = "arrowconsume";
+         // arrowconsumediv
+         setInterval( function() { 
+          console.log("Add class");
+          $("#" + arrowName).addClass("arrowhighlight");
+          setTimeout( function() { $("#" + arrowName).removeClass("arrowhighlight"); }, 1000);
+          beepTrigger(counter);
+          counter++;
+         }, 3000);
+
+
+         setInterval( function() {
+           pollObjectStore();
+         }, 800);
+
+       });
+
+
+    </script>
+
+  </head>
+
+  <body>
+
+    <div style="max-width: 75%; margin: 40px 5% 40px 5%; float: left;">
+    
+      <div id="toprowdiv" style="width: 80%; margin: 10px auto 40px auto; float: left;">
+  
+        <div class="outerelementdiv">
+          <div id="c64div" class="elementdiv">
+            <img style="fill: red;" src="svg/Commodore_icon.svg">
+          </div>
+        </div>
+  
+  
+        <div class="outerelementdiv">
+          <div id="macdiv" class="elementdiv">
+            <img src="svg/Findericon.svg" class="svg">
+          </div>
+        </div>
+  
+  
+        <div class="outerelementdiv">
+          <div id="arrowconsumediv" class="elementdiv">
+            <i id="arrowconsume" class="fa fa-long-arrow-left fa-4x arrowanimatediv" aria-hidden="true"></i> 
+          </div>
+        </div>
+  
+  
+        <div class="outerelementdiv">
+          <div id="mqdiv" class="elementdiv" class="svg">
+            <img class="customsvg" src="svg/AMQicon.svg">
+          </div>
+        </div>
+  
+  
+        <div class="outerelementdiv">
+          <div id="arrowpublishdiv" class="elementdiv">
+            <i class="fa fa-long-arrow-left fa-4x arrowanimatediv" aria-hidden="true"></i>
+          </div>
+        </div>
+  
+  
+        <div class="outerelementdiv">
+          <div id="mulediv" class="elementdiv" class="svg">
+  
+          </div>
+        </div>
+  
+  
+  
+        <div class="outerelementdiv">
+          <div id="arrowphonediv" class="elementdiv">
+            <i id="phonearrow" class="fa fa-long-arrow-left fa-4x arrowanimatediv" aria-hidden="true"></i> 
+          </div>
+        </div>
+  
+        <div class="outerelementdiv">
+          <div id="phonediv" class="elementdiv">
+            <i class="fa fa-mobile fa-4x" aria-hidden="true"></i>
+          </div>
+        </div>
+  
+      </div>
+  
+  
+      <div id="secondrowdiv" style="width: 92%; margin: 10px auto 10px auto; float: left;">
+  
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+  
+        <div class="outerelementdiv">
+          <div id="arrowtweetdiv" class="elementdiv">
+            <i id="twitterarrow" class="fa fa-long-arrow-up fa-4x arrowanimatediv" aria-hidden="true"></i>
+          </div>
+        </div>
+  
+      </div>
+  
+      
+      <div id="thirdrowdiv" style="width: 80%; margin: 10px auto 10px auto; float: left;">
+  
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+        <div class="outerelementdiv"><div id="arrowtweetdiv" class="elementdiv">&nbsp;</div></div>
+  
+        <div class="outerelementdiv">
+          <div id="twitterdiv" class="elementdiv">
+            <img style="width: 100px; height: 100px;" class"svg twittericon" src="svg/twittericonhover.svg">
+          </div>
+        </div>
+  
+      </div>
+
+    </div>
+
+
+
+    <!--
+    <div id="scrollmsgdiv" style="width: 19%; margin-right: 5%; height: 600px; float: left; border: 1px solid rgba(100, 100, 100, 1); overflow: hidden; margin-top: 20px;">
+      &nbsp;
+    </div>
+    -->
+
+
+  </body>
+
+</html>
