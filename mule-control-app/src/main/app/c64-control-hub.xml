@@ -34,6 +34,10 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP"/>
         <http:static-resource-handler resourceBase="${app.home}/static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
+    <flow name="c64-control-hubFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/flow/*" doc:name="HTTP"/>
+        <http:static-resource-handler resourceBase="${app.home}/static/flow" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
+    </flow>
     <flow name="weather-poll">
         <poll doc:name="Poll">
             <fixed-frequency-scheduler frequency="10" timeUnit="MINUTES"/>
