@@ -54,7 +54,6 @@ function getMessage () {
   return request(opts)
     .then(function (msg) {
       if (msg) {
-
         opts.method= 'DELETE';
         opts.qs = {};
         opts.body = [
@@ -75,7 +74,7 @@ function getMessage () {
     .catch(function (err) {
       console.error('Problem getting a message:', err.message)
       if (err.statusCode === 401) {
-        getAuthToken()
+        return getAuthToken()
       }
     })
 }

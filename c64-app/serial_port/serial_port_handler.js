@@ -3,6 +3,7 @@
 var child_process = require('child_process');
 var Promise = require('bluebird');
 var amqService = require('./amqService.js')
+var request = require('request-promise')
 
 
 process.stdin.setEncoding('ascii');
@@ -27,23 +28,37 @@ function heartbeat() {
   setTimeout(function () {
     write('6');
     heartbeat();
-  }, 1000)
+  }, 2000)
 }
 
-timeout();
-heartbeat();
+function weather() {
+  setTimeout(function () {
+    request.get({
+      url: 'http://muleadore64.cloudhub.io/api/weather'
+    });
+    weather();
+  }, 20000)
+}
+
+// wait 10 seconds before firing stuff
+setTimeout(function () {
+    heartbeat();
+    timeout();
+    weather();
+  }, 20000);
+
 
 
 function write(str) {
   var str = str[0] + convertToPetscii(str.substring(1));
-  str += 'Z';  // add end marker
+  str += '~';  // add end marker
   process.stderr.write("writing " + str + ":\n");
   process.stdout.write(str);
   return;
 }
 
 function convertToPetscii(input) {
-  input = input.replace(/\x0d/g, "@@@");
+  input = input.replace(/\n/g, "@@@");
   var output = child_process.execFileSync('/usr/local/bin/petcat', ['-nh', '-text'], {
     input: input
   });
