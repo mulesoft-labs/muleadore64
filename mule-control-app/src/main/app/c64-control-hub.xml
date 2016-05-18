@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule
+<mule xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata"
 	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
 	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
 	xmlns:json="http://www.mulesoft.org/schema/mule/json"
@@ -119,7 +119,11 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
     <flow name="color">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/color" allowedMethods="POST" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/color" allowedMethods="POST" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Content-Type" value="text/html; charset=UTF-8"/>
+            </http:response-builder>
+        </http:listener>
         <set-variable variableName="messageId" value="#[message.id]" doc:name="Variable"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="Incoming color command: #[message.payload]" level="INFO" doc:name="Logger"/>
@@ -141,10 +145,14 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Queueing transformed color command: #[message.payload]" level="INFO" doc:name="Logger"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
-        <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
+        <component class="com.mulesoft.c64.Writer" metadata:id="05b2a005-acd1-42db-8651-71017ef891f9" doc:name="Java"/>
     </flow>
     <flow name="beep">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/beep" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/beep" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Content-Type" value="text/html; charset=UTF-8"/>
+            </http:response-builder>
+        </http:listener>
         <set-payload value="{&quot;type&quot;:&quot;beep&quot;, &quot;id&quot;:&quot;#[message.id]&quot;, &quot;c64command&quot;: &quot;5&quot;}" doc:name="Set Payload"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="Sending beep command: #[message.payload]" level="INFO" doc:name="Logger"/>

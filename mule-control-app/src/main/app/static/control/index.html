@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bootstrap 101 Template</title>
+    <title>Muleadore64</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -11,8 +11,139 @@
     <script src="https://fb.me/react-0.14.8.js"></script>
     <script src="https://fb.me/react-dom-0.14.8.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <style>
+
+      .Icon--tweet:before {
+        content: "\f029";
+      }
+
+      .tweet-btn .Icon--tweet {
+        left: -2px;
+        top: -5px;
+      }
+
+      .Icon:after, .Icon:before {
+        display: block;
+        font-family: "rosettaicons";
+        font-weight: normal;
+        font-style: normal;
+        text-align: center;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .Icon:after, .Icon:before {
+        display: block;
+        font-family: "rosettaicons";
+        font-weight: normal;
+        font-style: normal;
+        text-align: center;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .tweet-btn .Icon {
+        font-size: 19px;
+        height: 19px;
+        position: relative;
+        vertical-align: middle;
+        width: 17px;
+      }
+
+      .btn .Icon {
+        background: transparent;
+      }
+
+      .Icon {
+        background: transparent;
+        display: inline-block;
+        font-style: normal;
+        vertical-align: baseline;
+        position: relative;
+      }
+
+      .tweet-btn.btn.disabled, .tweet-btn.btn.disabled:hover, .tweet-btn.btn[disabled], .tweet-btn.btn[aria-disabled=true] {
+        background: #0084B4;
+      }
+
+      .tweet-btn:hover, .tweet-btn:active, .tweet-btn.active {
+        background-color: #0084B4;
+      }
+
+      .tweet-btn, .tweet-btn:focus {
+        background-color: #0084B4;
+        background: rgba(0,132,180,.8);
+        color: #fff;
+        font-size: 19px;
+      }
+
+      .button-text {
+        color: #fff;
+        display: block;
+        padding: 9px 16px 8px 17px;
+        text-align: center;
+        font-size: 19px;
+      }
+
+      .primary-btn, .following.first-hover .follow-btn:hover, .following .follow-btn, .following .follow-button.cancel-hover-style:hover, .following .follow-button, .notifying .device-follow-button, .button-group-item .content.selected {
+        color: #fff;
+        background-color: #1da1f2;
+        background-image: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.05));
+        -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00000000, endColorstr=#0C000000)";
+        border: 1px solid #3b88c3;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
+      }
+
+      .mulesoft-header {
+          height: 30px;
+          background-color: #252627;
+          display: -ms-flexbox;
+          display: flex;
+          position: relative;
+      }
+
+
+      .mulesoft-header ul.mulesoft-header-panel {
+          height: 30px;
+          display: inline-block;
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+      }
+
+      .mulesoft-header .mulesoft-header-panel.left, .mulesoft-header .mulesoft-header-panel.right {
+          -ms-flex: none;
+          flex: none;
+      }
+
+      .mulesoft-header ul.mulesoft-header-panel > li {
+          height: 30px;
+          line-height: 28px;
+          display: inline-block;
+          float: left;
+          padding: 0 16px 0 16px;
+      }
+
+      .mulesoft-header li, .mulesoft-header a {
+          cursor: pointer;
+      }
+
+      .mulesoft-header ul.mulesoft-header-panel > li.mulesoft-logo a {
+          width: 18px;
+          background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAxNCAxMy45MzciIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDE0IDEzLjkzNyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI%2BCgk8cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNNi45OTksMTMuOTM3QzMuMTQsMTMuOTM3LDAsMTAuODExLDAsNi45NjlDMCwzLjEyNiwzLjE0LDAsNi45OTksMEMxMC44NiwwLDE0LDMuMTI2LDE0LDYuOTY5CgkJQzE0LDEwLjgxMSwxMC44NiwxMy45MzcsNi45OTksMTMuOTM3eiBNNi45OTksMC40OTdjLTMuNTg1LDAtNi41MDIsMi45MDMtNi41MDIsNi40NzJjMCwzLjU2OCwyLjkxNyw2LjQ3MSw2LjUwMiw2LjQ3MQoJCWMzLjU4NiwwLDYuNTAzLTIuOTAzLDYuNTAzLTYuNDcxQzEzLjUwMywzLjQsMTAuNTg2LDAuNDk3LDYuOTk5LDAuNDk3eiIvPgoJPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTUuMTU3LDEwLjA3MkM0LjExLDkuNTc3LDMuMzgsOC40NjksMy4zOCw3LjE3OWMwLTAuNjc5LDAuMjAzLTEuMzA5LDAuNTQ4LTEuODI0bDIuMjg2LDMuNDA2aDEuMzgxCgkJbDIuMjg2LTMuNDA2YzAuMzQ1LDAuNTE2LDAuNTQ4LDEuMTQ1LDAuNTQ4LDEuODI0YzAsMS4yMDItMC42MzQsMi4yNDgtMS41NjgsMi43ODRMOS4zLDExLjY0OQoJCWMxLjY3Ni0wLjg2NCwyLjgyMi0yLjYxMSwyLjgyMi00LjYyNmMwLTEuOTAzLTEuMDIzLTMuNTY3LTIuNTQ4LTQuNDc0TDYuOTIsNi42NDZMNC4yOTEsMi41MzRDMi43NTEsMy40MzgsMS43MTcsNS4xMSwxLjcxNyw3LjAyMwoJCWMwLDIuMDg4LDEuMjMsMy44ODgsMy4wMDUsNC43MTZMNS4xNTcsMTAuMDcyeiIvPgo8L3N2Zz4K");
+          background-repeat: no-repeat;
+          background-position: center;
+      }
+
+      .mulesoft-header ul.mulesoft-header-panel > li > a {
+          height: 100%;
+          display: inline-table;
+          color: #ffffff;
+          outline: 0;
+          text-decoration: none;
+      }
+
 
       .colorclickdiv {
         width: 22%;
@@ -105,6 +236,8 @@
       "use strict";
 
       var baseUrl = window.location.protocol + '//' + window.location.host
+
+      var $toastlast;
 
       // colors taken from https://www.c64-wiki.com/index.php/Color
       var colorsArray = [
@@ -233,37 +366,59 @@
            type: "POST",
            url: baseUrl + "/api/color",
            data: data,
-           dataType: 'json',
+           //dataType: 'text/html',
            success: function(data, textStatus, jqXHR) {
              //data - response from server
+              toastr.options.hideDuration = 0;
+              toastr.clear(getLastToast());
+              toastr.options.hideDuration = 1000;
+              var $toast = toastr.success('Colour change has been sent!')
            },
            error: function (jqXHR, textStatus, errorThrown) {
-
+              toastr.options.hideDuration = 0;
+              toastr.clear(getLastToast());
+              toastr.options.hideDuration = 1000;
+              var $toast = toastr.error('Unable to set colour')
+              console.log(errorThrown);
            }
          });
 
        }
 
+       function getLastToast(){
+         return $toastlast;
+       }
 
-       function sendTweet() {
+       function sendTweet(jqBtn) {
 
          var tweetContent = $("#tweettextarea").val();
          console.log("In sendTweet with value: " + tweetContent);
 
          var data = { tweet: tweetContent };
 
+         $(jqBtn).prop('disabled', true);
          $.ajax({
            type: "POST",
            url: baseUrl + "/api/tweet",
            data: data,
-           dataType: 'json',
-	          success: function(data, textStatus, jqXHR) {
+           //dataType: 'json',
+	   success: function(data, textStatus, jqXHR) {
               console.log('succeeded tweeting')
+             $(jqBtn).prop('disabled', false);
               $("#tweettextarea").val('')
+              toastr.options.hideDuration = 0;
+              toastr.clear(getLastToast());
+              toastr.options.hideDuration = 1000;
+              var $toast = toastr.success('Tweet has been sent!')
            },
            error: function (jqXHR, textStatus, errorThrown) {
              console.log('failed tweeting');
-             $("#tweettextarea").val('')
+             $(jqBtn).prop('disabled', false);
+             //$("#tweettextarea").val('')
+             toastr.options.hideDuration = 0;
+             toastr.clear(getLastToast());
+             toastr.options.hideDuration = 1000;
+             var $toast = toastr.error('Tweet not sent, invalid message')
            }
          });
 
@@ -271,6 +426,7 @@
 
 
        // Function if the welcome button is clicked
+       /*
        function welcome(jqBtn) {
 
          $(jqBtn).prop('disabled', true);
@@ -289,6 +445,8 @@
          });
 
        }
+       */
+
 
        // Function if the beep button is clicked
        function beep(jqBtn) {
@@ -296,17 +454,26 @@
          $.ajax({
            type: "PUT",
            url: baseUrl + "/api/beep",
-           dataType: 'json',
+           //dataType: 'json',
 	   success: function(data, textStatus, jqXHR) {
              //data - response from server
              $(jqBtn).prop('disabled', false);
+             toastr.options.hideDuration = 0;
+             toastr.clear(getLastToast());
+             toastr.options.hideDuration = 1000;
+             var $toast = toastr.success('Beep has been sent!')
            },
            error: function (jqXHR, textStatus, errorThrown) {
              $(jqBtn).prop('disabled', false);
+             toastr.options.hideDuration = 0;
+             toastr.clear(getLastToast());
+             toastr.options.hideDuration = 1000;
+             var $toast = toastr.error('Unable to send Beep')
            }
          });
 
        }
+
 
        // Function if the weather toggle button is clicked
        function sendWeather(jqBtn) {
@@ -355,6 +522,9 @@
 
        $(document).ready(function() {
 
+          toastr.options.positionClass = "toast-bottom-right";
+          toastr.options.preventDuplicates = false;
+
           $('.toggle-button').click( function() {
             $(this).toggleClass('toggle-button-selected');
             changeWeatherSpanBold();
@@ -367,7 +537,7 @@
 
           $('#tweetsendbtndiv').click( function() {
             console.log("Have clicked the send button for a tweet");
-            sendTweet();
+            sendTweet($(this));
           });
 
           $('#welcomebtn').click( function() {
@@ -397,24 +567,66 @@
 
   <body>
 
+    <div class="mulesoft-header">
+      <ul class="mulesoft-header-panel left">
+        <!--<li class="mulesoft-logo"><a ng-href="/accounts/#/home" href="/accounts/#/home"></a></li>-->
+        <li class="mulesoft-logo"><a ng-href="https://mulesoft.com" href="https://mulesoft.com"></a></li>
+        <li class="platform-name front-separator" ng-class="{active: getActiveState()==='welcome'}">
+          <a ng-href="/accounts/#/home" href="/accounts/#/home">Anypoint Platform</a>
+        </li>
+      </ul>
+    </div>
+
+    <!--
+
+       <button type="button" class="modal-btn modal-close js-close" aria-controls="global-tweet-dialog-dialog" aria-describedby="global-tweet-dialog-body">
+         <span class="Icon Icon--close Icon--medium">
+           <span class="visuallyhidden">Close</span>
+         </span>
+       </button>
+     -->
+
     <div id="sendtweetdiv" class="parentdiv">
       <div style="width: 100%; float: left;">
-        <h2 style="text-align: center; width: 85%;">Tweet @muleadore64 here or on your own</h2>
+        <!-- <h3 style="text-align: center; width: 85%;">Tweet @muleadore64 here or on your own</h3> -->
+        <h3 style="text-align: center; width: 85%;">Tweet <span style="color: #0084B4;">@muleadore64</span></h3>
         <!--<i class="fa fa-twitter" aria-hidden="true">-->
       </div>
+      <div style="width: 100%; float: left;">
+        <span style="font-weight: bold;">Below or from your own account</span>
+      </div>
+    
 
       <div id="tweettextareadiv" style="width: 75%; float: left;">
         <textarea id="tweettextarea" rows="4" cols="50" style="resize: none;"></textarea>
       </div>
 
       <div id="tweetsendbtndiv" style="width: 25%; float: left;">
-        <button type="button" class="btn btn-success">Send</button>
+        <!--
+        <button class="btn primary-btn tweet-action disabled tweet-btn js-tweet-btn" type="button">
+          <span class="button-text tweeting-text">
+            <span class="Icon Icon--tweet"></span>
+            Tweet
+          </span>
+          <span class="button-text messaging-text">
+            <span class="Icon Icon--dm Icon--small"></span>
+            Send message
+          </span>
+        </button>
+        -->
+
+        <button type="button" class="btn tweet-btn">
+            <i class="fa fa-twitter"></i>
+            Tweet
+        </button>
+        <!--  <span class="button-text messaging-text"> -->
+        <!-- <button type="button" class="btn btn-success">Send</button> -->
       </div>
 
     </div>
 
     <div class="parentdiv">
-      <h2 style="text-align: center;">Change Color</h2>
+      <h3 style="text-align: center;">Change Color</h3>
       <div style="width: 100%; float: left;">
         <div id="colorbtndiv" style="width:240px; margin: 4px auto 10px auto; height: 30px;">
           <button id="borderbtn" type="button" class="btn btn-primary typecolorbtn">Border</button>
@@ -424,11 +636,13 @@
       <div id="colorcontent" style="width: 100%; float: left;"></div>
     </div>
 
+    <!--
     <div id="welcomebtndiv" style="width: 100%; float: left;">
       <div style="margin-top: 10px; margin-bottom: 10px; margin-left: auto ; margin-right: auto; width: 196px;">
         <button id="welcomebtn" type="button" class="btn btn-danger" style="font-size: 16px;">Show welcome screen</button>
       </div>
     </div>
+    -->
 
     <div id="beepdiv" style="width: 100%; float: left;">
       <div style="margin-top: 10px; margin-bottom: 10px; margin-left: auto ; margin-right: auto; width: 196px;">
