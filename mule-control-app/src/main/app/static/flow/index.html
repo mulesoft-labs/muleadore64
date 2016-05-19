@@ -14,6 +14,56 @@
 
     <style>
 
+      .mulesoft-header {
+          height: 30px;
+          background-color: #252627;
+          display: -ms-flexbox;
+          display: flex;
+          position: relative;
+      }
+
+
+      .mulesoft-header ul.mulesoft-header-panel {
+          height: 30px;
+          display: inline-block;
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+      }
+
+      .mulesoft-header .mulesoft-header-panel.left, .mulesoft-header .mulesoft-header-panel.right {
+          -ms-flex: none;
+          flex: none;
+      }
+
+      .mulesoft-header ul.mulesoft-header-panel > li {
+          height: 30px;
+          line-height: 28px;
+          display: inline-block;
+          float: left;
+          padding: 0 16px 0 16px;
+      }
+
+      .mulesoft-header li, .mulesoft-header a {
+          cursor: pointer;
+      }
+
+      .mulesoft-header ul.mulesoft-header-panel > li.mulesoft-logo a {
+          width: 18px;
+          background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAxNCAxMy45MzciIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDE0IDEzLjkzNyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI%2BCgk8cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNNi45OTksMTMuOTM3QzMuMTQsMTMuOTM3LDAsMTAuODExLDAsNi45NjlDMCwzLjEyNiwzLjE0LDAsNi45OTksMEMxMC44NiwwLDE0LDMuMTI2LDE0LDYuOTY5CgkJQzE0LDEwLjgxMSwxMC44NiwxMy45MzcsNi45OTksMTMuOTM3eiBNNi45OTksMC40OTdjLTMuNTg1LDAtNi41MDIsMi45MDMtNi41MDIsNi40NzJjMCwzLjU2OCwyLjkxNyw2LjQ3MSw2LjUwMiw2LjQ3MQoJCWMzLjU4NiwwLDYuNTAzLTIuOTAzLDYuNTAzLTYuNDcxQzEzLjUwMywzLjQsMTAuNTg2LDAuNDk3LDYuOTk5LDAuNDk3eiIvPgoJPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTUuMTU3LDEwLjA3MkM0LjExLDkuNTc3LDMuMzgsOC40NjksMy4zOCw3LjE3OWMwLTAuNjc5LDAuMjAzLTEuMzA5LDAuNTQ4LTEuODI0bDIuMjg2LDMuNDA2aDEuMzgxCgkJbDIuMjg2LTMuNDA2YzAuMzQ1LDAuNTE2LDAuNTQ4LDEuMTQ1LDAuNTQ4LDEuODI0YzAsMS4yMDItMC42MzQsMi4yNDgtMS41NjgsMi43ODRMOS4zLDExLjY0OQoJCWMxLjY3Ni0wLjg2NCwyLjgyMi0yLjYxMSwyLjgyMi00LjYyNmMwLTEuOTAzLTEuMDIzLTMuNTY3LTIuNTQ4LTQuNDc0TDYuOTIsNi42NDZMNC4yOTEsMi41MzRDMi43NTEsMy40MzgsMS43MTcsNS4xMSwxLjcxNyw3LjAyMwoJCWMwLDIuMDg4LDEuMjMsMy44ODgsMy4wMDUsNC43MTZMNS4xNTcsMTAuMDcyeiIvPgo8L3N2Zz4K");
+          background-repeat: no-repeat;
+          background-position: center;
+      }
+
+      .mulesoft-header ul.mulesoft-header-panel > li > a {
+          height: 100%;
+          display: inline-table;
+          color: #ffffff;
+          outline: 0;
+          text-decoration: none;
+      }
+
+
       .elementdiv {
         float: left;
         width: auto;
@@ -77,7 +127,7 @@
       .infodiv {
         width: 96%;
         margin: 2px auto 2px auto;
-        border: 1px solid rgba(100, 100, 100, 1);
+        border: 2px solid rgba(100, 100, 100, 1);
         padding: 2px;
         border-radius: 6px;
        }
@@ -384,6 +434,16 @@
   </head>
 
   <body>
+
+    <div class="mulesoft-header">
+      <ul class="mulesoft-header-panel left">
+        <!--<li class="mulesoft-logo"><a ng-href="/accounts/#/home" href="/accounts/#/home"></a></li>-->
+        <li class="mulesoft-logo"><a ng-href="https://mulesoft.com" href="https://mulesoft.com"></a></li>
+        <li class="platform-name front-separator" ng-class="{active: getActiveState()==='welcome'}">
+          <a ng-href="/accounts/#/home" href="/accounts/#/home">Anypoint Platform</a>
+        </li>
+      </ul>
+    </div>
   
     <div style="width: 100%; float: left;">
 
