@@ -71,9 +71,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 	c64command: "7" ++ weatherString()
 }]]></dw:set-payload>
         </dw:transform-message>
-        <object-to-string-transformer doc:name="Object to String"/>
-        <logger message="Weather command sent: #[message.payload]" level="INFO" doc:name="Logger"/>
-        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="Weather command sent: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
@@ -98,9 +96,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 	c64command: "1$(payload.text)\n   - @$(payload.user.screenName), at " ++ payload.createdAt as :datetime {format: "HH:mm"}
 }]]></dw:set-payload>
         </dw:transform-message>
-        <object-to-string-transformer doc:name="Object to String"/>
-        <logger message="New Tweet Detected.  Sending message: #[message.payload]" level="INFO" doc:name="Logger"/>
-        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="New Tweet Detected.  Sending message: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ - interactive queue"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
@@ -108,7 +104,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/tweet" allowedMethods="POST" doc:name="HTTP"/>
         <set-payload value="@muleadore64: #[message.payload.tweet]" mimeType="text/plain" doc:name="Set Payload"/>
         <twitter:update-status config-ref="Twitter__Configuration-c64" status="#[message.payload]" doc:name="Twitter"/>
-        <logger message="Tweet status sent: #[message.payload]" level="INFO" doc:name="Logger"/>
+        <logger message="Tweet status sent: #[message.payload.text]" level="INFO" doc:name="Logger"/>
     </flow>
     <flow name="welcome">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/welcome" allowedMethods="PUT" doc:name="HTTP"/>
@@ -141,9 +137,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 	c64command: ("3" ++ payload.poke as :string) when payload.colortype == "background" otherwise ("2" ++ payload.poke as :string)
 }]]></dw:set-payload>
         </dw:transform-message>
-        <object-to-string-transformer doc:name="Object to String"/>
-        <logger message="Queueing transformed color command: #[message.payload]" level="INFO" doc:name="Logger"/>
-        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="Queueing transformed color command: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <component class="com.mulesoft.c64.Writer" metadata:id="05b2a005-acd1-42db-8651-71017ef891f9" doc:name="Java"/>
     </flow>
