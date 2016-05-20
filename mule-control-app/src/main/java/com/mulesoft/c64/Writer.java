@@ -8,7 +8,7 @@ public class Writer implements Callable {
 	public Object onCall(MuleEventContext eventContext) throws Exception {
 		String payloadAsString = eventContext.getMessage().getPayloadAsString();
 		Memory.json = payloadAsString;
-		return eventContext;
+		return payloadAsString;
 	}
 	
 }
