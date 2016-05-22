@@ -2,11 +2,21 @@
 'use strict';
 var child_process = require('child_process');
 var Promise = require('bluebird');
-var amqService = require('./amqService.js')
-var request = require('request-promise')
+var amqService = require('./amqService.js');
+var muleService = require('./muleService.js');
+var SerialPort = require("serialport").SerialPort;
+var request = require('request-promise');
 
+var mode = 1; // 0 = stdin/out, 1 = serial
 
-process.stdin.setEncoding('ascii');
+if (mode == 1) {
+  var port = new SerialPort("/dev/ttyUSB0", {
+    baudrate: 300
+  });
+}
+else {
+  process.stdin.setEncoding('ascii');
+}
 
 var delay = 100;
 write(' ');  // seems to be needed to 'wake up' the connection
@@ -52,8 +62,18 @@ setTimeout(function () {
 function write(str) {
   var str = str[0] + convertToPetscii(str.substring(1));
   str += '~';  // add end marker
-  process.stderr.write("writing " + str + ":\n");
-  process.stdout.write(str);
+  //process.stderr.write("writing " + str + ":\n");
+  if (mode == 1) {
+      port.write(str, function(e, bytesWritten) {
+        if (e) {
+          console.error(e);
+        }
+      });
+  }
+  else {
+    process.stdout.write(str);
+  }
+  
   return;
 }
 
@@ -67,16 +87,19 @@ function convertToPetscii(input) {
   return String(output);
 }
 
-process.stdin.on('readable', function() {
-  //this is required
-});
 
-process.stdin.on('end', function () {
-  process.exit(0);
-});
-process.stdin.on('close', function () {
-  process.exit(0);
-});
-process.stdout.on('error', function () {
-  process.stderr.write('error');
-});
+if (mode == 0) {
+  process.stdin.on('readable', function() {
+    //this is required
+  });
+
+  process.stdin.on('end', function () {
+    process.exit(0);
+  });
+  process.stdin.on('close', function () {
+    process.exit(0);
+  });
+  process.stdout.on('error', function () {
+    process.stderr.write('error');
+  });
+}
