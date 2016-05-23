@@ -1,17 +1,21 @@
 #!/usr/bin/env node
 'use strict';
-var child_process = require('child_process');
 var Promise = require('bluebird');
-var amqService = require('./amqService.js');
 var muleService = require('./muleService.js');
 var SerialPort = require("serialport").SerialPort;
 var request = require('request-promise');
+
+//console.log(convertToPetscii('Clouds'));
+//return;
 
 var mode = 1; // 0 = stdin/out, 1 = serial
 
 if (mode == 1) {
   var port = new SerialPort("/dev/ttyUSB0", {
     baudrate: 300
+  });
+  port.on('open', function () {
+    console.error('port opened');
   });
 }
 else {
@@ -24,7 +28,7 @@ write(' ');  // seems to be needed to 'wake up' the connection
 
 function timeout () {
   setTimeout(function () {
-    amqService.getMessage()
+    muleService.getMessage()
       .then(function (msg) {
         if (msg) {
           write(msg.c64command);
@@ -62,7 +66,7 @@ setTimeout(function () {
 function write(str) {
   var str = str[0] + convertToPetscii(str.substring(1));
   str += '~';  // add end marker
-  //process.stderr.write("writing " + str + ":\n");
+  process.stderr.write("writing " + str + ":\n");
   if (mode == 1) {
       port.write(str, function(e, bytesWritten) {
         if (e) {
@@ -78,13 +82,25 @@ function write(str) {
 }
 
 function convertToPetscii(input) {
-  input = input.replace(/\n/g, "@@@");
-  var output = child_process.execFileSync('petcat', ['-nh', '-text'], {
-    input: input
-  });
-  output = String(output);
-  output = output.replace(/@@@/g, "\x0d");
-  return String(output);
+  var output = '';
+  for (var i = 0; i < input.length; i++) {
+    var o = _p_toascii(input[i]);
+    //console.error(input[i] + ' => ' + o);
+    output += o;
+  }
+  return output;
+}
+
+// from petcat.c
+function _p_toascii(c) {
+    var ascii = c.charCodeAt(0);
+    if (ascii >= 65 && ascii <= 90) {
+      return String.fromCharCode(ascii + 32);
+    }
+    if (ascii >= 97 && ascii <= 122) {
+      return String.fromCharCode(ascii - 32);
+    }
+    return c;
 }
 
 
