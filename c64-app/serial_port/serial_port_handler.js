@@ -79,7 +79,7 @@ function write(str) {
 
 function convertToPetscii(input) {
   input = input.replace(/\n/g, "@@@");
-  var output = child_process.execFileSync('/usr/local/bin/petcat', ['-nh', '-text'], {
+  var output = child_process.execFileSync('petcat', ['-nh', '-text'], {
     input: input
   });
   output = String(output);
