@@ -15,6 +15,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <style>
+    
+    	.btn-muleadorepri {
+    		color: #fff;
+    		text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    		background-color: #32444d;
+    		background-image: none;
+    		/*background-image: -moz-linear-gradient(top,#08c,#04c);
+    		background-image: -webkit-gradient(linear,0 0,0 100%,from(#08c),to(#04c));
+    		background-image: -webkit-linear-gradient(top,#08c,#04c);
+    		background-image: -o-linear-gradient(top,#08c,#04c);
+    		background-image: linear-gradient(to bottom,#08c,#04c);*/
+    		background-repeat: repeat-x;
+    		/*border-color: #04c #04c #002a80;
+    		border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);*/
+    		border-color: #ffffff;
+    		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc',endColorstr='#ff0044cc',GradientType=0);
+    		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+		}
+		
+		.btn-muleadorepri:hover {
+			background-color: #32444d;
+			color: #fff;
+		}
+		
+		.btn-muleadorepri:focus {
+    		outline: none;
+    		outline: none;
+    		outline-offset: 0;
+    		background-color: #32444d;
+			color: #fff;
+		}
 
       .Icon--tweet:before {
         content: "\f029";
@@ -351,7 +382,7 @@
          console.log("In sendColor with value: " + newColor);
 
          var colorType = "border";
-         if($("#backgroundbtn").hasClass("btn-primary")) {
+         if($("#backgroundbtn").hasClass("btn-muleadorepri")) {
            colorType = "background";
          }
 
@@ -551,10 +582,10 @@
           });
 
           $(".typecolorbtn").click( function() {
-            $('.typecolorbtn').removeClass('btn-primary');
-            $('.typecolorbtn').addClass('btn-secondary');
-            $(this).removeClass('btn-secondary');
-            $(this).addClass('btn-primary');
+            $('.typecolorbtn').removeClass('btn-muleadorepri');
+            $('.typecolorbtn').addClass('btn-muleadoresec');
+            $(this).removeClass('btn-muleadoresec');
+            $(this).addClass('btn-muleadorepri');
           });
 
        });
@@ -629,8 +660,8 @@
       <h3 style="text-align: center;">Change Color</h3>
       <div style="width: 100%; float: left;">
         <div id="colorbtndiv" style="width:240px; margin: 4px auto 10px auto; height: 30px;">
-          <button id="borderbtn" type="button" class="btn btn-primary typecolorbtn">Border</button>
-          <button id="backgroundbtn" type="button" class="btn btn-secondary typecolorbtn">Background</button>
+          <button id="borderbtn" type="button" class="btn btn-muleadorepri typecolorbtn" style="border-radius: 0;">Border</button>
+          <button id="backgroundbtn" type="button" class="btn btn-muleadoresec typecolorbtn" style="border-radius: 0;">Background</button>
         </div>
       </div>
       <div id="colorcontent" style="width: 100%; float: left;"></div>
