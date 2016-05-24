@@ -93,7 +93,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 	id: flowVars.messageId,
 	user: "@$(payload.user.screenName)",
 	text: payload.text,
-	c64command: "1$(payload.text)\n   - @$(payload.user.screenName), at " ++ payload.createdAt as :datetime {format: "HH:mm"}
+	c64command: "1$(payload.text)\n   - @$(payload.user.screenName), at " ++ now as :string {format: "E M/d h:mm a"}
 }]]></dw:set-payload>
         </dw:transform-message>
         <logger message="New Tweet Detected.  Sending message: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
