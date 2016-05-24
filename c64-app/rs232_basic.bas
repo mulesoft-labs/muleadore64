@@ -1,4 +1,4 @@
-0 rem !to "build/hello_world.prg"
+0 rem !to "build/ms.prg"
 
 poke 198,0: wait 198,1
 
@@ -10,7 +10,8 @@ buf$ = ""
 cr = 55296
 sid = 54272
 hb = 0
-pp$ = "Jeff, Steven, James, James2, Arvi, Someone, David, Greg, James.     "
+pp$ = "Accenture, Deloitte Digital, PwC, Cognizant, SalesForce, Appnovation, "
+pp$ = pp$ + "AvenueCode, Capgemini, ModusBox.  "
 po% = 0
 rem Disable interrupts from serial port (sort-of)
 di% = 0
@@ -30,14 +31,16 @@ rem skip logo screen?
 if sk% = 0 then gosub 11000 : rem logo screen
 if sk% = 1 then gosub 4000
 
+rem gosub 15000
+
 goto 6500
 
 
 4000: rem Setup info screen
   gosub 5000
   rem Setup top line
-  poke 781,0:poke 782,0:poke 783,0:sys 65520
-  print "Welcome to the Mulesoft SF office!"
+  poke 781,0:poke 782,4:poke 783,0:sys 65520
+  print "MuleSoft San Francisco (c) 1985"
   poke 781,1:poke 782,0:poke 783,0:sys 65520
   print chr$(155);
   for x = 0 to 39
@@ -45,18 +48,23 @@ goto 6500
   next x
 
   rem Setup onsite interview section
-  poke 781, 4 : poke 782, 0 : poke 783, 0 : sys 65520
-  print chr$(30) + "Greetings to on-site guests today"
+  poke 781, 3 : poke 782, 0 : poke 783, 0 : sys 65520
+  print chr$(30) + "Welcome to Connect"
 
   rem Setup twitter section
-  poke 781, 9 : poke 782, 0 : poke 783, 0 : sys 65520
+  poke 781, 7 : poke 782, 0 : poke 783, 0 : sys 65520
   print chr$(30) + "Latest from Twitter"
   print chr$(5) + "...Waiting for data..."
 
   rem Setup weather section
-  poke 781, 18 : poke 782, 0 : poke 783, 0 : sys 65520
+  poke 781, 16 : poke 782, 0 : poke 783, 0 : sys 65520
   print chr$(30) + "Current weather"
   print chr$(5) + "...Waiting for data..."
+
+  rem Setup next session section
+  poke 781, 19 : poke 782, 0 : poke 783, 0 : sys 65520
+  print chr$(30) + "Next session"
+  print chr$(5) + "...Waiting for data..."  
   return
 
 5000 : rem clear screen
@@ -70,6 +78,8 @@ goto 6500
   get# 3, inp$
   if st = 0 then buf$ = buf$ + inp$
   if right$(buf$, 1) = chr$(126) then gosub 7000 : rem tilde char
+  rem get inp$
+  rem if inp$ = " " then gosub 11000
 
   gosub 16000 : rem move sprite
   goto 6500
@@ -90,18 +100,19 @@ goto 6500
   if cm$ = "5" then found%=1 : gosub 12000
   if cm$ = "6" then found%=1 : gosub 13000
   if cm$ = "7" then found%=1 : gosub 14000
+  if cm$ = "8" then found%=1 : gosub 17000
   rem if found% = 0 then print "unknown command", cm$: print buf$
   buf$ = ""
   return
 
 8000: rem twitter
-  poke 781, 10 : poke 782, 0 : poke 783, 0 : sys 65520
+  poke 781, 8 : poke 782, 0 : poke 783, 0 : sys 65520
   nb$ = ""
   for x = 0 to 250
     nb$ = nb$ + " "
   next x
   print chr$(5) + nb$ : rem clear twitter area
-  poke 781, 10 : poke 782, 0 : poke 783, 0 : sys 65520
+  poke 781, 8 : poke 782, 0 : poke 783, 0 : sys 65520
   print buf$
   rem easter egg - tweet PLAY 29,54,23... to play a sound
   rem not sure why but we need to manually specifiy the byte numbers..
@@ -136,7 +147,7 @@ goto 6500
   print
   print
   print
-  print "Today, Mulesoft technology is"
+  print "Today, MuleSoft technology is"
   print
   print "connecting everything, even this"
   print
@@ -167,7 +178,7 @@ goto 6500
   poke 781,23:poke 782,10:poke 783,0:sys 65520
   print "C64, welcome to 2016!";
   poke 781,24:poke 782,6:poke 783,0:sys 65520
-  print "   ( Powered by " + chr$(154) + "Mulesoft" + chr$(5) + " )"
+  print "   ( Powered by " + chr$(154) + "MuleSoft" + chr$(5) + " )"
   gosub 12000
   gosub 15000 : rem setup sprites
   poke 198,0: wait 198,1
@@ -233,19 +244,19 @@ goto 6500
   ov% = 0
   if ln% < 40 then ov% = 40 - ln%
   if ln% > 40 then ln% = 40
-  poke 781,5:poke 782,0:poke 783,0:sys 65520
+  poke 781,4:poke 782,0:poke 783,0:sys 65520
   print chr$(5) + mid$(pp$, po%, ln%);
   if ov% > 0 then print left$(pp$, 40 - ln%)
   return
 
 14000: rem weather
-  poke 781, 19 : poke 782, 0 : poke 783, 0 : sys 65520
+  poke 781, 17 : poke 782, 0 : poke 783, 0 : sys 65520
   nb$ = ""
   for x = 0 to 40
     nb$ = nb$ + " "
   next x
   print chr$(5) + nb$ : rem clear area
-  poke 781, 19 : poke 782, 0 : poke 783, 0 : sys 65520
+  poke 781, 17 : poke 782, 0 : poke 783, 0 : sys 65520
   print buf$
   return
 
@@ -285,6 +296,17 @@ goto 6500
   sa% = sa% + 1
   if sa% > 7 then sa% = 0
   poke 2040, 180 + sa%
+  return
+
+17000: rem next session
+  poke 781, 20 : poke 782, 0 : poke 783, 0 : sys 65520
+  nb$ = ""
+  for x = 0 to 40
+    nb$ = nb$ + " "
+  next x
+  print chr$(5) + nb$ : rem clear area
+  poke 781, 20 : poke 782, 0 : poke 783, 0 : sys 65520
+  print buf$
   return
 
 
