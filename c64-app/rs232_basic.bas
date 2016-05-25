@@ -1,6 +1,6 @@
-0 rem !to "build/ms.prg"
+0 rem !to "build/ms2.prg"
 
-poke 198,0: wait 198,1
+rem poke 198,0: wait 198,1
 
 rem (THIS MUST BE AT THE TOP OF THE FILE - `OPEN` CLEARS ALL BASIC VARIABLES)
 rem Open RS-232 device at 300 baud, default parity, stop bits, 8 bits per char
@@ -20,14 +20,18 @@ sa% = 0
 sx% = 0
 sk% = 0 : rem skip loading screen?
 
+lt$ = "...Waiting for data..."
+lw$ = "...Waiting for data..."
+ls$ = "...Waiting for data..."
+
 poke 53272,23  : rem use lowercase char set
 gosub 5000
 print "Loading..."
 print
 print "Opening serial port device..."
 
-
 rem skip logo screen?
+input "skip intro"; sk%
 if sk% = 0 then gosub 11000 : rem logo screen
 if sk% = 1 then gosub 4000
 
@@ -40,7 +44,7 @@ goto 6500
   gosub 5000
   rem Setup top line
   poke 781,0:poke 782,4:poke 783,0:sys 65520
-  print "MuleSoft San Francisco (c) 1985"
+  print "MuleSoft San Francisco C64 (1985)"
   poke 781,1:poke 782,0:poke 783,0:sys 65520
   print chr$(155);
   for x = 0 to 39
@@ -54,17 +58,17 @@ goto 6500
   rem Setup twitter section
   poke 781, 7 : poke 782, 0 : poke 783, 0 : sys 65520
   print chr$(30) + "Latest from Twitter"
-  print chr$(5) + "...Waiting for data..."
+  print chr$(5) + lt$
 
   rem Setup weather section
   poke 781, 16 : poke 782, 0 : poke 783, 0 : sys 65520
   print chr$(30) + "Current weather"
-  print chr$(5) + "...Waiting for data..."
+  print chr$(5) + lw$
 
   rem Setup next session section
   poke 781, 19 : poke 782, 0 : poke 783, 0 : sys 65520
   print chr$(30) + "Next session"
-  print chr$(5) + "...Waiting for data..."  
+  print chr$(5) + ls$
   return
 
 5000 : rem clear screen
@@ -74,13 +78,26 @@ goto 6500
   print chr$(5)
   return
 
-6500 : rem read from serial
+6500 : rem read from serial and keyboard
   get# 3, inp$
   if st = 0 then buf$ = buf$ + inp$
-  if right$(buf$, 1) = chr$(126) then gosub 7000 : rem tilde char
-  rem get inp$
-  rem if inp$ = " " then gosub 11000
-
+  if right$(buf$, 1) = chr$(126) then gosub 7000 : goto 6590 : rem tilde char
+  get inp$
+  rem if inp$ = "" then goto 6510
+  if inp$ = " " then print#3, "l-power" + chr$(126)
+  if inp$ = "0" then print#3, "l-0" + chr$(126)
+  if inp$ = "1" then print#3, "l-1" + chr$(126)
+  if inp$ = "2" then print#3, "l-2" + chr$(126)
+  if inp$ = "3" then print#3, "l-3" + chr$(126)
+  if inp$ = "4" then print#3, "l-4" + chr$(126)
+  if inp$ = "5" then print#3, "l-5" + chr$(126)
+  if inp$ = "6" then print#3, "l-6" + chr$(126)
+  if inp$ = "7" then print#3, "l-7" + chr$(126)
+  if inp$ = "8" then print#3, "l-8" + chr$(126)
+  if inp$ = "9" then print#3, "l-9" + chr$(126)
+  if inp$ = "l" then gosub 11500 : gosub 4000
+  if inp$ = "t" then gosub 18000 : gosub 4000
+6590:
   gosub 16000 : rem move sprite
   goto 6500
   close 3
@@ -89,7 +106,7 @@ goto 6500
   rem print chr$(19) + "buf <<" + buf$ + ">>"
   if len(buf$) < 2 then buf$ = "" : return
   cm$ = mid$(buf$, 1, 1)
-  if di% = 1 then cm$ = "disabled"
+  if di% = 1 then cm$ = "-"
   buf$ = mid$(buf$, 2, len(buf$)-2)
   rem print "buf <<" + buf$ + ">>"
   found% = 0
@@ -106,6 +123,7 @@ goto 6500
   return
 
 8000: rem twitter
+  lt$ = buf$
   poke 781, 8 : poke 782, 0 : poke 783, 0 : sys 65520
   nb$ = ""
   for x = 0 to 250
@@ -134,27 +152,74 @@ goto 6500
 11000: rem attract screen
   di% = 1
   gosub 5000
-  poke 781,7:poke 782,0:poke 783,0:sys 65520
-
-  print "In 1982, the most common thing to"
-  print 
-  print "connect a Commodore64 to were beige"
-  print 
-  print "tape drives, joysticks and CRT tvs..."
 
   poke 198,0: wait 198,1
-
-  print
-  print
-  print
-  print "Today, MuleSoft technology is"
-  print
-  print "connecting everything, even this"
-  print
-  print "poor Commodore64"
+  poke 781,2:poke 782,1:poke 783,0:sys 65520
+  ps$ = "Hi there!"
+  gosub 19000
   poke 198,0: wait 198,1
+  print
+  print
+  print
+  print
+  ps$ = "         I'm a Commodore 64 (from 1985)"
+  gosub 19000
+  poke 198,0: wait 198,1
+  print
+  print
+  print
+  print
+  ps$ = " In 1985, I wasn't connected to anything except beige tape drives, joysticks and CRT tvs"
+  gosub 19000
+  print
+  print " :("
+  poke 198,0: wait 198,1
+  print
+  print
+  print
+  print
+  ps$ = "         In 2016, thanks to MuleSoft, I am connected to an extendable application network that includes Twitter, Phillips Hue lights and live weather updates!"
+  gosub 19000
+  print
+  print " :)"
+  poke 198,0: wait 198,1
+  gosub 5000  
+
+  print "THE HACK:"
+  print
+  print "2 days to prove the MuleSoft tagline"
+  print "'Connect anything. Change everything'"
+  print
+  print
+  print
+  poke 198,0: wait 198,1
+  print "THE ARCHITECTURE:"
+  print
+  print "Cloudhub App (serves UI, pollers)"
+  print
+  print " -> MQ"
+  print
+  print "  -> RasPi running Mule"
+  print
+  print "   -> RasPi Serial port"
+  print
+  print "    -> C64 user-port"
+  print
+  print "     -> Custom C64 code"
+  print 
+  poke 198,0: wait 198,1
+
+  gosub 11500 : rem logo
+  gosub 15000 : rem setup sprites
+  poke 198,0: wait 198,1
+  di% = 0
+  gosub 4000
+  return
+
+
+11500: rem logo
+  di% = 1
   gosub 5000
-
   rem skip over audio + sprite data
   restore
   for x = 0 to 15 + (63 * 8)
@@ -163,13 +228,12 @@ goto 6500
 
   poke 781,24:poke 782,0:poke 783,0:sys 65520
   print chr$(154) : rem switch to light blue
-  ln$ = ""
   i% = 0
   for x = 0 to 800
     read a%
     i% = i% + 1
-    ln$ = ln$ + chr$(a%)
-    if i% = 40 then print ln$; : ln$ = "" : i% = 0
+    print chr$(a%);
+    if i% = 40 then print chr$(10); : i% = 0
   next x
   print
   print
@@ -180,10 +244,7 @@ goto 6500
   poke 781,24:poke 782,6:poke 783,0:sys 65520
   print "   ( Powered by " + chr$(154) + "MuleSoft" + chr$(5) + " )"
   gosub 12000
-  gosub 15000 : rem setup sprites
-  poke 198,0: wait 198,1
   di% = 0
-  gosub 4000
   return
 
 12000: rem play sound
@@ -250,6 +311,7 @@ goto 6500
   return
 
 14000: rem weather
+  lw$ = buf$
   poke 781, 17 : poke 782, 0 : poke 783, 0 : sys 65520
   nb$ = ""
   for x = 0 to 40
@@ -269,8 +331,11 @@ goto 6500
 
   rem set sprite pointer
 
-  for j = 180 to 187
-    for i=0 to 62:read a:poke 64*j+i,a:next i
+  for j = 220 to 227
+    for i=0 to 62
+      read a
+      poke 64*j+i, a
+    next i
     print ".";
   next j
 
@@ -295,10 +360,11 @@ goto 6500
   if sx% > 255 then poke 53264, 1 : poke 53248,sx% - 255
   sa% = sa% + 1
   if sa% > 7 then sa% = 0
-  poke 2040, 180 + sa%
+  poke 2040, 220 + sa%
   return
 
 17000: rem next session
+  ls$ = buf$
   poke 781, 20 : poke 782, 0 : poke 783, 0 : sys 65520
   nb$ = ""
   for x = 0 to 40
@@ -307,6 +373,34 @@ goto 6500
   print chr$(5) + nb$ : rem clear area
   poke 781, 20 : poke 782, 0 : poke 783, 0 : sys 65520
   print buf$
+  return
+
+18000: rem input tweet
+  gosub 5000
+  print "Send a tweet from 1985 as @muleadore64:"
+  print
+  print
+  input "Text: "; tw$
+  if len(tw$) = 0 then print "No text" : return
+  print
+  print
+  print "Sending data to event ingest API..."
+  print
+  print#3, "T-" + tw$ + chr$(126)
+  for i = 1 to 600
+  next
+  print
+  print "Complete. Hit any key to continue."
+  poke 198,0: wait 198,1
+  return
+
+19000: rem print string slowly
+  for x = 1 to len(ps$)
+    c$ = mid$(ps$, x, 1)
+    print c$;
+    for y = 1 to 10
+    next y
+  next x
   return
 
 

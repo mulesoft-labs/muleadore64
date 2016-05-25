@@ -7,6 +7,7 @@ var request = require('request-promise');
 var moment = require('moment');
 
 var mode = 0; // 0 = stdin/out, 1 = serial
+var inputBuffer = '';
 
 if (mode == 1) {
   var port = new SerialPort("/dev/ttyUSB0", {
@@ -14,6 +15,13 @@ if (mode == 1) {
   });
   port.on('open', function () {
     console.error('port opened');
+  });
+  port.on('data', function(data) {
+    if (data && data.length > 0) {
+      console.error('RECV:', data);
+      inputBuffer += chunk.toString('ascii');
+      onInputBufferUpdated();
+    }
   });
 }
 else {
@@ -31,6 +39,11 @@ function timeout () {
         if (msg && msg.c64command) {
           write(msg.c64command);
         }
+      })
+      .catch(function(e) {
+        console.error(e);
+      })
+      .finally(function () {
         timeout();
       });
   }, 2000)
@@ -49,7 +62,7 @@ function weather() {
       url: 'http://muleadore64.cloudhub.io/api/weather'
     });
     weather();
-  }, 20000)
+  }, 55000)
 }
 
 function nextSession() {
@@ -57,7 +70,7 @@ function nextSession() {
     var t = moment("2016-05-24 08:30").fromNow();
     write('8\'Change the Clock Speed of Business with Application Networks\' ' + t);
     nextSession();
-  }, 60000);
+  }, 65000);
 }
 
 // wait 10 seconds before firing stuff
@@ -110,10 +123,26 @@ function _p_toascii(c) {
     return c;
 }
 
+function onInputBufferUpdated() {
+  if (inputBuffer.endsWith('~')) {
+    muleService.postMessage(inputBuffer.substr(0, inputBuffer.length - 1))
+      .catch(function(e) {
+        console.error(e);
+      })
+      .finally(function() {
+        inputBuffer = '';
+      });
+  }
+}
 
-if (mode == 0) {
+
+if (mode === 0) {
   process.stdin.on('readable', function() {
-    //this is required
+    var chunk = process.stdin.read();
+    if (chunk && chunk.length > 0) {
+      inputBuffer += chunk;
+      onInputBufferUpdated();
+    }
   });
 
   process.stdin.on('end', function () {
