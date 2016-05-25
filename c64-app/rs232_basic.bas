@@ -95,7 +95,7 @@ goto 6500
   if inp$ = "7" then print#3, "l-7" + chr$(126)
   if inp$ = "8" then print#3, "l-8" + chr$(126)
   if inp$ = "9" then print#3, "l-9" + chr$(126)
-  if inp$ = "l" then gosub 11500 : gosub 4000
+  rem if inp$ = "l" then gosub 11500 : gosub 4000
   if inp$ = "t" then gosub 18000 : gosub 4000
 6590:
   gosub 16000 : rem move sprite
@@ -211,7 +211,6 @@ goto 6500
 
   gosub 11500 : rem logo
   gosub 15000 : rem setup sprites
-  poke 198,0: wait 198,1
   di% = 0
   gosub 4000
   return
