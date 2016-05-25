@@ -14,7 +14,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
     <anypoint-mq:config name="Anypoint_MQ_Configuration-Rasp-PI-CLIENT" doc:name="Anypoint MQ Configuration">
         <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="60186e15cf8d4be2b3d0897ace40d3a2" clientSecret="3208c2601b4a4581A7C4532E6139DC88"/>
     </anypoint-mq:config>
-    <http:request-config name="HueHub" host="192.168.1.145" port="80" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HueHub" host="192.168.0.166" port="80" doc:name="HTTP Request Configuration"/>
     <flow name="retrieve-message">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/message" allowedMethods="GET" doc:name="HTTP">
             <http:response-builder>
@@ -24,7 +24,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
         <anypoint-mq:consume config-ref="Anypoint_MQ_Configuration-Rasp-PI-CLIENT" destination="c64-interactive-queue" acknowledgementMode="NONE" doc:name="Anypoint MQ" pollingTime="2000"/>
         <logger message="Got message: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
     </flow>
-    <flow name="pi-mule-appFlow">
+    <flow name="process-c64-command">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/message" allowedMethods="POST" doc:name="HTTP"/>
         <json:json-to-object-transformer returnClass="java.util.HashMap" doc:name="JSON to Object"/>
         <component class="com.mulesoft.c64.pi.ProcessC64Message" doc:name="Java"/>
