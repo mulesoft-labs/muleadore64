@@ -21,7 +21,7 @@ function postMessage(data) {
   var payload;
   if (data.startsWith('L-')) {
     cmd = 'light';
-    payload = data.substr(2).toLower();
+    payload = data.substr(2).toLowerCase();
   }
   else if (data.startsWith('T-')) {
     cmd = 'twitter';
@@ -47,7 +47,7 @@ function postMessage(data) {
   }
   console.error(cmd, payload);
   return request({
-    url: 'urlBase' + '/api/message',
+    url: urlBase + '/api/message',
     json: true,
     method: 'POST',
     body: {

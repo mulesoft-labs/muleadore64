@@ -53,7 +53,7 @@ function heartbeat() {
   setTimeout(function () {
     write('6');
     heartbeat();
-  }, 2000)
+  }, 4000)
 }
 
 function weather() {
