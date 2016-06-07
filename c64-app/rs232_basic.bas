@@ -83,7 +83,7 @@ goto 6500
   if st = 0 then buf$ = buf$ + inp$
   if right$(buf$, 1) = chr$(126) then gosub 7000 : goto 6590 : rem tilde char
   get inp$
-  rem if inp$ = "" then goto 6510
+  rem if inp$ = "" then goto 6590
   if inp$ = " " then print#3, "l-power" + chr$(126)
   if inp$ = "0" then print#3, "l-0" + chr$(126)
   if inp$ = "1" then print#3, "l-1" + chr$(126)

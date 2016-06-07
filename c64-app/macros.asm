@@ -1,4 +1,4 @@
-
+!zone macros
 ; Constants
 SYSTEM_IRQ_VECTOR = $314
 
@@ -26,9 +26,9 @@ SYSTEM_IRQ_VECTOR = $314
 
 !macro add16im .n1, .n2, .result {                               ; add a 16bit constant to a memory location, store in result
     clc                                                          ; ensure carry is clear
-    lda .n1+0                                                    ; add the two least significant bytes
+    lda .n1                                                    ; add the two least significant bytes
     adc #<.n2
-    sta .result+0                                                
+    sta .result                                                
     lda .n1+1                                                    ; add the two most significant bytes
     adc #>.n2                                                    
     sta .result+1                                                

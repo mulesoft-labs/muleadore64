@@ -19,13 +19,13 @@ function getMessage() {
 function postMessage(data) {
   var cmd;
   var payload;
-  if (data.startsWith('L-')) {
+  if (data.startsWith('2')) {
     cmd = 'light';
-    payload = data.substr(2).toLowerCase();
+    payload = data.substr(1).toLowerCase();
   }
-  else if (data.startsWith('T-')) {
+  else if (data.startsWith('1')) {
     cmd = 'twitter';
-    payload = data.substr(2).toLowerCase();
+    payload = data.substr(1).toLowerCase();
 
     return request({
       url: 'http://muleadore64.cloudhub.io/api/tweet',

@@ -5,3 +5,4 @@ node_modules
 *md__io__.xml
 .settings
 .prefs
+.DS_Store
