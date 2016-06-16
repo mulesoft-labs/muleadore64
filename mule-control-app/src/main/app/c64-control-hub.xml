@@ -24,7 +24,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <anypoint-mq:config name="Anypoint_MQ_Configuration-c64-control-hub" doc:name="Anypoint MQ Configuration">
-        <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="2cc7b2ae1e6f47be9ed9638f489d2a13" clientSecret="80bed3adfe3b449eA866EC803C9C9A37"/>
+        <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="${mq.client.id}" clientSecret="${mq.client.secret}"/>
     </anypoint-mq:config>
     <twitter:config name="Twitter__Configuration-c64" accessKey="${twitter.access.key}" accessSecret="${twitter.access.secret}" consumerKey="${twitter.consumer.key}" consumerSecret="${twitter.consumer.secret}" doc:name="Twitter: Configuration"/>
     <http:request-config name="HTTP_Request_Configuration" host="api.openweathermap.org" port="80" basePath="data/2.5/weather" doc:name="HTTP Request Configuration"/>
