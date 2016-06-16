@@ -26,10 +26,9 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
     <anypoint-mq:config name="Anypoint_MQ_Configuration-c64-control-hub" doc:name="Anypoint MQ Configuration">
         <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="2cc7b2ae1e6f47be9ed9638f489d2a13" clientSecret="80bed3adfe3b449eA866EC803C9C9A37"/>
     </anypoint-mq:config>
-    <twitter:config name="Twitter__Configuration-c64" accessKey="724851736842756100-kyTVBaK1jNNXaIEbAwUED5o7IR1nVQT" accessSecret="CJvzXQFJJV5IS4orXghM6PiliL0NK36gnrBUxWw77KGwu" consumerKey="84ZvnEtJdEzY2yeLLaWfCAsSC" consumerSecret="fgN4GTb6rVQPp1AaHQ4EJH4E75CJgAk1TxENPGVVsNgRgQUPZZ" doc:name="Twitter: Configuration"/>
+    <twitter:config name="Twitter__Configuration-c64" accessKey="${twitter.access.key}" accessSecret="${twitter.access.secret}" consumerKey="${twitter.consumer.key}" consumerSecret="${twitter.consumer.secret}" doc:name="Twitter: Configuration"/>
     <http:request-config name="HTTP_Request_Configuration" host="api.openweathermap.org" port="80" basePath="data/2.5/weather" doc:name="HTTP Request Configuration"/>
     <http:request-config name="HTTP_Request_OpenWeatherMap" host="api.openweathermap.org" port="80" doc:name="HTTP Request Configuration"/>
-    <twitter:config name="Twitter__Configuration-Steve" accessKey="1627285890-XfCvMumITmruODTbLfESFRnyW20knhN84SQHrel" accessSecret="6yW1QQYh4Fd6hh3vUmgAvYSmDnZTObeh6spa3YmFNY" consumerKey="v3TFFvEqkkUSMJhn91yPA" consumerSecret="sv8n88vbe9rDVwvrPTj7UhYVw9GP6TUQuDRADSIY6s" doc:name="Twitter: Configuration"/>
     <flow name="control-static-content">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP"/>
         <http:static-resource-handler resourceBase="${app.home}/static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
