@@ -102,7 +102,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Updating today's scheduled visitors: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
-    <flow name="visitors POST">
+    <flow name="visitors-POST">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/visitors" allowedMethods="POST" doc:name="HTTP"/>
         <set-variable variableName="messageId" value="#[message.id]" doc:name="Variable"/>
         <dw:transform-message doc:name="Transform Message">
