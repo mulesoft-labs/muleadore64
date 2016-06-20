@@ -13,8 +13,12 @@ twitter_buffer          !pet "waiting for data..."
 !fill 235, 0
 weather_buffer          !pet "waiting for data..."
 !fill 235, 0
+visitors_scroll_pos !byte 0
+visitors_buffer_len !byte 19
+.delay !byte 20
 
 main_screen_render
+	jsr screen_clear
 	lda #COLOR_WHITE
 	jsr CHROUT      ; foreground white
 
@@ -55,6 +59,8 @@ main_screen_render
 	jsr main_screen_update_weather
 	jsr main_screen_update_visitors
 
+	jsr mule_sprite_init
+
 	; call .update_handler on screen refresh
 	sei
 	+set16im .update_handler, screen_update_handler_ptr
@@ -80,17 +86,54 @@ main_screen_update_weather
 	rts
 
 main_screen_update_visitors
-	lda #COLOR_WHITE
-	jsr CHROUT      ; foreground white
-	ldx #4
-	ldy #0
-	+set16im visitors_buffer, $fb
-	jsr screen_print_str
+	;lda #COLOR_WHITE
+	;jsr CHROUT      ; foreground white
+	;ldx #4
+	;ldy #0
+	;+set16im visitors_buffer, $fb
+	;+add16 $fb, visitors_scroll_pos, $fb
+	;jsr screen_print_str
+	jsr .do_visitors_scroll
 	rts
 
 .update_handler
 	jsr mule_sprite_update
 	jsr heartbeat_frame_counter
+	dec .delay
+	bne .dont_delay 
+	lda #20
+	sta .delay
+	jsr .do_visitors_scroll
+.dont_delay
 	jmp irq_return
 
+.do_visitors_scroll
+	+set16im visitors_buffer, $fb
+	inc visitors_scroll_pos
+	lda visitors_scroll_pos
+	cmp visitors_buffer_len
+	bne .render_scolling_line_setup
+	lda #0			; if pos > len, reset pos
+	sta visitors_scroll_pos
 
+.render_scolling_line_setup
+	ldx #4
+	ldy #0
+	clc
+	jsr PLOT
+
+	ldy visitors_scroll_pos
+	ldx #40
+
+.render_scrolling_line
+	cpy visitors_buffer_len
+	bmi .next
+	ldy #0
+.next
+	lda ($fb), y
+	jsr CHROUT
+
+	iny
+	dex
+	bne .render_scrolling_line
+	rts

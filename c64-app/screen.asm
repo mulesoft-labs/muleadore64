@@ -6,6 +6,8 @@ screen_clear
 		sta $d021       ; background color
 		lda #147        ; clear screen
 		jsr CHROUT
+
+		jsr mule_sprite_disable
 		rts
 
 ; ----------------------------------------------------------------------

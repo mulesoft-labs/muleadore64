@@ -22,6 +22,12 @@ mule_sprite_init
 		sta ms_pos_x_high
 		rts
 
+mule_sprite_disable
+		lda $d015
+		and #$fe		; disable sprite #0
+		sta $d015
+		rts
+
 mule_sprite_update
 		jsr .walk
 		jsr .animate

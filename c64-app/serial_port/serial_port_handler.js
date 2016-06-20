@@ -94,3 +94,11 @@ else {
     }
   });
 }
+
+// setTimeout(() => {
+//   write('8Danielle, Gaston, John, Kristy, Nicholas, Radhika, Wayne');
+// }, 2000);
+
+// setTimeout(() => {
+//   write('9Jeff');
+// }, 2000);

@@ -7,7 +7,7 @@ CMD_PLAY = "5"
 CMD_HEARTBEAT = "6"
 CMD_WEATHER = "7"
 CMD_VISITORS = "8"
-CMD_VISITOR_CHECKIN = "9"
+CMD_SIGNIN = "9"
 
 heartbeat_tick !byte 0
 
@@ -78,17 +78,24 @@ command_handler
 
 .test_visitors
                 cmp #CMD_VISITORS
-                bne .test_visitor_checkin
+                bne .test_signin
                 +set16im cmd_buffer + 1, $fb
                 +set16im visitors_buffer, $fd
                 jsr string_copy
+                jsr string_len
+                sty visitors_buffer_len         ; store string length
                 jsr main_screen_update_visitors
                 rts
 
-.test_visitor_checkin
-                cmp #CMD_VISITOR_CHECKIN
+.test_signin
+                cmp #CMD_SIGNIN
                 bne .done
-                ; do some checkin screen
+                +set16im cmd_buffer + 1, $fb
+                +set16im visitor_name_buffer, $fd
+                jsr string_copy
+                jsr signin_screen_render
+                jsr keyboard_wait
+                jsr main_screen_render
                 rts
 
 .done

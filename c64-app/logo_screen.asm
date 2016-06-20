@@ -9,6 +9,8 @@ logo_screen_render
 		lda #0
 		sta screen_update_handler_ptr
 		cli
+
+		jsr screen_clear
 		
 		clc
 		ldx #24

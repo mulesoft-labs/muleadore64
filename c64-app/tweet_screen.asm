@@ -54,7 +54,6 @@ tweet_screen_render
 		jsr rs232_send_string
 		lda #'~'	; cmd-trailer
 		jsr rs232_write_byte
-		jsr keyboard_wait
 
 .no_data_entered
 		rts

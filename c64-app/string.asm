@@ -31,4 +31,15 @@ string_copy
 	beq .exit
 	iny
 	jmp .copy_loop
-		
+
+; ----------------------------------------------------------------------
+; $FB/$FC: source null-terminated string
+; Returns length in Y
+; ----------------------------------------------------------------------
+string_len
+	ldy #0
+.loop2
+	lda ($fb), y
+	beq .exit
+	iny
+	jmp .loop2

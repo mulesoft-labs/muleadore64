@@ -8,11 +8,11 @@
 !pet 13
 !pet 13
 !pet 13
-!pet "THE ARCHITECTURE:", 13
+!pet "ARCHITECTURE:", 13
 !pet 13
 !pet "Cloudhub App (serves UI, pollers)", 13
 !pet 13
-!pet " -> MQ", 13
+!pet " -> Anypoint MQ", 13
 !pet 13
 !pet "  -> RasPi running Mule", 13
 !pet 13
@@ -30,6 +30,8 @@ info_screen_render
 		lda #0
 		sta screen_update_handler_ptr
 		cli
+
+		jsr screen_clear
 		
 		lda #COLOR_WHITE
 		jsr CHROUT

@@ -28,17 +28,8 @@ screen_update_handler_ptr !word 0
                 lda #23
                 sta $d018
 
-                jsr info_screen_render
-                jsr keyboard_wait
-
-                jsr logo_screen_render
-                jsr keyboard_wait
-
                 jsr rs232_open
-
-                jsr mule_sprite_init
                 jsr main_screen_render
-
                 jsr irq_init
 
 .main_loop
@@ -89,3 +80,4 @@ cmd_buffer_ptr !byte 0
 !source "heartbeat.asm"
 !source "logo_screen.asm"
 !source "info_screen.asm"
+!source "signin_screen.asm"
