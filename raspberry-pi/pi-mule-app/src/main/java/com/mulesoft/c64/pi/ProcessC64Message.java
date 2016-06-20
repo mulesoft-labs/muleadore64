@@ -2,12 +2,9 @@ package com.mulesoft.c64.pi;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
 
-import org.json.JSONObject;
 import org.mule.api.MuleEventContext;
 import org.mule.api.lifecycle.Callable;
 import java.lang.StringBuilder;
-
-import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 

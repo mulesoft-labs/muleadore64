@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <anypoint-mq:config name="Anypoint_MQ_Configuration-Rasp-PI-CLIENT" doc:name="Anypoint MQ Configuration">
-        <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="60186e15cf8d4be2b3d0897ace40d3a2" clientSecret="3208c2601b4a4581A7C4532E6139DC88"/>
+        <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="${mq.client.id}" clientSecret="${mq.client.secret}"/>
     </anypoint-mq:config>
     <http:request-config name="HueHub" host="192.168.0.166" port="80" doc:name="HTTP Request Configuration"/>
     <flow name="retrieve-message">
