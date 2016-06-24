@@ -10,6 +10,7 @@ keyboard_read
 		cmp #'T'
 		bne .keyboard_m
 		jsr tweet_screen_render
+		jsr keyboard_wait
 		jsr main_screen_render
 		rts
 .keyboard_m
@@ -21,16 +22,26 @@ keyboard_read
 		rts
 .keyboard_i
 		cmp #'I'
-		bne .keyboard_w
+		bne .keyboard_n
 		jsr info_screen_render
+		jsr keyboard_wait
+		jsr screen_enable_lowercase_chars
+		jsr main_screen_render
+		rts
+.keyboard_n
+		cmp #'N'
+		bne .keyboard_w
+		jsr intro_screen_render
 		jsr keyboard_wait
 		jsr main_screen_render
 		rts
+
 .keyboard_w
 		cmp #'S'
 		bne .done
 		jsr signin_screen_render
 		jsr keyboard_wait
+		jsr screen_enable_lowercase_chars
 		jsr main_screen_render
 		rts
 

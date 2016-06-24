@@ -4,10 +4,9 @@
 .welcome_banner2 !pet "( Powered by MuleSoft )", 0
 
 logo_screen_render
-		; disable screen update handler
+		; call .update_handler on screen refresh
 		sei
-		lda #0
-		sta screen_update_handler_ptr
+		+set16im .update_handler, screen_update_handler_ptr
 		cli
 
 		jsr screen_clear
@@ -49,4 +48,10 @@ logo_screen_render
         ldy #9          ; column
         +set16im .welcome_banner2, $fb
         jsr screen_print_str
+
+        jsr jackson_sprite_init
 		rts
+
+.update_handler
+		jsr jackson_sprite_update
+		jmp irq_return

@@ -15,88 +15,79 @@ heartbeat_tick !byte 0
 ; Looks at cmd_buffer and executes matching command
 ; ----------------------------------------------------------------------
 command_handler
-                lda cmd_buffer
-                cmp #CMD_TWITTER
-                bne .test_border_cmd
-                ; handle tweet
-                +set16im cmd_buffer + 1, $fb
-                +set16im twitter_buffer, $fd
-                jsr string_copy
-                jsr main_screen_update_twitter
-                rts
+		lda cmd_buffer
+		cmp #CMD_TWITTER
+		bne .test_border_cmd
+		; handle tweet
+		+set16im cmd_buffer + 1, $fb
+		+set16im twitter_buffer, $fd
+		jsr string_copy
+		jsr main_screen_update_twitter
+		rts
 
 .test_border_cmd
-                cmp #CMD_BORDER
-                bne .test_bg_cmd
-                lda cmd_buffer + 1
-                sta $d020       ; border color
-                rts
+		cmp #CMD_BORDER
+		bne .test_bg_cmd
+		lda cmd_buffer + 1
+		sta $d020       ; border color
+		rts
 
 .test_bg_cmd
-                cmp #CMD_BG
-                bne .test_play_cmd
-                lda cmd_buffer + 1
-                sta $d021       ; background color
-                rts
+		cmp #CMD_BG
+		bne .test_play_cmd
+		lda cmd_buffer + 1
+		sta $d021       ; background color
+		rts
 
 .test_play_cmd
-                cmp #CMD_PLAY
-                bne .test_heartbeat_cmd
-                rts
-
-.test_heartbeat_cmd
-                cmp #CMD_HEARTBEAT
-                bne .test_weather_cmd
-                ldx #0
-                ldy #39
-                clc
-                jsr PLOT
-                lda heartbeat_tick
-                eor #1
-                sta heartbeat_tick
-                bne .test_heartbeat_print_tick
-                lda #COLOR_WHITE
-                jsr CHROUT
-                lda #32                 ; print " "
-                jsr CHROUT
-                rts
-.test_heartbeat_print_tick
-                lda #COLOR_WHITE
-                jsr CHROUT
-                lda #186                ; print "{tick}"
-                jsr CHROUT
-                rts
+		cmp #CMD_PLAY
+		bne .test_weather_cmd
+		rts
 
 .test_weather_cmd
-                cmp #CMD_WEATHER
-                bne .test_visitors
-                +set16im cmd_buffer + 1, $fb
-                +set16im weather_buffer, $fd
-                jsr string_copy
-                jsr main_screen_update_weather
-                rts
+		cmp #CMD_WEATHER
+		bne .test_visitors
+		+set16im cmd_buffer + 1, $fb
+		+set16im weather_buffer, $fd
+		jsr string_copy
+		jsr main_screen_update_weather
+		rts
 
 .test_visitors
-                cmp #CMD_VISITORS
-                bne .test_signin
-                +set16im cmd_buffer + 1, $fb
-                +set16im visitors_buffer, $fd
-                jsr string_copy
-                jsr string_len
-                sty visitors_buffer_len         ; store string length
-                jsr main_screen_update_visitors
-                rts
+		cmp #CMD_VISITORS
+		bne .test_signin
+		+set16im cmd_buffer + 1, $fb
+		+set16im visitors_buffer, $fd
+		jsr string_copy
+		jsr string_len
+		; pad the string
+		lda #'.'
+		sta ($fd), y
+		iny
+		lda #32
+		sta ($fd), y
+		iny
+		sta ($fd), y
+		iny
+		sta ($fd), y
+		iny
+		lda #0
+		sta ($fd), y
+		sty visitors_buffer_len     ; store string length
+		jsr main_screen_update_visitors
+		rts
 
 .test_signin
-                cmp #CMD_SIGNIN
-                bne .done
-                +set16im cmd_buffer + 1, $fb
-                +set16im visitor_name_buffer, $fd
-                jsr string_copy
-                jsr signin_screen_render
-                jsr keyboard_wait
-                jsr main_screen_render
-                rts
+		cmp #CMD_SIGNIN
+		bne .done
+		+set16im cmd_buffer + 1, $fb
+		+set16im visitor_name_buffer, $fd
+		jsr string_copy
+		jsr signin_screen_render
+		jsr keyboard_wait
+		jsr screen_enable_lowercase_chars
+		jsr main_screen_render
+		rts
 
 .done
-                rts
+		rts

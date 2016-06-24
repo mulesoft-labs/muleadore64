@@ -23,6 +23,9 @@
 !pet "     -> Custom C64 code", 13
 !pet 0
 
+.str_banner !bin "resources/architecture.seq"
+!byte 0
+
 
 info_screen_render
 		; disable screen update handler
@@ -37,8 +40,8 @@ info_screen_render
 		jsr CHROUT
  		jsr screen_clear
 
- 		ldx #1         ; row
+ 		ldx #0         ; row
         ldy #0          ; column
-        +set16im .str_text, $fb
+        +set16im .str_banner, $fb
         jsr screen_print_str
         rts

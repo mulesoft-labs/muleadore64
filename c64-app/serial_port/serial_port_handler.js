@@ -13,17 +13,11 @@ commandHandler.eventEmitter.on('data', (data) => {
 });
 
 
-function weather() {
-  setTimeout(function () {
-    request.get({
-      url: 'http://muleadore64.cloudhub.io/api/weather'
-    });
-    weather();
-  }, 55000)
-}
-
-
 function write(str) {
+  // nasty hack for c64 upper-case screen handling
+  if (str[0] === '9') {
+    str = str.toLowerCase();
+  }
   var str = str[0] + convertToPetscii(str.substring(1));
   str += '~';  // add end marker
   process.stderr.write("writing :" + str + ":\n");
@@ -98,7 +92,16 @@ else {
 // setTimeout(() => {
 //   write('8Danielle, Gaston, John, Kristy, Nicholas, Radhika, Wayne');
 // }, 2000);
+// setTimeout(() => {
+//   write('1@muleadore64: this combination of retro computing and high tech API connectivity is amazing! Go MuleSoft!\n  - @muleadore64, at Tue 6/21 11:34pm');
+// }, 1000);
 
 // setTimeout(() => {
-//   write('9Jeff');
-// }, 2000);
+//   request.get({
+//     url: 'http://muleadore64.cloudhub.io/api/weather'
+//   });
+// }, 3000);
+
+// setTimeout(() => {
+//  write('9Jeff');
+// }, 500);
