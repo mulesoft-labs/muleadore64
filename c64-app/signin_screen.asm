@@ -23,7 +23,7 @@ signin_screen_render
 	jsr screen_print_str
 
 	ldx #10         ; row
-	ldy #14          ; column
+	ldy #10          ; column
 	+set16im visitor_name_buffer, $fb
 	jsr screen_print_str
 

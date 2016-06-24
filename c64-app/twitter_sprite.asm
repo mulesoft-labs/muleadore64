@@ -15,13 +15,18 @@ twitter_sprite_init
 		lda $d015
 		ora #%00000010
 		sta $d015
-		lda #1			; color 1
+		lda #14			; color 1
 		sta $d028
 
-		lda #25
+		lda #25			; x
 		sta $d002
-		lda #103
+		lda #103 		; y
 		sta $d003
+
+		lda #.FRAME_COUNT
+		sta .frame_counter
+		lda #0
+		sta .anim_direction
 		rts
 
 twitter_sprite_update

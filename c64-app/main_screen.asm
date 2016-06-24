@@ -78,6 +78,12 @@ main_screen_update_twitter
 	ldy #4
 	+set16im twitter_buffer, $fb
 	jsr screen_print_str
+	lda #32
+.clear_extra_chars
+	jsr CHROUT
+	cpy #255
+	iny
+	bcc .clear_extra_chars
 	rts
 
 main_screen_update_weather

@@ -34,13 +34,6 @@ function postMessage(data) {
         tweet: payload
       }
     });
-    // console.error(payload)
-    // // yuck.. nasty demo day hack
-    // var output = '';
-    // for (var i = 0; i < payload.length; i++) {
-    //   output += _p_toascii(payload[i]);
-    // }
-    // payload = output;
   }
   else {
     return Promise.reject('invalid command');

@@ -12,7 +12,7 @@ hand_sprite_init
 		sta $07fb		; sprite3 pointer location
 		sta $07fc		; sprite4 pointer location
 		lda $d015
-		ora #%00011000 	; enable sprite 3+4
+		ora #%00011000 	; enable sprite 3 + 4
 		sta $d015
 
 		; left hand
@@ -30,7 +30,7 @@ hand_sprite_init
 		lda #130
 		sta $d009
 
-		lda #3
+		lda #7			; sprite color
 		sta $d02a
 		sta $d02b
 		rts

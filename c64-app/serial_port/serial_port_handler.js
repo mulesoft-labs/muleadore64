@@ -15,9 +15,20 @@ commandHandler.eventEmitter.on('data', (data) => {
 
 function write(str) {
   // nasty hack for c64 upper-case screen handling
+  var maxLength = 20;
   if (str[0] === '9') {
-    str = str.toLowerCase();
+    var data = str.substr(1);
+    if (data.length > maxLength) {
+      data = data.substr(0, maxLength);
+    }
+    else {
+      var padLength = (maxLength - data.length) / 2;
+      data = ' '.repeat(padLength) + data + ' '.repeat(padLength);
+    }
+    data = data.toLowerCase();
+    str = str[0] + data;
   }
+  // end nasty hack
   var str = str[0] + convertToPetscii(str.substring(1));
   str += '~';  // add end marker
   process.stderr.write("writing :" + str + ":\n");
@@ -72,7 +83,7 @@ if (mode === 0) {
     process.exit(0);
   });
   process.stdout.on('error', function () {
-    process.stderr.write('error');
+    process.stderr.write('stdout error');
   });
 }
 else {
@@ -95,6 +106,14 @@ else {
 // setTimeout(() => {
 //   write('1@muleadore64: this combination of retro computing and high tech API connectivity is amazing! Go MuleSoft!\n  - @muleadore64, at Tue 6/21 11:34pm');
 // }, 1000);
+
+// setTimeout(() => {
+//   write('1this is a really long tweet');
+// }, 1000);
+
+// setTimeout(() => {
+//   write('111');
+// }, 3000);
 
 // setTimeout(() => {
 //   request.get({

@@ -1,5 +1,9 @@
 !zone tweet_screen
-.str_tweet_banner !pet "Send a tweet from 1985 as @muleadore64:", 0
+.str_tweet_banner
+!pet "    #mulesoft-connects-everything", 13, 13
+!pet "        #c64       #mulesoftLobby", 13, 13, 13, 13
+!pet "Tweet from our internet-connected 1985              Commodore64:", 13, 13
+!byte 0
 .str_sending !pet "Sending data to event ingest API...", 0
 .str_complete !pet "Complete. Hit any key to continue.", 0
 .tweet_buffer !fill 140, 0
@@ -15,14 +19,19 @@ tweet_screen_render
 	lda #COLOR_WHITE
 	jsr CHROUT      ; foreground white
 
-	ldx #10
+	ldx #5
 	ldy #0		
 	+set16im .str_tweet_banner, $fb
 	jsr screen_print_str
 
 	jsr twitter_sprite_init
 
-	ldx #12
+	lda #155
+	sta $d002
+	lda #50
+	sta $d003
+
+	ldx #14
 	ldy #0
 	clc
 	jsr PLOT
@@ -39,17 +48,21 @@ tweet_screen_render
 	sta .tweet_buffer, y
 
 	tya
+	cmp #2
+check_tweet_2
 	beq .no_data_entered
 
-	ldx #14
+	ldx #18
 	ldy #0
 	+set16im .str_sending, $fb
 	jsr screen_print_str
 
 	+set16im .str_complete, $fb
-	ldx #17
+	ldx #20
 	ldy #0
 	jsr screen_print_str
+
+	+set16im .tweet_buffer, $fb
 
 	lda #'1'	; cmd-type
 	jsr rs232_write_byte

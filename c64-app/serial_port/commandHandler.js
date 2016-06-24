@@ -32,7 +32,7 @@ function handle(chunk) {
   else {
     muleService.postMessage(cmd)
     .catch(function(e) {
-      console.error(e);
+      console.error('e', e);
     });
   }
 }
@@ -46,7 +46,7 @@ function fetchNextMessage() {
       }
     })
     .catch(function(e) {
-      console.error(e);
+      console.error('e', e);
     })
     .finally(function () {
       lastFetched = Date.now();

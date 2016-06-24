@@ -14,7 +14,7 @@ weather_sprite_init
 		lda $d015
 		ora #%00100000
 		sta $d015
-		lda #1			; color 1
+		lda #15			; color
 		sta $d02c
 
 		lda #25
