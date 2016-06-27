@@ -70,6 +70,8 @@ check_tweet_2
 	lda #'~'	; cmd-trailer
 	jsr rs232_write_byte
 
+	jsr keyboard_wait
+
 .no_data_entered
 	rts
 

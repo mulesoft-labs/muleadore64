@@ -3,8 +3,8 @@
 ms_pos_x_low !byte 60
 ms_pos_x_high !byte 0
 .current_frame !byte 0
-.walk_delay !byte 2
-.anim_delay !byte 3
+.walk_delay !byte 4
+.anim_delay !byte 5
 
 .POS_Y = 227
 .FRAME_COUNT = 8

@@ -1,5 +1,5 @@
 !cpu 6510
-!to "./build/ms3.prg",cbm
+!to "./build/ms4.prg",cbm
 !zone main
 !source "macros.asm"
 
@@ -94,6 +94,7 @@ cmd_buffer_ptr !byte 0
 !source "jackson_sprite.asm"
 !source "twitter_sprite.asm"
 !source "weather_sprite.asm"
+!source "beep.asm"
 
 !if * > $9fff {
 	!error "Program reached ROM: ", * - $d000, " bytes overlap."

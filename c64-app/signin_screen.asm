@@ -48,6 +48,8 @@ signin_screen_render
 	; jsr screen_print_str
 
 	jsr hand_sprite_init
+
+	jsr do_beep
 	rts
 
 .update_handler
