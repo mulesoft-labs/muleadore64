@@ -58,17 +58,22 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
                 <http:query-param paramName="appid" value="deb15d321034ef704f75416ff633b9a5"/>
             </http:request-builder>
         </http:request>
-        <set-variable variableName="messageId" value="#[message.id]" doc:name="Variable"/>
+        <set-variable variableName="messageId" value="#[message.id]" doc:name="Track Message ID"/>
+        <set-variable variableName="payloadSize" value="#[message.payloadAs(java.lang.String).toString().length()]" doc:name="Payload Size"/>
+        <logger message="OMFG bytes: #[message.payloadAs(java.lang.String).toString().getBytes().length]" level="INFO" doc:name="Logger"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
 %var weatherString = () -> "SF: " ++ payload.list[0].main.temp as :string {format: "#"} ++ "F $(payload.list[0].weather[0].main), BA: " ++ (((payload.list[1].main.temp as :number) -32)*5/9) as :string {format: "#"} ++ "C $(payload.list[1].weather[0].main)"
+%var cmd = () -> "7" ++ weatherString()
 ---
 {
 	type: "weather",
 	id: flowVars.messageId,
 	value: weatherString(),
-	c64command: "7" ++ weatherString()
+	c64command: cmd(),
+	bytesBefore: flowVars.payloadSize,
+	bytesAfter: sizeOf cmd()
 }]]></dw:set-payload>
         </dw:transform-message>
         <logger message="Weather command sent: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
@@ -85,17 +90,21 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
     <flow name="visitors-retrieve-api">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/visitors" allowedMethods="GET" doc:name="HTTP"/>
         <http:request config-ref="HTTP_Request_Greenhouse_Visitors" path="/api/onsiteToday" method="GET" doc:name="HTTP"/>
-        <set-variable variableName="messageId" value="#[message.id]" doc:name="Variable"/>
+        <set-variable variableName="messageId" value="#[message.id]" doc:name="Track Message ID"/>
+        <set-variable variableName="payloadSize" value="#[message.payloadAs(java.lang.String).toString().length()]" doc:name="Payload Size"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
 %var visitors = trim (payload orderBy $.first_name reduce ((val, acc="") -> (acc ++ val.first_name ++ " "))) replace " " with ", "
+%var cmd = "8" ++ visitors
 ---
 {
 	type: "visitors",
 	id: flowVars.messageId,
 	value: visitors,
-	c64command: "8" ++ visitors
+	c64command: cmd,
+	bytesBefore: flowVars.payloadSize,
+	bytesAfter: sizeOf cmd
 }]]></dw:set-payload>
         </dw:transform-message>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
@@ -104,16 +113,20 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
     </flow>
     <flow name="visitors-POST">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/visitors" allowedMethods="POST" doc:name="HTTP"/>
-        <set-variable variableName="messageId" value="#[message.id]" doc:name="Variable"/>
+        <set-variable variableName="messageId" value="#[message.id]" doc:name="Track Message ID"/>
+        <set-variable variableName="payloadSize" value="#[message.payloadAs(java.lang.String).toString().length()]" doc:name="Payload Size"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
+%var cmd = "9" ++ payload.firstName
 ---
 {
 	type: "signIn",
 	id: flowVars.messageId,
 	value: payload.firstName,
-	c64command: "9" ++ payload.firstName
+	c64command: cmd,
+	bytesBefore: flowVars.payloadSize,
+	bytesAfter: sizeOf cmd
 }]]></dw:set-payload>
         </dw:transform-message>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
@@ -126,19 +139,23 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
                 <twitter:keyword>@muleadore64</twitter:keyword>
             </twitter:keywords>
         </twitter:filtered-stream>
-        <set-variable variableName="messageId" value="#[message.id]" doc:name="Variable"/>
+        <set-variable variableName="messageId" value="#[message.id]" doc:name="Track Message ID"/>
+        <set-variable variableName="payloadSize" value="#[message.payloadAs(java.lang.String).toString().length()]" doc:name="Payload Size"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:input-payload doc:sample="list_Status.dwl"/>
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
+%var cmd = "1$(payload.text)\n   - @$(payload.user.screenName), at " ++ (now >> |-07:00|) as :string {format: "E M/d h:mm a"}
 ---
 {
 	type: "tweet",
 	id: flowVars.messageId,
 	user: "@$(payload.user.screenName)",
 	text: payload.text,
-	c64command: "1$(payload.text)\n   - @$(payload.user.screenName), at " ++ (now >> |-07:00|) as :string {format: "E M/d h:mm a"}
+	c64command: cmd,
+	bytesBefore: flowVars.payloadSize,
+	bytesAfter: sizeOf cmd
 }]]></dw:set-payload>
         </dw:transform-message>
         <logger message="New Tweet Detected.  Sending message: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
@@ -153,7 +170,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
     </flow>
     <flow name="welcome">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/welcome" allowedMethods="PUT" doc:name="HTTP"/>
-        <set-payload value="{&quot;type&quot;:&quot;welcome&quot;, &quot;id&quot;:&quot;#[message.id]&quot;, &quot;c64command&quot;:&quot;4&quot;}" mimeType="application/json" doc:name="Set Payload"/>
+        <set-payload value="{&quot;type&quot;:&quot;welcome&quot;, &quot;id&quot;:&quot;#[message.id]&quot;, &quot;c64command&quot;:&quot;4&quot;, &quot;bytesBefore&quot;: &quot;8&quot;, &quot;bytesAfter&quot;: &quot;2&quot;}" mimeType="application/json" doc:name="Set Payload"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="Welcome command sent: #[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
@@ -165,11 +182,13 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
                 <http:header headerName="Content-Type" value="text/html; charset=UTF-8"/>
             </http:response-builder>
         </http:listener>
-        <set-variable variableName="messageId" value="#[message.id]" doc:name="Variable"/>
+        <set-variable variableName="messageId" value="#[message.id]" doc:name="Track Message ID"/>
+        <set-variable variableName="payloadSize" value="#[message.payloadAs(java.lang.String).toString().length()]" doc:name="Payload Size"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
+%var cmd = ("3" ++ payload.poke as :string) when payload.colortype == "background" otherwise ("2" ++ payload.poke as :string)
 ---
 {
 	type: "color",
@@ -178,7 +197,9 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 	value: payload.color,
 	hex: payload.hex,
 	poke: payload.poke,
-	c64command: ("3" ++ payload.poke as :string) when payload.colortype == "background" otherwise ("2" ++ payload.poke as :string)
+	c64command: cmd,
+	bytesBefore: flowVars.payloadSize,
+	bytesAfter: sizeOf cmd
 }]]></dw:set-payload>
         </dw:transform-message>
         <logger message="Queueing transformed color command: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
@@ -190,7 +211,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
             <http:response-builder>
             </http:response-builder>
         </http:listener>
-        <set-payload value="{&quot;type&quot;:&quot;beep&quot;, &quot;id&quot;:&quot;#[message.id]&quot;, &quot;c64command&quot;: &quot;5&quot;}" doc:name="Set Payload"/>
+        <set-payload value="{&quot;type&quot;:&quot;beep&quot;, &quot;id&quot;:&quot;#[message.id]&quot;, &quot;c64command&quot;: &quot;5&quot;, &quot;bytesBefore&quot;: &quot;10&quot;, &quot;bytesAfter&quot;: &quot;2&quot;}" doc:name="Set Payload"/>
         <logger message="Sending beep command: #[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
