@@ -60,7 +60,6 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         </http:request>
         <set-variable variableName="messageId" value="#[message.id]" doc:name="Track Message ID"/>
         <set-variable variableName="payloadSize" value="#[message.payloadAs(java.lang.String).toString().length()]" doc:name="Payload Size"/>
-        <logger message="OMFG bytes: #[message.payloadAs(java.lang.String).toString().getBytes().length]" level="INFO" doc:name="Logger"/>
         <dw:transform-message doc:name="Transform Message">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
