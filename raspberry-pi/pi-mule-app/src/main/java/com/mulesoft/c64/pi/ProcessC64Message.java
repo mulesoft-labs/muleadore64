@@ -30,6 +30,12 @@ public class ProcessC64Message implements Callable {
 			case "power":
 				Memory.power = !Memory.power;
 				return createLightStateString(Memory.power, null, null, null, null, 0, 0);
+			case "off":
+				Memory.power = false;
+				return createLightStateString(Memory.power, null, null, null, null, 0, 0);
+			case "on":
+				Memory.power = true;
+				return createLightStateString(Memory.power, null, null, null, null, 0, 0);
 			case "0":
 				// Black
 				return createLightStateString(Memory.power, 1, 0, 0, 248, 0.3804, 0.3768);
