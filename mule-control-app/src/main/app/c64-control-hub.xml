@@ -215,6 +215,11 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
+    <flow name="raw">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/raw" allowedMethods="POST" doc:name="HTTP"/>
+        <logger message="Sending Raw command: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
+        <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
+    </flow>
     <flow name="last-message-sent">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/lastMsg" doc:name="HTTP"/>
         <component class="com.mulesoft.c64.Reader" doc:name="Java"/>
