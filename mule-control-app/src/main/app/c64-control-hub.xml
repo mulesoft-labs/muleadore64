@@ -31,11 +31,19 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
     <http:request-config name="HTTP_Request_OpenWeatherMap" host="api.openweathermap.org" port="80" doc:name="HTTP Request Configuration"/>
     <http:request-config name="HTTP_Request_Greenhouse_Visitors" host="mulesoft-gh-cloudhub.cloudhub.io" port="80" doc:name="HTTP Request Configuration"/>
     <flow name="control-static-content">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
         <http:static-resource-handler resourceBase="${app.home}/static/control" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
     <flow name="c64-control-hubFlow">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/flow/*" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/flow/*" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
         <http:static-resource-handler resourceBase="${app.home}/static/flow" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
     <flow name="weather-poll">
@@ -46,7 +54,11 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Invoked weather flow from poll" level="INFO" doc:name="Logger"/>
     </flow>
     <flow name="weather-api">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/weather" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/weather" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
         <vm:outbound-endpoint exchange-pattern="one-way" path="weather" doc:name="VM"/>
     </flow>
     <flow name="weather-produce-msg">
@@ -87,7 +99,11 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Running visitors poll" level="INFO" doc:name="Logger"/>
     </flow>
     <flow name="visitors-retrieve-api">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/visitors" allowedMethods="GET" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/visitors" allowedMethods="GET" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
         <http:request config-ref="HTTP_Request_Greenhouse_Visitors" path="/api/onsiteToday" method="GET" doc:name="HTTP"/>
         <set-variable variableName="messageId" value="#[message.id]" doc:name="Track Message ID"/>
         <set-variable variableName="payloadSize" value="#[message.payloadAs(java.lang.String).toString().length()]" doc:name="Payload Size"/>
@@ -111,7 +127,11 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
     <flow name="visitors-POST">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/visitors" allowedMethods="POST" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/visitors" allowedMethods="POST" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
         <set-variable variableName="messageId" value="#[message.id]" doc:name="Track Message ID"/>
         <set-variable variableName="payloadSize" value="#[message.payloadAs(java.lang.String).toString().length()]" doc:name="Payload Size"/>
         <dw:transform-message doc:name="Transform Message">
@@ -162,13 +182,21 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
     <flow name="send-tweet">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/tweet" allowedMethods="POST" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/tweet" allowedMethods="POST" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
         <set-payload value="@muleadore64: #[message.payload.tweet]" mimeType="text/plain" doc:name="Set Payload"/>
         <twitter:update-status config-ref="Twitter__Configuration-c64" status="#[message.payload]" doc:name="Twitter"/>
         <logger message="Tweet status sent: #[message.payload.text]" level="INFO" doc:name="Logger"/>
     </flow>
     <flow name="welcome">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/welcome" allowedMethods="PUT" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/welcome" allowedMethods="PUT" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
         <set-payload value="{&quot;type&quot;:&quot;welcome&quot;, &quot;id&quot;:&quot;#[message.id]&quot;, &quot;c64command&quot;:&quot;4&quot;, &quot;bytesBefore&quot;: &quot;8&quot;, &quot;bytesAfter&quot;: &quot;2&quot;}" mimeType="application/json" doc:name="Set Payload"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="Welcome command sent: #[message.payload]" level="INFO" doc:name="Logger"/>
@@ -179,6 +207,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/color" allowedMethods="POST" doc:name="HTTP">
             <http:response-builder>
                 <http:header headerName="Content-Type" value="text/html; charset=UTF-8"/>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
             </http:response-builder>
         </http:listener>
         <set-variable variableName="messageId" value="#[message.id]" doc:name="Track Message ID"/>
@@ -208,6 +237,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
     <flow name="beep">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/beep" doc:name="HTTP">
             <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
             </http:response-builder>
         </http:listener>
         <set-payload value="{&quot;type&quot;:&quot;beep&quot;, &quot;id&quot;:&quot;#[message.id]&quot;, &quot;c64command&quot;: &quot;5&quot;, &quot;bytesBefore&quot;: &quot;10&quot;, &quot;bytesAfter&quot;: &quot;2&quot;}" doc:name="Set Payload"/>
@@ -216,12 +246,36 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
     </flow>
     <flow name="raw">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/raw" allowedMethods="POST" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/raw" allowedMethods="POST" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
         <logger message="Sending Raw command: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
     </flow>
     <flow name="last-message-sent">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/lastMsg" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/lastMsg" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
         <component class="com.mulesoft.c64.Reader" doc:name="Java"/>
+    </flow>
+    <flow name="read-state">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/state" allowedMethods="GET" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
+        <component class="com.mulesoft.c64.ReadState" doc:name="Java"/>
+    </flow>
+    <flow name="update-state">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/state" allowedMethods="PATCH" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Access-Control-Allow-Origin" value="*"/>
+            </http:response-builder>
+        </http:listener>
+        <component class="com.mulesoft.c64.UpdateState" doc:name="Java"/>
     </flow>
 </mule>
