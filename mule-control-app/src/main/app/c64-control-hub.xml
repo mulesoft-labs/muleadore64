@@ -30,6 +30,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
     <http:request-config name="HTTP_Request_Configuration" host="api.openweathermap.org" port="80" basePath="data/2.5/weather" doc:name="HTTP Request Configuration"/>
     <http:request-config name="HTTP_Request_OpenWeatherMap" host="api.openweathermap.org" port="80" doc:name="HTTP Request Configuration"/>
     <http:request-config name="HTTP_Request_Greenhouse_Visitors" host="mulesoft-gh-cloudhub.cloudhub.io" port="80" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Update_State" host="127.0.0.1" port="8081" doc:name="HTTP Request Configuration"/>
     <flow name="control-static-content">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/control/*" doc:name="HTTP">
             <http:response-builder>
@@ -90,11 +91,58 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Weather command sent: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <processor-chain>
+                <dw:transform-message doc:name="Transform Message">
+                    <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	weatherToMule: {
+		lastActive: (now >> |-07:00|) as :number {unit: "milliseconds"},
+		message: payload
+	}
+}]]></dw:set-payload>
+                </dw:transform-message>
+                <http:request config-ref="HTTP_Update_State" path="/api/state" method="PATCH" doc:name="HTTP"/>
+            </processor-chain>
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-muleToAmq" doc:name="VM"/>
+        </scatter-gather>
+    </flow>
+    <flow name="update-state-muleToAmq">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="update-state-muleToAmq" doc:name="VM"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	muleToAmq: {
+		lastActive: (now >> |-07:00|) as :number {unit: "milliseconds"},
+		message: payload
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <http:request config-ref="HTTP_Update_State" path="/api/state" method="PATCH" doc:name="HTTP"/>
+    </flow>
+    <flow name="update-state-controlAppToMule">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="update-state-controlAppToMule" doc:name="VM"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	controlAppToMule: {
+		lastActive: (now >> |-07:00|) as :number {unit: "milliseconds"},
+		message: payload
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <http:request config-ref="HTTP_Update_State" path="/api/state" method="PATCH" doc:name="HTTP"/>
     </flow>
     <flow name="visitors-poll">
         <poll doc:name="Poll">
             <fixed-frequency-scheduler frequency="1" timeUnit="HOURS"/>
-            <flow-ref name="visitors-retrieve-api" doc:name="Flow Reference"/>
+            <flow-ref name="visitors-retrieve-api" doc:name="visitors-retrieve-api"/>
         </poll>
         <logger message="Running visitors poll" level="INFO" doc:name="Logger"/>
     </flow>
@@ -125,6 +173,23 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <logger message="Updating today's scheduled visitors: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <processor-chain>
+                <dw:transform-message doc:name="Transform Message">
+                    <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	greenhouseToMule: {
+		lastActive: (now >> |-07:00|) as :number {unit: "milliseconds"},
+		message: payload
+	}
+}]]></dw:set-payload>
+                </dw:transform-message>
+                <http:request config-ref="HTTP_Update_State" path="/api/state" method="PATCH" doc:name="HTTP"/>
+            </processor-chain>
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-muleToAmq" doc:name="VM"/>
+        </scatter-gather>
     </flow>
     <flow name="visitors-POST">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/visitors" allowedMethods="POST" doc:name="HTTP">
@@ -151,6 +216,23 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <logger message="Office visitor sign-in: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <processor-chain>
+                <dw:transform-message doc:name="Transform Message">
+                    <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	envoyToMule: {
+		lastActive: (now >> |-07:00|) as :number {unit: "milliseconds"},
+		message: payload
+	}
+}]]></dw:set-payload>
+                </dw:transform-message>
+                <http:request config-ref="HTTP_Update_State" path="/api/state" method="PATCH" doc:name="HTTP"/>
+            </processor-chain>
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-muleToAmq" doc:name="VM"/>
+        </scatter-gather>
     </flow>
     <flow name="stream-recieve-tweets">
         <twitter:filtered-stream config-ref="Twitter__Configuration-c64" doc:name="Twitter (Streaming)">
@@ -180,6 +262,23 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="New Tweet Detected.  Sending message: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ - interactive queue"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <processor-chain>
+                <dw:transform-message doc:name="Transform Message">
+                    <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	twitterToMule: {
+		lastActive: (now >> |-07:00|) as :number {unit: "milliseconds"},
+		message: payload
+	}
+}]]></dw:set-payload>
+                </dw:transform-message>
+                <http:request config-ref="HTTP_Update_State" path="/api/state" method="PATCH" doc:name="HTTP"/>
+            </processor-chain>
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-muleToAmq" doc:name="VM"/>
+        </scatter-gather>
     </flow>
     <flow name="send-tweet">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/tweet" allowedMethods="POST" doc:name="HTTP">
@@ -190,6 +289,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <set-payload value="@muleadore64: #[message.payload.tweet]" mimeType="text/plain" doc:name="Set Payload"/>
         <twitter:update-status config-ref="Twitter__Configuration-c64" status="#[message.payload]" doc:name="Twitter"/>
         <logger message="Tweet status sent: #[message.payload.text]" level="INFO" doc:name="Logger"/>
+        <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-controlAppToMule" doc:name="VM"/>
     </flow>
     <flow name="welcome">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/welcome" allowedMethods="PUT" doc:name="HTTP">
@@ -202,6 +302,10 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Welcome command sent: #[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-controlAppToMule" doc:name="VM"/>
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-muleToAmq" doc:name="VM"/>
+        </scatter-gather>
     </flow>
     <flow name="color">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/color" allowedMethods="POST" doc:name="HTTP">
@@ -233,6 +337,10 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Queueing transformed color command: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <component class="com.mulesoft.c64.Writer" metadata:id="05b2a005-acd1-42db-8651-71017ef891f9" doc:name="Java"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-controlAppToMule" doc:name="VM"/>
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-muleToAmq" doc:name="VM"/>
+        </scatter-gather>
     </flow>
     <flow name="beep">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/beep" doc:name="HTTP">
@@ -244,6 +352,10 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <logger message="Sending beep command: #[message.payload]" level="INFO" doc:name="Logger"/>
         <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration-c64-control-hub" destination="c64-interactive-queue" doc:name="Anypoint MQ"/>
         <component class="com.mulesoft.c64.Writer" doc:name="Java"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-controlAppToMule" doc:name="VM"/>
+            <vm:outbound-endpoint exchange-pattern="one-way" path="update-state-muleToAmq" doc:name="VM"/>
+        </scatter-gather>
     </flow>
     <flow name="raw">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/raw" allowedMethods="POST" doc:name="HTTP">

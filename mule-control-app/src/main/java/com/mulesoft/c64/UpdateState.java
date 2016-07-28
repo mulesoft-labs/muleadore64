@@ -1,7 +1,5 @@
 package com.mulesoft.c64;
 
-import java.util.Map;
-
 import org.mule.api.MuleEventContext;
 import org.mule.api.lifecycle.Callable;
 
@@ -15,7 +13,7 @@ public class UpdateState implements Callable {
 	@Override
 	public Object onCall(MuleEventContext eventContext) throws Exception {
 		UpdateCommand cmd = gson.fromJson(eventContext.getMessage().getPayloadAsString(), UpdateCommand.class);
-
+		
 		if (cmd.twitterToMule != null) Memory.state.twitterToMule = cmd.twitterToMule;
 		if (cmd.weatherToMule != null) Memory.state.weatherToMule = cmd.weatherToMule;
 		if (cmd.greenhouseToMule != null) Memory.state.greenhouseToMule = cmd.greenhouseToMule;
