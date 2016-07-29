@@ -47,6 +47,10 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         </http:listener>
         <http:static-resource-handler resourceBase="${app.home}/static/flow" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
+    <flow name="c64-control-hubFlow1">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/control2/*" doc:name="HTTP"/>
+        <http:static-resource-handler resourceBase="${app.home}/static/control2" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
+    </flow>
     <flow name="weather-poll">
         <poll doc:name="Poll">
             <fixed-frequency-scheduler frequency="10" timeUnit="MINUTES"/>
@@ -358,7 +362,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         </scatter-gather>
     </flow>
     <flow name="raw">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/raw" allowedMethods="POST" doc:name="HTTP">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/raw"  doc:name="HTTP">
             <http:response-builder>
                 <http:header headerName="Access-Control-Allow-Origin" value="*"/>
             </http:response-builder>
