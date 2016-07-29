@@ -1,0 +1,47 @@
+body, html, #myContainer {
+  height: 100%;
+}
+
+#myContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+#top_div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 30%;
+  padding-top:20px;
+}
+
+#bottom_div {
+  border-top: 1px solid #aaa;
+  padding-top: 10px;
+  position: absolute;
+  top: 70%;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color:#eee;
+}
+
+.flow-icon {
+  width: 100px;
+  paddng: 10px;
+}
+
+.arrow-highlight {
+  color: blue;
+}
+
+#bottom_div, #bottom_div button {
+  font-size: 25px;
+}
+.screen-button {
+  
+}

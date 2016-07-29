@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Muleadore64</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="js/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://fb.me/react-0.14.8.js"></script>
+    <script src="https://fb.me/react-dom-0.14.8.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="css/custom.css" />
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="js/lodash-4.14.0.js"></script>
+    
+    <style>
+
+      .colorclickdiv {
+        width: 80px;
+        height: 50px;
+        margin: 5px;
+        float: left;
+      }      
+
+    </style>
+    <script>
+      baseUrl = "http://muleadore64.cloudhub.io";
+    </script>
+
+    <script type="text/babel" src="js/colorsControl.js"></script>
+
+  </head>
+
+  <body>
+
+    
+    <div id="myContainer">
+      <div id="top_div">
+      </div>
+
+      <div id="bottom_div">
+        <div class="container">
+          <div class="row">
+              <button id="showMainScreenButton" class="btn btn-primary screen-button">Main Screen</button>
+              <button id="showLogoScreenButton" class="btn btn-default screen-button">Logo Screen</button>
+              <button id="showTweetScreenButton" class="btn btn-default screen-button">Tweet Screen</button>
+<!--               <button id="showLightsScreenButton" class="btn btn-default screen-button">Lights Screen</button> -->
+              <button id="showArchitectureScreenButton" class="btn btn-default screen-button">Architecture Screen</button>
+          </div>
+          <div class="row">
+          <br>
+          Border color:
+              <div id="colorcontent"></div>
+          </div>
+          <div class="row">
+            Tweet <strong>@muleadore64</strong> to see your tweet on the Commodore!
+<!--             Handle: <input type="text" id="tweetHandle" />
+            Message: <input type="text" id="tweetInput" maxLength=80 />
+            <button id="sendTweetButton" class="btn btn-default">Send tweet</button> -->
+          </div>
+        </div>
+      </div>
+    <script src="js/custom.js"></script>
+    <script src="js/flowGraph.js"></script>
+  </body>
+
+  <script>
+  setInterval(fetch, 500);
+
+  function fetch() {
+    $.ajax({
+      type: 'GET',
+      url: baseUrl + '/api/state',
+      dataType: 'json',
+      success: function(data, textStatus, jqXHR) {
+        updateState(data);
+      },
+      error: function(a,b,e) {
+        console.error(e);
+      }
+    });
+  }
+  fetch();
+    // setTimeout(function() {
+    //   var state = {
+    //     controlAppToMule: {
+    //       lastActive: Date.now()
+    //     }
+    //   };
+    //   updateState(state);
+    // }, 3000);
+    // setTimeout(function() {
+    //   var state = {
+    //     controlAppToMule: {
+    //       lastActive: 0
+    //     },
+    //     muleToAmq: {
+    //       lastActive: Date.now()
+    //     }
+    //   };
+    //   updateState(state);
+    // }, 4000);
+    // setTimeout(function() {
+    //   var state = {
+    //     muleToAmq: {
+    //       lastActive: 0
+    //     },
+    //     amqToPi: {
+    //       lastActive: Date.now()
+    //     }
+    //   };
+    //   updateState(state);
+    // }, 6000);
+    // setTimeout(function() {
+    //   var state = {
+    //     amqToPi: {
+    //       lastActive: 0
+    //     },
+    //     piToC64: {
+    //       lastActive: Date.now()
+    //     }
+    //   };
+    //   updateState(state);
+    // }, 8000);
+    // setTimeout(function() {
+    //   var state = {
+    //     piToC64: {
+    //       lastActive: 0
+    //     }
+    //   };
+    //   updateState(state);
+    // }, 7000);
+
+
+
+    function updateState(state) {
+      var updatedRoutes = [];
+      _.forEach(_.keys(state), (key) => {
+        var isActive = state[key].lastActive > Date.now() - 2000;
+        var result = _.find(window.routes, {id: key});
+        if (result) {
+                  //console.log(key, (Date.now() - state[key].lastActive) / 1000);
+          var newRoute = _.clone(result);
+          newRoute.isActive = isActive;
+          updatedRoutes.push(newRoute);
+        }
+        else {
+          //console.error(key + ' not found');
+        }
+      });
+      refreshGraph(updatedRoutes);
+    }
+  </script>
+
+</html>
