@@ -41,14 +41,15 @@ $("#sendTweetButton").click(function() {
 });
 
 function setScreen(screenId) {
+  var d = JSON.stringify({
+      type: 'raw',
+      c64command: screenId
+    });
   $.ajax({
     method: 'POST',
     contentType: 'application/json',
     url: baseUrl + '/api/raw',
-    data: {
-      type: 'raw',
-      c64command: screenId
-    },
+    data: d,
     success: function(data, textStatus, jqXHR) {
       toastr.success('Success');
     },
