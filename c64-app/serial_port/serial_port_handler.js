@@ -2,33 +2,39 @@
 'use strict';
 var Promise = require('bluebird');
 var commandHandler = require('./commandHandler.js');
-var SerialPort = require("serialport").SerialPort;
+var SerialPort = require("serialport");
 var request = require('request-promise');
-var moment = require('moment');
 
 var mode = 0; // 0 = stdin/out, 1 = serial
+const RESET_TIMER_MAX = 3 * 60;
+var resetTimer = 0;
 
-commandHandler.eventEmitter.on('data', (data) => {
+commandHandler.eventEmitter.on('dataFromMQ', (data) => {
   write(data);
 });
 
+commandHandler.eventEmitter.on('gotCommandFromC64', (data) => {
+  resetTimer = 0;
+});
+
+setInterval(() => {
+  resetTimer += 5;
+  if (resetTimer >= RESET_TIMER_MAX) {
+    // this is nasty, but required to reset to defaults after X minutes
+    const RESET_BORDER_CMD = '20';
+    const RESET_MAIN_SCREEN_CMD = 'd';
+    write(RESET_BORDER_CMD);    // reset border color
+    write(RESET_MAIN_SCREEN_CMD);
+    commandHandler.resetEnvironment();
+    resetTimer = 0;
+  }
+}, 5000);
+
 
 function write(str) {
-  // nasty hack for c64 upper-case screen handling
-  var maxLength = 20;
   if (str[0] === '9') {
-    var data = str.substr(1);
-    if (data.length > maxLength) {
-      data = data.substr(0, maxLength);
-    }
-    else {
-      var padLength = (maxLength - data.length) / 2;
-      data = ' '.repeat(padLength) + data + ' '.repeat(padLength);
-    }
-    data = data.toLowerCase();
-    str = str[0] + data;
+    str = nastyHackForSigninCommand();
   }
-  // end nasty hack
   var str = str[0] + convertToPetscii(str.substring(1));
   str += '~';  // add end marker
   process.stderr.write("writing :" + str + ":\n");
@@ -42,6 +48,21 @@ function write(str) {
   else {
     process.stdout.write(str);
   }
+}
+
+// hack for c64 upper-case screen handling and padding
+function nastyHackForSigninCommand() {
+  var maxLength = 20;
+  var data = str.substr(1);
+  if (data.length > maxLength) {
+    data = data.substr(0, maxLength);
+  }
+  else {
+    var padLength = (maxLength - data.length) / 2;
+    data = ' '.repeat(padLength) + data + ' '.repeat(padLength);
+  }
+  data = data.toLowerCase();
+  return str[0] + data;
 }
 
 // from petcat.c
@@ -66,8 +87,6 @@ function convertToPetscii(input) {
 
 
 if (mode === 0) {
-  //process.stdin.setEncoding('ascii');
-
   // seems to be needed to 'wake up' the connection
   process.stdout.write('\x00');
 
@@ -99,28 +118,3 @@ else {
     }
   });
 }
-
-// setTimeout(() => {
-//   write('8Danielle, Gaston, John, Kristy, Nicholas, Radhika, Wayne');
-// }, 2000);
-// setTimeout(() => {
-//   write('1@muleadore64: this combination of retro computing and high tech API connectivity is amazing! Go MuleSoft!\n  - @muleadore64, at Tue 6/21 11:34pm');
-// }, 1000);
-
-// setTimeout(() => {
-//   write('1this is a really long tweet');
-// }, 1000);
-
-// setTimeout(() => {
-//   write('111');
-// }, 3000);
-
-// setTimeout(() => {
-//   request.get({
-//     url: 'http://muleadore64.cloudhub.io/api/weather'
-//   });
-// }, 3000);
-
-// setTimeout(() => {
-//  write('9Jeff');
-// }, 500);

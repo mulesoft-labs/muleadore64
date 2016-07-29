@@ -1,7 +1,7 @@
 {
   "name": "serial_port",
   "version": "1.0.0",
-  "description": "",
+  "description": "Handles the connection between the C64 and Mule services",
   "main": "serial_port_handler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.3.5",
-    "moment": "^2.13.0",
     "request-promise": "^3.0.0",
-    "serialport": "^3.1.2"
+    "serialport": "^4.0.1"
   }
 }

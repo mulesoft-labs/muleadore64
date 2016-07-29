@@ -1,6 +1,7 @@
 'use strict'
 var request = require('request-promise');
 var Promise = require('bluebird');
+var controlAppService = require('./controlAppService.js');
 
 module.exports = {
   getMessage,
@@ -20,10 +21,18 @@ function postMessage(data) {
   var cmd;
   var payload;
   if (data.startsWith('2')) {
+    controlAppService.markRouteAsActive('piToLights')
+    .catch(function(e) {
+      console.error('e', e);
+    });
     cmd = 'light';
     payload = data.substr(1).toLowerCase();
   }
   else if (data.startsWith('1')) {
+    controlAppService.markRouteAsActive('piToTwitter')
+    .catch(function(e) {
+      console.error('e', e);
+    });
     cmd = 'twitter';
     payload = data.substr(1).toLowerCase();
 

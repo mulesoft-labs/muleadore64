@@ -3,9 +3,10 @@
 ms_pos_x_low !byte 60
 ms_pos_x_high !byte 0
 .current_frame !byte 0
-.walk_delay !byte 4
+.walk_delay !byte .WALK_DELAY
 .anim_delay !byte 5
 
+.WALK_DELAY = 5
 .POS_Y = 227
 .FRAME_COUNT = 8
 
@@ -44,7 +45,7 @@ mule_sprite_update
 .walk
 		dec .walk_delay
 		bne .done
-		lda #2
+		lda #.WALK_DELAY
 		sta .walk_delay
 
 		ldx ms_pos_x_high

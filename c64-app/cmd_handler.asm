@@ -8,6 +8,10 @@ CMD_HEARTBEAT = "6"
 CMD_WEATHER = "7"
 CMD_VISITORS = "8"
 CMD_SIGNIN = "9"
+CMD_SHOW_LOGO = "a"
+CMD_SHOW_INFO = "b"
+CMD_SHOW_TWEET = "c"
+CMD_SHOW_MAIN = "d"
 
 heartbeat_tick !byte 0
 
@@ -41,6 +45,8 @@ command_handler
 
 .test_play_cmd
 		cmp #CMD_PLAY
+		bne .test_weather_cmd
+		jsr do_beep
 		bne .test_weather_cmd
 		rts
 
@@ -79,13 +85,37 @@ command_handler
 
 .test_signin
 		cmp #CMD_SIGNIN
-		bne .done
+		bne .test_show_logo
 		+set16im cmd_buffer + 1, $fb
 		+set16im visitor_name_buffer, $fd
 		jsr string_copy
 		jsr signin_screen_render
 		jsr keyboard_wait
 		jsr screen_enable_lowercase_chars
+		jsr main_screen_render
+		rts
+
+.test_show_logo
+		cmp #CMD_SHOW_LOGO
+		bne .test_show_info
+		jsr logo_screen_render
+		rts
+
+.test_show_info
+		cmp #CMD_SHOW_INFO
+		bne .test_show_tweet
+		jsr info_screen_render
+		rts
+
+.test_show_tweet
+		cmp #CMD_SHOW_TWEET
+		bne .test_show_main
+		jsr tweet_screen_render
+		rts
+
+.test_show_main
+		cmp #CMD_SHOW_MAIN
+		bne .done
 		jsr main_screen_render
 		rts
 
