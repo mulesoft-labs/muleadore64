@@ -377,6 +377,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
             </http:response-builder>
         </http:listener>
         <component class="com.mulesoft.c64.Reader" doc:name="Java"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
     </flow>
     <flow name="read-state">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/state" allowedMethods="GET" doc:name="HTTP">
@@ -385,6 +386,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
             </http:response-builder>
         </http:listener>
         <component class="com.mulesoft.c64.ReadState" doc:name="Java"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
     </flow>
     <flow name="update-state">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/state" allowedMethods="PATCH" doc:name="HTTP">
@@ -393,5 +395,6 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
             </http:response-builder>
         </http:listener>
         <component class="com.mulesoft.c64.UpdateState" doc:name="Java"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
     </flow>
 </mule>
