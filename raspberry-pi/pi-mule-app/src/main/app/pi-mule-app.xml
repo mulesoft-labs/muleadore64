@@ -14,7 +14,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
     <anypoint-mq:config name="Anypoint_MQ_Configuration-Rasp-PI-CLIENT" doc:name="Anypoint MQ Configuration">
         <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="${mq.client.id}" clientSecret="${mq.client.secret}"/>
     </anypoint-mq:config>
-    <http:request-config name="HueHub" host="192.168.0.166" port="80" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HueHub" host="${hue.hub.ip}" port="80" doc:name="HTTP Request Configuration"/>
     <flow name="retrieve-message">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/message" allowedMethods="GET" doc:name="HTTP">
             <http:response-builder>
@@ -30,6 +30,6 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
         <component class="com.mulesoft.c64.pi.ProcessC64Message" doc:name="Java"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="PUT light command: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
-        <http:request config-ref="HueHub" path="/api/15cfeb5d3c786ba71cdfcb193c0fe5c3/lights/4/state" method="PUT" doc:name="HTTP"/>
+        <http:request config-ref="HueHub" path="/api/15cfeb5d3c786ba71cdfcb193c0fe5c3/lights/5/state" method="PUT" doc:name="HTTP"/>
     </flow>
 </mule>
