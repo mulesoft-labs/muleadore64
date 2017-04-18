@@ -1,0 +1,2 @@
+break .debugger
+;break .command_handler_init_command

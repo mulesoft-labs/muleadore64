@@ -18,12 +18,24 @@ SYSTEM_IRQ_VECTOR = $314
 }
 
 !macro inc16 .n1 {
-    inc .n1+0                                                    ; Increment the LSB
+    inc .n1                                                      ; Increment the LSB
     bne .done                                                    ; If the result was not zero we're done
     inc .n1+1                                                    ; Increment the MSB if LSB wrapped round
 .done   
 }
 
+!macro dec16 .n1 {
+    lda .n1
+    bne .dec_lsb
+    dec .n1+1
+.dec_lsb
+    dec .n1                                                      ; Dec the LSB
+.done   
+}
+
+; n1 = memory location
+; n2 = constant
+; result = store
 !macro add16im .n1, .n2, .result {                               ; add a 16bit constant to a memory location, store in result
     clc                                                          ; ensure carry is clear
     lda .n1                                                    ; add the two least significant bytes
@@ -48,11 +60,13 @@ SYSTEM_IRQ_VECTOR = $314
     clc             
     lda .n1       
     adc .n2
-    sta .result+0       
+    sta .result+0
     lda .n1+1       
     adc .n2+1       
     sta .result+1
 }
+
+
 
 !macro set_raster_interrupt .line, .handler {
     sei                                                          ; disable interrupts

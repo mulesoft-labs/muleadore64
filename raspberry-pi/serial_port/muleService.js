@@ -9,6 +9,7 @@ module.exports = {
 };
 
 var urlBase = 'http://pi-mule-app.cloudhub.io';
+//urlBase = 'http://172.16.11.109:8081';
 
 function getMessage() {
   return request({

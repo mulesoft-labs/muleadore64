@@ -4,14 +4,14 @@ ms_pos_x_low !byte 60
 ms_pos_x_high !byte 0
 .current_frame !byte 0
 .walk_delay !byte .WALK_DELAY
-.anim_delay !byte 5
+.anim_delay !byte 2
 
-.WALK_DELAY = 5
-.POS_Y = 227
+.WALK_DELAY = 1
+.POS_Y = 230
 .FRAME_COUNT = 8
 
 mule_sprite_init
-		lda #$80		; $2000 / 64
+		lda #$88		; $2000 / 64
 		sta $07f8		; sprite0 pointer location
 		lda $d015
 		ora #%00000001
@@ -22,7 +22,7 @@ mule_sprite_init
 		;+set16im 260, ms_pos_x_low
 		lda #255 
 		sta ms_pos_x_low
-		lda #80
+		lda #85
 		sta ms_pos_x_high
 
 		lda #.POS_Y

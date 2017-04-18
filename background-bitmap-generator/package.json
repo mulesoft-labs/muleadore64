@@ -1,15 +1,15 @@
 {
-  "name": "node-amq",
+  "name": "image_generator",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^3.3.5",
-    "request-promise": "^3.0.0"
+    "bluebird": "^3.5.0",
+    "get-pixels": "^3.3.0"
   }
 }

@@ -14,9 +14,14 @@ irq_init
 
 irq_line_0
 		dec $d019			; ack interrupt
-		lda screen_update_handler_ptr
-		beq irq_return
-		jmp (screen_update_handler_ptr)
+		;lda screen_update_handler_ptr
+		;beq irq_return
+		;jmp (screen_update_handler_ptr)
+
+		jsr PLAY_SID
+		jsr mule_sprite_update
+		jsr mule_logo_sprite_update
+		jsr twitter_sprite_update
 irq_return
 		jmp $ea31			; system handler
 

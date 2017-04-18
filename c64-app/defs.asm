@@ -1,3 +1,5 @@
+!zone defs
+
 ; KERNAL methods
 SETLFS = $FFBA
 OPEN = $FFC0
@@ -24,6 +26,30 @@ RS232_OUTBUF_PTR = $f9
 ; Colors
 COLOR_WHITE = 5
 COLOR_GREEN = 30
+COLOR_BLACK = 151
 COLOR_LIGHT_BLUE = $9A
+COLOR_YELLOW = 158
+COLOR_LIGHT_GREY = 155
 REVERSE_VIDEO_ON = $12
 REVERSE_VIDEO_OFF = $92
+
+COMMAND_TRAILER_CHAR = 126
+
+; ZERO-PAGE mem pointers
+ZP_TMP_1 = $02
+ZP_TMP_2 = $04
+ZP_TMP_3 = $06
+ZP_TMP_4 = $08
+BITMAP_STREAM_PTR = $0A
+
+COMMAND_BUFFER_PTR = $08 ; + $04
+
+
+KEY_DOWN = $11
+KEY_UP = $91
+
+SCREEN_VRAM = $6000
+BITMAP_VRAM = $4000
+
+INIT_SID        = $11ed     ; init routine for music
+PLAY_SID        = $1004     ; play music routine

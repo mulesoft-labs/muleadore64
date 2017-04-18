@@ -1,11 +1,11 @@
 !cpu 6510
-!to "./build/ms4.prg",cbm
+!to "./build/c64-pv.prg",cbm
 !zone main
 !source "macros.asm"
 
 
 BASIC_START = $0801
-CODE_START = $8000
+CODE_START = $9000
 
 * = BASIC_START
 !byte 12,8,0,0,158
@@ -24,78 +24,63 @@ CODE_START = $8000
 
 
 screen_update_handler_ptr !word 0
+keyboard_handler_ptr !word 0
+flash_screen_on_data !byte 0
+.dbg_pos !byte 0
+.end_of_command !byte 0
+.debug_output_offset !byte 0
+in_command !byte 0
 
 init
-	; disable BASIC rom
-	lda $01
-	and #%01111111
-	sta $01
 
 	jsr screen_clear
-	jsr screen_enable_lowercase_chars
+	
+	; disable BASIC rom
+	lda $01
+	and #%11111110
+	sta $01
 
-	jsr rs232_open
-	jsr main_screen_render
+	jsr mule_sprite_init
+	jsr mule_logo_sprite_init
+	jsr twitter_sprite_init
+
+	jsr INIT_SID
+
 	jsr irq_init
+	jsr rs232_open
+	jsr main_screen_enter
+
 
 .main_loop
-	jsr keyboard_read
+	;jsr keyboard_read
 	jsr rs232_try_read_byte
-	cmp #0
-	beq .main_loop  
 
-	ldy #0          ; reset our 'end of command' marker
-	cmp #126        ; tilde char means 'end of command'
-	bne .add_byte_to_buffer
-	ldy #1          ; if tilde, then set Y = 1
-	sty .end_of_command
-	lda #0          ; replace ~ with \0 so we write the end of the string
-.add_byte_to_buffer
-	;inc $d021
-	ldx cmd_buffer_ptr
-	sta cmd_buffer, x
-	inc cmd_buffer_ptr
-
-	jsr heartbeat_reset
-
-	ldy .end_of_command
-	cpy #1          ; if not 'end of command', go back around
-	bne .main_loop
-
+	tay
+	lda RSSTAT      ; check if recv buffer was empty
+	and #%00001000
+	bne .main_loop  ; if bit-3 was set, buffer was empty, no data read
+	tya
+	
 	jsr command_handler
-	ldx #0                  ; set length of buffer back to zero
-	stx cmd_buffer_ptr
-	stx .end_of_command
 	jmp .main_loop
-
-cmd_buffer !fill 250, 0
-cmd_buffer_ptr !byte 0
-.end_of_command !byte 0
 
 
 !source "defs.asm"
 !source "screen.asm"
 !source "rs232.asm"
-!source "main_screen.asm"
-!source "tweet_screen.asm"
 !source "string.asm"
-!source "cmd_handler.asm"
 !source "keyboard_input.asm"
-!source "mule_sprite.asm"
 !source "irq.asm"
-!source "heartbeat.asm"
-!source "logo_screen.asm"
-!source "info_screen.asm"
-!source "signin_screen.asm"
-!source "intro_screen.asm"
-!source "smiler_sprite.asm"
-!source "roller_sprite.asm"
-!source "hand_sprite.asm"
-!source "jackson_sprite.asm"
+!source "memory.asm"
+!source "cmd_handler.asm"
+!source "shared_resources.asm"
+!source "math.asm"
+!source "logo_sprite.asm"
+!source "mule_sprite.asm"
+!source "mule_logo_sprite.asm"
 !source "twitter_sprite.asm"
-!source "weather_sprite.asm"
-!source "beep.asm"
+!source "main_screen.asm"
 
-!if * > $9fff {
-	!error "Program reached ROM: ", * - $d000, " bytes overlap."
-}
+;!if * > $9fff {
+;	!error "Program reached ROM: ", * - $d000, " bytes overlap."
+;}

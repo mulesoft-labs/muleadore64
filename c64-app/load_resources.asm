@@ -1,42 +1,15 @@
 !zone load_resources
-.address_sprites = $2000  ; 8192
 
-* = .address_sprites                  
+.address_sid = $1001
+.address_data = $2000  ; 8192
+
+* = .address_sid
+!bin "resources/empty_1000.sid",, $7c+2  ; remove header from sid and cut off original loading address 
+
+* = .address_data
 
 !bin "resources/mule.spr"  ; (512)
 
-;!warn "Program reached ROM2x: ", *
+!bin "resources/mule-logo.spr" ;(512)
 
-; 8704
-!bin "resources/roller.spr" ;(512)
-
-; 9216
-!bin "resources/waving_hand.spr" ; (704)
-
-; 9920
-!bin "resources/jackson.spr" ; (4416)
-
-; 14336
-!bin "resources/smiler.spr", 1024 ; (1024)
-
-; 15360
-!bin "resources/twitter.spr" ; (512)
-
-; 15872
-!bin "resources/weather.spr" ; (512)
-
-
-logo_data
-!bin "resources/logo.bin"
-
-
-; sprite0 - mule, jackson
-; sprite1 - twitter
-; sprite2 - roller
-; sprite3 - left hand
-; sprite4 - right hand
-; sprite5 - weather
-; sprite6 - smiler
-; sprite7 - 
-
-
+!bin "resources/twitter.spr" ;(512)
