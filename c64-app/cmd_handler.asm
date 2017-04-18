@@ -10,7 +10,7 @@ TWEET_DATA = 3
 BITMAP_COMMAND_LENGTH = 8000
 BITMAP_STREAM_PTR_END = $4000 + BITMAP_COMMAND_LENGTH
 
-command_complete_callback !byte 1,$7e,0
+command_complete_callback !byte 1,1,$7e,0
 
 
 ; ----------------------------------------------------------------------
@@ -66,7 +66,7 @@ command_handler_init_command
 	;lda #%11110000		; white/black
 	lda #$e6			; light blue/dark blue
 	jsr screen_clear_bitmap_to_color
-	;jsr screen_clear_bitmap_data
+	jsr screen_clear_bitmap_data
 	jsr screen_switch_vic_bank_1
 	jsr screen_enable_standard_bitmap_mode
 	rts

@@ -52,7 +52,7 @@ init
 
 
 .main_loop
-	;jsr keyboard_read
+	jsr keyboard_read
 	jsr rs232_try_read_byte
 
 	tay
@@ -80,6 +80,7 @@ init
 !source "mule_logo_sprite.asm"
 !source "twitter_sprite.asm"
 !source "main_screen.asm"
+!source "beep.asm"
 
 ;!if * > $9fff {
 ;	!error "Program reached ROM: ", * - $d000, " bytes overlap."

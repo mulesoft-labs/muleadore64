@@ -20,7 +20,6 @@ screen_enable_lowercase_chars
 ; ----------------------------------------------------------------------
 screen_clear_bitmap_to_color
 	ldx #0
-
 -
 	sta SCREEN_VRAM, x
 	sta SCREEN_VRAM + $100, x
@@ -41,6 +40,34 @@ screen_clear_bitmap_data
 	sta BITMAP_VRAM + $100, x
 	sta BITMAP_VRAM + $200, x
 	sta BITMAP_VRAM + $300, x
+	sta BITMAP_VRAM + $400, x
+	sta BITMAP_VRAM + $500, x
+	sta BITMAP_VRAM + $600, x
+	sta BITMAP_VRAM + $700, x
+	sta BITMAP_VRAM + $800, x
+	sta BITMAP_VRAM + $900, x
+	sta BITMAP_VRAM + $A00, x
+	sta BITMAP_VRAM + $B00, x
+	sta BITMAP_VRAM + $C00, x
+	sta BITMAP_VRAM + $D00, x
+	sta BITMAP_VRAM + $E00, x
+	sta BITMAP_VRAM + $F00, x
+	sta BITMAP_VRAM + $1000, x
+	sta BITMAP_VRAM + $1100, x
+	sta BITMAP_VRAM + $1200, x
+	sta BITMAP_VRAM + $1300, x
+	sta BITMAP_VRAM + $1400, x
+	sta BITMAP_VRAM + $1500, x
+	sta BITMAP_VRAM + $1600, x
+	sta BITMAP_VRAM + $1700, x
+	sta BITMAP_VRAM + $1800, x
+	sta BITMAP_VRAM + $1900, x
+	sta BITMAP_VRAM + $1A00, x
+	sta BITMAP_VRAM + $1B00, x
+	sta BITMAP_VRAM + $1C00, x
+	sta BITMAP_VRAM + $1D00, x
+	sta BITMAP_VRAM + $1E00, x
+	sta BITMAP_VRAM + $1F00, x
 	dex
 	bne -
 	rts
