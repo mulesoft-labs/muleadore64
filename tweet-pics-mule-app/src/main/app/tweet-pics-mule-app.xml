@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:twitter="http://www.mulesoft.org/schema/mule/twitter" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/twitter http://www.mulesoft.org/schema/mule/twitter/current/mule-twitter.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <twitter:config name="Twitter__Configuration" accessKey="${twitter.access.key}" accessSecret="${twitter.access.secret}" consumerKey="${twitter.consumer.key}" consumerSecret="${twitter.consumer.secret}" doc:name="Twitter: Configuration"/>
+    <anypoint-mq:config name="Anypoint_MQ_Configuration" doc:name="Anypoint MQ Configuration">
+        <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="${mq.client.id}" clientSecret="${mq.client.secret}"/>
+    </anypoint-mq:config>
+    <flow name="test-flow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/test" doc:name="HTTP" allowedMethods="POST"/>
+        <logger message="Input: #[message.payload]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+%var numMediaEntities =  sizeOf payload.mediaEntities
+%var type = payload.mediaEntities[0].type
+%var text = "$(payload.text)\n   - @$(payload.user.screenName), at " ++ (now >> |-07:00|) as :string {format: "E M/d h:mm a"}
+---
+{
+  type: "background-image",
+  text: text,
+  user: "@$(payload.user.screenName)",
+  url: payload.mediaEntities[0].mediaURL
+}
+when numMediaEntities > 0 and type == "photo"
+otherwise
+{
+	type: "tweet",
+	user: "@$(payload.user.screenName)",
+	text: text
+}
+]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="Output: #[message.payload]" level="INFO" doc:name="Logger"/>
+        <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration" destination="twitter-connect17-stream" doc:name="Anypoint MQ"/>
+    </flow>
+    <flow name="tweet-stream-flow">
+        <twitter:filtered-stream config-ref="Twitter__Configuration" doc:name="Twitter (Streaming)">
+            <twitter:keywords>
+                <twitter:keyword>#CONNECT17</twitter:keyword>
+                <twitter:keyword>CONNECT17</twitter:keyword>
+                <twitter:keyword>#connect17</twitter:keyword>
+                <twitter:keyword>connect17</twitter:keyword>
+                <twitter:keyword>#Connect17</twitter:keyword>
+                <twitter:keyword>Connect17</twitter:keyword>
+            </twitter:keywords>
+        </twitter:filtered-stream>
+        <logger message="Got Tweet from stream: #[message.payload]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%input payload application/java
+%output application/json
+%var numMediaEntities =  sizeOf payload.mediaEntities
+%var type = payload.mediaEntities[0].type
+%var text = "$(payload.text)\n   - @$(payload.user.screenName), at " ++ (now >> |-07:00|) as :string {format: "E M/d h:mm a"}
+---
+{
+  type: "background-image",
+  text: text,
+  user: "@$(payload.user.screenName)",
+  url: payload.mediaEntities[0].mediaURL
+}
+when numMediaEntities > 0 and type == "photo"
+otherwise
+{
+	type: "tweet",
+	user: "@$(payload.user.screenName)",
+	text: text
+}
+]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="Output: #[message.payload]" level="INFO" doc:name="Logger"/>
+        <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration" destination="twitter-connect17-stream" doc:name="Anypoint MQ"/>
+    </flow>
+</mule>
