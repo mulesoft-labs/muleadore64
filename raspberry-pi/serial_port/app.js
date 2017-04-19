@@ -12,7 +12,7 @@ const child_process = require('child_process');
 const fs = require('fs');
 
 const COMMAND_PROCESSED_CALLBACK_MSG = 1;
-
+const TWEET_END_MARKER = "~";
 const c64Channel = new C64SerialChannel(serialPortDevice, 1200);
 
 var c64IsReady = true;
@@ -23,11 +23,11 @@ c64Channel.on('commandReceived', (command, data) => {
   switch (command) {
     case COMMAND_PROCESSED_CALLBACK_MSG:
       c64IsReady = true;
-      if (lastMessage === 'tweet') {
-        delayNextFetchUntil = Date.now() + 2 * 1000;
+      if (lastMessage === 'background-image') {
+        delayNextFetchUntil = Date.now() + 5 * 1000;
       }
       else {
-        delayNextFetchUntil = Date.now() + 5 * 1000; 
+        delayNextFetchUntil = Date.now() + 2 * 1000; 
       }
       break;
       
@@ -72,8 +72,8 @@ function fetchAndProcessMessage() {
         case 'background-image':
           var filename = msg.url;
           var timestamp = Date.now();
-          child_process.spawnSync('cp', [filename, '/tmp/' + timestamp + '-orig.png']);
-	  var outputfile = '/tmp/' + timestamp + '.png';
+          child_process.spawnSync('cp', [filename, '/tmp/img/' + timestamp + '-orig.png']);
+	        var outputfile = '/tmp/img/' + timestamp + '.png';
 
           //var imPath = 'convert ' + filename + ' -resize \'320x200>\' -background black -gravity center -extent 320x200 -monochrome /tmp/resized.png | tee /tmp/conv-output.txt' ;
           var imPath = 'convert ' + filename + ' -resize \'320\' -background black -gravity center -extent 320x200 -monochrome ' + outputfile + ' | tee /tmp/conv-output.txt' ;
@@ -91,7 +91,8 @@ function fetchAndProcessMessage() {
           break;
 
         case 'tweet':
-          c64Channel.write(3, Buffer.from(petscii.to(msg.text) + '\0'));
+          var petsciiData = petscii.to(msg.text.replace(TWEET_END_MARKER, '-')) + TWEET_END_MARKER;
+          c64Channel.write(3, Buffer.from(petsciiData));
           break;
 
         default:

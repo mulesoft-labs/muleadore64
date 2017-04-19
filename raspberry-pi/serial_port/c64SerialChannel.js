@@ -94,6 +94,7 @@ class C64SerialChannel extends EventEmitter {
   }
 
   handleInputFromC64(chunk) {
+    logger.log('got chunk', getPrintableBytes(chunk));
     this.inputBuffer = Buffer.concat([this.inputBuffer, chunk]);
     // check for 'end-command' character
     if (this.inputBuffer[this.inputBuffer.length - 1] !== 0x7e) {

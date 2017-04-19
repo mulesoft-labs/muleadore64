@@ -22,6 +22,9 @@ irq_line_0
 		jsr mule_sprite_update
 		jsr mule_logo_sprite_update
 		jsr twitter_sprite_update
+
+		lda current_command
+		sta $d020
 irq_return
 		jmp $ea31			; system handler
 

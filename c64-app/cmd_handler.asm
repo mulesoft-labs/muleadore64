@@ -39,14 +39,13 @@ command_handler
 .check_tweet_data
 		cpx #TWEET_DATA
 		bne .check_new_command
-		cmp #0  ; if char == \0, it means end of tweet
+		cmp #$7e  ; if char == '~', it means end of tweet
 		bne +
 		jsr command_handler_reset_for_next_command
 		rts
 +
 		jsr CHROUT
 		rts
-
 
 .check_new_command
 		cpx #0

@@ -111,14 +111,12 @@ mule_logo_sprite_update
 	rts
 
 .swap_y_direction
-	inc $d028
 	lda .y_direction
 	eor #1
 	sta .y_direction
 	rts
 
 .swap_x_direction
-	inc $d028
 	lda .x_direction
 	eor #1
 	sta .x_direction
