@@ -46,6 +46,8 @@ init
 
 	jsr INIT_SID
 
+	jsr patch_rs232_routines
+
 	jsr irq_init
 	jsr rs232_open
 	jsr main_screen_enter
@@ -65,6 +67,7 @@ init
 	jmp .main_loop
 
 
+!source "newmodem.asm"
 !source "defs.asm"
 !source "screen.asm"
 !source "rs232.asm"

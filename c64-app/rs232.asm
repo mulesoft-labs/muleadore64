@@ -20,8 +20,10 @@ rs232_open
 		lda #0			; no name
 		jsr SETNAM
 
-		lda #%00001000  ; 1200 baud, 8 bits per char
-		;lda #%00001010  ; 2400 baud, 8 bits per char
+		;lda #%00000110  ; 300 baud, 8 bits per char
+		;lda #%00000111  ; 600 baud, 8 bits per char
+		;lda #%00001000  ; 1200 baud, 8 bits per char
+		lda #%00001010  ; 2400 baud, 8 bits per char
 		sta $0293
 
 		jsr OPEN

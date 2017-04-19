@@ -65,11 +65,31 @@ function fetchAndProcessMessage() {
 
       c64IsReady = false;
 
-      logger.log('message recieved', msg);
+      if (msg.data) {
+        logger.log('message recieved (base64)', msg.type);
+      }
+      else {
+        logger.log('message recieved', msg);
+      }
+
+      if (!msg.type) {
+        logger.log('[warn] no type field on msg, ignoring...');
+        return;
+      }
 
       switch (msg.type) {
 
         case 'background-image':
+          if (msg.data) {
+            var b64string = msg.data.substring(msg.data.indexOf(','));
+            var buf = Buffer.from(b64string, 'base64');
+            fs.writeFileSync('/tmp/b64.jpg', buf);
+            msg.url = '/tmp/b64.jpg';
+          }
+          if (!msg.url) {
+            logger.log('no url property... ignoring');
+            return;
+          }
           var filename = msg.url;
           var timestamp = Date.now();
           child_process.spawnSync('cp', [filename, '/tmp/img/' + timestamp + '-orig.png']);

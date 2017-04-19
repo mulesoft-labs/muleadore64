@@ -23,6 +23,10 @@ command_handler
 		
 		ldy #0
 		sta (BITMAP_STREAM_PTR), y
+		lda #$ff
+		iny
+		sta (BITMAP_STREAM_PTR), y
+
  		+inc16 BITMAP_STREAM_PTR
 
  		ldy BITMAP_STREAM_PTR

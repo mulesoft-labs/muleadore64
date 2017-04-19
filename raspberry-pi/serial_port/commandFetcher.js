@@ -11,13 +11,9 @@ var list = [
     type: 'tweet',
     text: '@muleadore64 good info and this is a long tweet which will expand over many many lines etc etc https://t.co/lkr7dmd3Kd\n   - @muleadore64, at Mon 4/17 2:49 PM'
   },
-// {
-//     type: 'background-image',
-//     url: '/Users/jeff/steve.jpeg'
-//   },
   {
     type: 'background-image',
-    url: '/Users/jeff/C9u9rHxUIAAzWlW.jpg'
+    url: '/tmp/input.jpg'
   }
 
 ]
@@ -31,9 +27,9 @@ module.exports = {
 
 function fetchNextMessageFromQueue() {
 
-  var msg = list[listIndex];
-  listIndex = (listIndex + 1) % list.length;
-  return Promise.resolve(msg);
+  // var msg = list[listIndex];
+  // listIndex = (listIndex + 1) % list.length;
+  // return Promise.resolve(msg);
 
   fetchingMessage = true;
   return muleService.getMessage()
