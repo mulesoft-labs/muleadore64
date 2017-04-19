@@ -71,15 +71,18 @@ function fetchAndProcessMessage() {
 
         case 'background-image':
           var filename = msg.url;
+          var timestamp = Date.now();
+          child_process.spawnSync('cp', [filename, '/tmp/' + timestamp + '-orig.png']);
+	  var outputfile = '/tmp/' + timestamp + '.png';
 
           //var imPath = 'convert ' + filename + ' -resize \'320x200>\' -background black -gravity center -extent 320x200 -monochrome /tmp/resized.png | tee /tmp/conv-output.txt' ;
-          var imPath = 'convert ' + filename + ' -resize \'320\' -background black -gravity center -extent 320x200 -monochrome /tmp/resized.png | tee /tmp/conv-output.txt' ;
+          var imPath = 'convert ' + filename + ' -resize \'320\' -background black -gravity center -extent 320x200 -monochrome ' + outputfile + ' | tee /tmp/conv-output.txt' ;
           logger.log('Resizing and reducing colorspace...');
           child_process.execSync(imPath);
           logger.log('done');
           //var execPath = 'node ../background-bitmap-generator/app.js /tmp/resized.png | tee /tmp/conv-output2.txt';
           logger.log('Generating c64 bitmap bitstream...');
-          return bitmapGenerator.generateFromFile('/tmp/resized.png')
+          return bitmapGenerator.generateFromFile(outputfile)
             .then((pixelData) => {
               c64Channel.write(1, pixelData);
               logger.log('done');

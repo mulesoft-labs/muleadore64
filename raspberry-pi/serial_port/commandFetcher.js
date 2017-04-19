@@ -27,27 +27,27 @@ module.exports = {
 
 function fetchNextMessageFromQueue() {
 
-  var msg = list[listIndex];
-  listIndex = (listIndex + 1) % list.length;
-  return Promise.resolve(msg);
+  //var msg = list[listIndex];
+  //listIndex = (listIndex + 1) % list.length;
+  //return Promise.resolve(msg);
 
   fetchingMessage = true;
   return muleService.getMessage()
-    .then(function (resp) {
+    .then(function (msg) {
       
       if (msg) {
         //console.error('here...');
         controlAppService.markRouteAsActive('amqToPi')
         .catch(function(e) {
-          logger.log('e3', e);
+          //logger.log('e3', e);
         });
         logger.log('here2...');
         controlAppService.markRouteAsActive('piToC64')
         .catch(function(e) {
-          logger.log('e4', e);
+          //logger.log('e4', e);
         });
-        return msg;
       }
+      return msg;
     })
     .catch(function(e) {
       logger.log('error fetching message:', e.statusCode);

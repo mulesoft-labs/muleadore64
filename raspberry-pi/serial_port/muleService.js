@@ -2,6 +2,7 @@
 var request = require('request-promise');
 var Promise = require('bluebird');
 var controlAppService = require('./controlAppService.js');
+const logger = require('./logger');
 
 module.exports = {
   getMessage,
@@ -9,12 +10,12 @@ module.exports = {
 };
 
 var urlBase = 'http://pi-mule-app.cloudhub.io';
-//urlBase = 'http://172.16.11.109:8081';
+urlBase = 'http://localhost:8080';
 
 function getMessage() {
   return request({
-    url: urlBase + '/api/message',
-    json: true
+    uri: urlBase + '/api/message',
+    json: true,
   });
 }
 
