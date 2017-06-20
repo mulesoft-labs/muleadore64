@@ -65,6 +65,7 @@ command_handler_init_command
 	cmp #BITMAP_DATA
 	bne .check_tweet_init
 	sta current_command
+
 	+set16im $4000, BITMAP_STREAM_PTR
 	;lda #%11110000		; white/black
 	lda #$e6			; light blue/dark blue

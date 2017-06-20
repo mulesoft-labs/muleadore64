@@ -24,6 +24,15 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
         <anypoint-mq:consume config-ref="Anypoint_MQ_Configuration-Rasp-PI-CLIENT" destination="c64-interactive-queue" acknowledgementMode="NONE" doc:name="Anypoint MQ" pollingTime="2000"/>
         <logger message="Got message: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
     </flow>
+    <flow name="retrieve-photo-message">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/photo-message" allowedMethods="GET" doc:name="HTTP">
+            <http:response-builder>
+                <http:header headerName="Content-type" value="application/json"/>
+            </http:response-builder>
+        </http:listener>
+        <anypoint-mq:consume config-ref="Anypoint_MQ_Configuration-Rasp-PI-CLIENT" destination="twitter-connect17-stream" acknowledgementMode="NONE" doc:name="Anypoint MQ" pollingTime="2000"/>
+        <logger message="Got message: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
+    </flow>
     <flow name="process-c64-command">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/message" allowedMethods="POST" doc:name="HTTP"/>
         <json:json-to-object-transformer returnClass="java.util.HashMap" doc:name="JSON to Object"/>

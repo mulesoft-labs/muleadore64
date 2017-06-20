@@ -5,18 +5,6 @@
 ; at 300, 1200, and 2400 baud
 ;---------------------------------------------
 
-        ; # * = $cc00   ; Merily a suggestion
-
-        JMP patch   ; This patches the kernel and returns
-
-        ; # JMP n0      ; Don't know why these jump vectors are here
-        ; # JMP irq2    ; you can probably just delete them, as well
-        ; # JMP n3      ; as the trailing NOP.
-        ; # JMP m0
-        ; # NOP
-
-; Interrupt speed tables
-
 tab1   !BYTE $CB 
         !BYTE $01
         !BYTE $42
@@ -248,4 +236,4 @@ n5     LDY $97
         LDA $9E
         RTS
 
-        .END
+.END

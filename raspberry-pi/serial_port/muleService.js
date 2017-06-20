@@ -10,11 +10,11 @@ module.exports = {
 };
 
 var urlBase = 'http://pi-mule-app.cloudhub.io';
-urlBase = 'http://localhost:8080';
+//urlBase = 'http://localhost:8080';
 
 function getMessage() {
   return request({
-    uri: urlBase + '/api/message',
+    uri: urlBase + '/api/photo-message',
     json: true,
   });
 }
