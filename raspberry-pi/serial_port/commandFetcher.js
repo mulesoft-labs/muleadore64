@@ -7,13 +7,10 @@ var controlAppService = require('./controlAppService.js');
 const logger = require('./logger');
 
 var list = [
-  {
-    type: 'tweet',
-    text: '@muleadore64 good info and this is a long tweet which will expand over many many lines etc etc https://t.co/lkr7dmd3Kd\n   - @muleadore64, at Mon 4/17 2:49 PM'
-  },
+  
   {
     type: 'background-image',
-    url: '/tmp/input.jpg'
+    url: '/tmp/b64-2.jpg'
   }
 
 ]
