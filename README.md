@@ -11,8 +11,7 @@ Commodore 64 commercial from 1985: [Youtube](https://www.youtube.com/watch?v=ocn
 
 1. Download [Vice64](http://vice-emu.sourceforge.net/) version 2.4 for Mac Cocoa compiled with gcc
 
-Direct link:
-```http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/vice-macosx-cocoa-i386%2bx86_64-10.6-gcc42-2.4.dmg```
+Direct link: http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE/vice-macosx-cocoa-i386%2bx86_64-10.6-gcc42-2.4.dmg
 
 2. Extract Vice contents to: `/Applications/Vice64`
 3. Add this to your .bashrc: `export PATH=/Applications/Vice64/tools:$PATH`
