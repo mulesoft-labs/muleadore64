@@ -11,14 +11,14 @@ function getPrintableBytes(payload) {
     return '';
   }
 
-  let output = '';
+  var output = '';
   if (_.isString(payload)) {
-    for (let i = 0; i < Math.min(40, payload.length); i++) {
+    for (var i = 0; i < Math.min(40, payload.length); i++) {
       output += payload.charCodeAt(i).toString(16) + ' ';  // eslint-disable-line prefer-template
     }
     return output;
   }
-  for (let i = 0; i < Math.min(40, payload.length); i++) {
+  for (var i = 0; i < Math.min(40, payload.length); i++) {
     output += payload[i].toString(16) + ' ';  // eslint-disable-line prefer-template
   }
   return output;
