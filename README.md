@@ -7,7 +7,7 @@ Commodore 64 commercial from 1985: [Youtube](https://www.youtube.com/watch?v=ocn
 ![Logo](/assets/logo-c64-rendered.png?raw=true)
 ![The hack](/assets/the-hack.png?raw=true)
 
-# Setup instructions for the Connect17 picture demo on a Mac
+# Setup instructions for the picture demo on a Mac
 
 1. Download [Vice64](http://vice-emu.sourceforge.net/) version 2.4 for Mac Cocoa compiled with gcc
 
@@ -22,7 +22,7 @@ Direct link: http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE
     2. Install the latest version of node 6 using cli: `nvm install 6`
     3. Set your default node version to node 6 (optional but recommended): `echo "6" > ~/.nvmrc; nvm alias default 6`
 7. Clone the commodore repo to the home dir: https://github.com/mulesoft-labs/muleadore64
-8. `cd ~/muleadore64; git checkout connect17`
+8. `cd ~/muleadore64; git checkout runwiththemules`
 9. `cd c64-app`
 10. `mkdir build`
 11. `acme main.asm`
@@ -43,7 +43,7 @@ Direct link: http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE
 15. `npm install` Make sure you are using node v6
 16. Navigate a finder window to `~/muleadore64/c64-app`
 17. Double click on the command file `start-c64-connect17-demo.sh.command` to run the demo.  You should see the mulesoft Commodore64 program on the emulator screen.  If you need to change this script for your specific machine then go ahead.
-18. Test that the app is working correctly by uploading a photo to twitter with `#connect17` in the message and see if it renders on the screen.
+18. Test that the app is working correctly by uploading a photo to twitter with `#runwiththemules` in the message and see if it renders on the screen.
 19. *VERY IMPORTANT* Turn your computer sound up
 20. Congratulations!  You have now setup your machine as a Commodore64 demo emulator.  It will pickup any tweets or photos uploaded to twitter with the hashtag `#connect17`.  Alternatively you can upload photos to the app directly at this URL (jpg only): http://c64-photo-ingest.cloudhub.io/static
 

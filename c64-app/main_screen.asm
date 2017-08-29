@@ -2,14 +2,14 @@
 
 border !pet "----------------------------------------", 0
 title_text !pet "** MULESOFT :: COMMODORE 64 (1982) **", 0
-;tweet_hashtag_1 !pet "Connected to MULESOFT #connect17 feed", 0
-description_text 
-!pet "     #connect17 feed -> CloudHub", 13
+;tweet_hashtag_1 !pet "Connected to MULESOFT #runwiththemules feed", 0
+description_text
+!pet "     #runwiththemules feed -> CloudHub", 13
 !pet "     -> Anypoint MQ -> Mule on Rasp. Pi", 13
 !pet "     -> Commodore 64", 0
-tweet_hashtag_2 
+tweet_hashtag_2
 !pet "    Tweet a message or a photo with ", 13, COLOR_GREEN
-!pet "     #connect17 #c64", COLOR_LIGHT_BLUE, " to see it here!", 0
+!pet "     #runwiththemules", COLOR_LIGHT_BLUE, " to see it here!", 0
 
 main_screen_enter
 	jsr screen_clear
@@ -44,7 +44,7 @@ main_screen_enter
 	ldx #21
 	ldy #0
 	+set16im border, $fb
-	jsr screen_print_str	
+	jsr screen_print_str
 
 	ldx #22
 	ldy #0
