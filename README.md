@@ -42,10 +42,10 @@ Direct link: http://www.zimmers.net/anonftp/pub/cbm/crossplatform/emulators/VICE
 14. `cd ~/muleadore64/raspberry-pi/serial_port`
 15. `npm install` Make sure you are using node v6
 16. Navigate a finder window to `~/muleadore64/c64-app`
-17. Double click on the command file `start-c64-connect17-demo.sh.command` to run the demo.  You should see the mulesoft Commodore64 program on the emulator screen.  If you need to change this script for your specific machine then go ahead.
+17. Double click on the command file `start-c64-runwiththemules-demo.sh.command` to run the demo.  You should see the mulesoft Commodore64 program on the emulator screen.  If you need to change this script for your specific machine then go ahead.
 18. Test that the app is working correctly by uploading a photo to twitter with `#runwiththemules` in the message and see if it renders on the screen.
 19. *VERY IMPORTANT* Turn your computer sound up
-20. Congratulations!  You have now setup your machine as a Commodore64 demo emulator.  It will pickup any tweets or photos uploaded to twitter with the hashtag `#connect17`.  Alternatively you can upload photos to the app directly at this URL (jpg only): http://c64-photo-ingest.cloudhub.io/static
+20. Congratulations!  You have now setup your machine as a Commodore64 demo emulator.  It will pickup any tweets or photos uploaded to twitter with the hashtag `#runwiththemules`.  Alternatively you can upload photos to the app directly at this URL (jpg only): http://c64-photo-ingest.cloudhub.io/static
 
 # Useful information about how the system works
 
