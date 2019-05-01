@@ -68,7 +68,7 @@ class C64SerialChannel extends EventEmitter {
     logger.log('Using real serial port');
     this.mode = MODE_SERIAL_PORT;
     this.port = new SerialPort(name, {
-      baudrate,
+      baudRate: baudrate,
       lock: false
     });
     this.port.on('data', (data) => {

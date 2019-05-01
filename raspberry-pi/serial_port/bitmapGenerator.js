@@ -3,22 +3,21 @@ var getPixels = Promise.promisify(require("get-pixels"));
 var Buffer = require('buffer').Buffer;
 var fs = Promise.promisifyAll(require('fs'));
 
-const BYTE_WIDTH = 320 / 8;
-
 module.exports = {
   generateFromFile
 }
 
-function generateFromFile(filename) {
+function generateFromFile(filename, width, height) {
   
   return getPixels(filename)
     .then((pixels) => {
 
-      var pxBuffer = new Buffer(BYTE_WIDTH * 200);
+      // 1 byte holds 8 pixels
+      var pxBuffer = new Buffer((width / 8) * height);
 
       var pxBufferIndex = 0;
-      for (var y = 0; y < 200; y += 8) {
-        for (var x = 0; x < 320; x += 8) {
+      for (var y = 0; y < height; y += 8) {
+        for (var x = 0; x < width; x += 8) {
 
           // we deal with 8x8 pixel blocks here
           for (var py = 0; py < 8; py++) {

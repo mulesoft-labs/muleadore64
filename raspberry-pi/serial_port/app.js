@@ -102,7 +102,7 @@ function fetchAndProcessMessage() {
           logger.log('done');
           //var execPath = 'node ../background-bitmap-generator/app.js /tmp/resized.png | tee /tmp/conv-output2.txt';
           logger.log('Generating c64 bitmap bitstream...');
-          return bitmapGenerator.generateFromFile(outputfile)
+          return bitmapGenerator.generateFromFile(outputfile, 320, 192)
             .then((pixelData) => {
               c64Channel.write(1, pixelData);
               logger.log('done');

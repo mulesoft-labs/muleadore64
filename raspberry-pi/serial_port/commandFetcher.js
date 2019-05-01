@@ -10,7 +10,7 @@ var list = [
   
   {
     type: 'background-image',
-    url: '/tmp/b64-2.jpg'
+    url: '/Users/jeff/IMG_0764.jpg'
   }
 
 ]
@@ -24,9 +24,9 @@ module.exports = {
 
 function fetchNextMessageFromQueue() {
 
-  // var msg = list[listIndex];
-  // listIndex = (listIndex + 1) % list.length;
-  // return Promise.resolve(msg);
+  var msg = list[listIndex];
+  listIndex = (listIndex + 1) % list.length;
+  return Promise.resolve(msg);
 
   fetchingMessage = true;
   return muleService.getMessage()

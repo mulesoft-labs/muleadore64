@@ -1,5 +1,3 @@
-!cpu 6510
-!to "./build/c64-pv.prg",cbm
 !zone main
 !source "macros.asm"
 
