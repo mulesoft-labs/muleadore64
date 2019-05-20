@@ -1,6 +1,6 @@
 
 hb_counter !byte 60
-color_tick !byte 5
+color_tick !byte $1
 color_tick_enabled !byte 1
 
 irq_init       
@@ -28,6 +28,8 @@ irq_line_0
 		jsr mule_logo_sprite_update
 		jsr twitter_sprite_update
 
+		jsr colwash
+
 		lda color_tick_enabled
 		beq irq_return
 
@@ -36,16 +38,34 @@ irq_line_0
 		lda #60
 		sta hb_counter
 		lda color_tick
-		eor #$9f
+		eor #$f
 		sta color_tick
 
 		ldx #255
 		lda color_tick
 -
-		sta $d800, x
+		sta $d950, x
+		sta $d9ff, x
 		dex
 		bne -
 
 irq_return
 		jmp $ea31			; system handler
+
+
+colwash   ldx #$27        ; load x-register with #$27 to work through 0-39 iterations
+          lda color+$27   ; init accumulator with the last color from first color table
+
+cycle1    ldy color-1,x   ; remember the current color in color table in this iteration
+          sta color-1,x   ; overwrite that location with color from accumulator
+          sta $d800+$25,x     ; put it into Color Ram into column x
+          tya             ; transfer our remembered color back to accumulator
+          dex             ; decrement x-register to go to next iteration
+          bne cycle1      ; repeat if there are iterations left
+          sta color+$27   ; otherwise store te last color from accu into color table
+          sta $d800+25       ; ... and into Color Ram
+                          
+
+ 
+          rts             ; return from subroutine
 

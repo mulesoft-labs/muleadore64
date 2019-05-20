@@ -16,6 +16,7 @@ tweet_hashtag_2
 !byte 0
 
 main_screen_enter
+	jsr mule_logo_sprite_disable
 	jsr screen_clear
 
 	lda #COLOR_LIGHT_BLUE

@@ -75,6 +75,8 @@ command_handler_init_command
 	jsr screen_clear_bitmap_data
 	jsr screen_switch_vic_bank_1
 	jsr screen_enable_standard_bitmap_mode
+
+	jsr mule_logo_sprite_init
 	rts
 
 .check_tweet_init

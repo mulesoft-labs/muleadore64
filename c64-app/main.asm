@@ -39,7 +39,7 @@ init
 	sta $01
 
 	jsr mule_sprite_init
-	jsr mule_logo_sprite_init
+	;jsr mule_logo_sprite_init
 	jsr twitter_sprite_init
 
 	jsr INIT_SID
@@ -82,6 +82,7 @@ init
 !source "twitter_sprite.asm"
 !source "main_screen.asm"
 !source "beep.asm"
+!source "resources/data_color_wash.asm"
 
 ;!if * > $9fff {
 ;	!error "Program reached ROM: ", * - $d000, " bytes overlap."

@@ -13,6 +13,12 @@ ms_pos_x !word 0
 .POS_Y = 200
 .FRAME_COUNT = 8
 
+mule_logo_sprite_disable
+	lda $d015
+	and #%11111101			; disable sprite1
+	sta $d015
+	rts
+
 ;sprite 1
 mule_logo_sprite_init
 		lda #$88		; ($2000 + 512 + 64) / 64
