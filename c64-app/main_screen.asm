@@ -1,8 +1,12 @@
 !zone main_screen
 
 border !pet "----------------------------------------", 0
-title_text !pet "** MULESOFT :: COMMODORE 64 (1982) **", 0
+title_text 
+!pet "** COMMODORE 64 SELFIE MACHINE **", 13
+!pet "  COMMODORE 1982, MULESOFT 2019", 0
+
 ;tweet_hashtag_1 !pet "Connected to MULESOFT #connect17 feed", 0
+
 description_text 
 !pet "     #connect17 feed -> CloudHub", 13
 !pet "     -> Anypoint MQ -> Mule on Rasp. Pi", 13
