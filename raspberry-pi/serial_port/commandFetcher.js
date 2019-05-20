@@ -28,8 +28,12 @@ module.exports = {
 
 function fetchNextMessageFromQueue() {
 
+  if (listIndex >= list.size) {
+    return Promise.resolve(null);
+  }
   var msg = list[listIndex];
-  listIndex = (listIndex + 1) % list.length;
+  listIndex++;
+  //listIndex = (listIndex + 1) % list.length;
   return Promise.resolve(msg);
 
   fetchingMessage = true;

@@ -2,22 +2,21 @@
 
 border !pet "----------------------------------------", 0
 title_text 
-!pet "** COMMODORE 64 SELFIE MACHINE **", 13
-!pet "  COMMODORE 1982, MULESOFT 2019", 0
+!pet COLOR_GREEN, "  ** commodore 64 selfie machine **", COLOR_LIGHT_BLUE, 13, 13
+!pet "   -in which our 37 year old c64 is", 13
+!pet "      connected to everything-", 0
 
 ;tweet_hashtag_1 !pet "Connected to MULESOFT #connect17 feed", 0
 
-description_text 
-!pet "     #connect17 feed -> CloudHub", 13
-!pet "     -> Anypoint MQ -> Mule on Rasp. Pi", 13
-!pet "     -> Commodore 64", 0
 tweet_hashtag_2 
-!pet "    Tweet a message or a photo with ", 13, COLOR_GREEN
-!pet "     #connect17 #c64", COLOR_LIGHT_BLUE, " to see it here!", 0
+!pet "    tweet a message or a photo with ", 13, COLOR_GREEN
+!pet "     #tdx18 #c64", COLOR_LIGHT_BLUE, " to see it here!", 0
+
+.str_banner !bin "resources/architecture.seq"
+!byte 0
 
 main_screen_enter
 	jsr screen_clear
-	jsr screen_enable_lowercase_chars
 
 	lda #COLOR_LIGHT_BLUE
 	jsr CHROUT
@@ -34,12 +33,6 @@ main_screen_enter
 	+set16im title_text, $fb
 	jsr screen_print_str
 
-
-	ldx #3
-	ldy #0
-	+set16im description_text, $fb
-	jsr screen_print_str
-
 	ldx #6
 	ldy #0
 	+set16im border, $fb
@@ -54,10 +47,15 @@ main_screen_enter
 	ldy #0
 	+set16im tweet_hashtag_2, $fb
 	jsr screen_print_str
-
-	; lda #COLOR_LIGHT_BLUE
-	; jsr CHROUT
-
-	; lda #13
-	; jsr CHROUT
 	rts
+
+main_screen_render_architecture
+	lda #COLOR_WHITE
+    jsr CHROUT
+
+    ldx #7         ; row
+    ldy #0          ; column
+    +set16im .str_banner, $fb
+    jsr screen_print_str
+    rts
+

@@ -18,6 +18,7 @@ const c64Channel = new C64SerialChannel(serialPortDevice, 2400);
 var c64IsReady = true;
 var delayNextFetchUntil = 0;
 var lastMessage = '';
+var mode = 0;
 
 c64Channel.on('commandReceived', (command, data) => {
   switch (command) {
@@ -27,7 +28,7 @@ c64Channel.on('commandReceived', (command, data) => {
         delayNextFetchUntil = Date.now() + 5 * 1000;
       }
       else {
-        delayNextFetchUntil = Date.now() + 2 * 1000; 
+        delayNextFetchUntil = Date.now() + 5 * 1000; 
       }
       break;
       
@@ -60,6 +61,10 @@ function fetchAndProcessMessage() {
   return commandFetcher.fetchNextMessageFromQueue()
     .then((msg) => {
       if (!msg) {
+        if (mode != 0) {
+          c64Channel.write(4);  //attract screen
+          mode = 0;
+        }
         return;
       }
 
@@ -80,6 +85,7 @@ function fetchAndProcessMessage() {
       switch (msg.type) {
 
         case 'background-image':
+          mode = 1;
           if (msg.data) {
             var b64string = msg.data.substring(msg.data.indexOf(','));
             var buf = Buffer.from(b64string, 'base64');
@@ -110,6 +116,7 @@ function fetchAndProcessMessage() {
           break;
 
         case 'tweet':
+          mode = 1;
           var petsciiData = petscii.to(msg.text.replace(TWEET_END_MARKER, '-')) + TWEET_END_MARKER;
           c64Channel.write(3, Buffer.from(petsciiData));
           break;

@@ -5,7 +5,7 @@
 .anim_delay !byte .ANIM_DELAY
 .anim_direction !byte 0
 
-.ANIM_DELAY = 5
+.ANIM_DELAY = 3
 .FRAME_COUNT = 8
 
 ; sprite2
@@ -20,7 +20,7 @@ twitter_sprite_init
 
     lda #30     ; x
     sta $d004
-    lda #75    ; y
+    lda #225    ; y
     sta $d005
 
     lda #.FRAME_COUNT

@@ -7,7 +7,7 @@ ms_pos_x_high !byte 0
 .anim_delay !byte 2
 
 .WALK_DELAY = 1
-.POS_Y = 230
+.POS_Y = 200
 .FRAME_COUNT = 8
 
 mule_sprite_init

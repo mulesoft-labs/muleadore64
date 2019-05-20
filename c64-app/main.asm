@@ -49,7 +49,7 @@ init
 	jsr irq_init
 	jsr rs232_open
 	jsr main_screen_enter
-
+	jsr main_screen_render_architecture
 
 .main_loop
 	jsr keyboard_read

@@ -6,6 +6,7 @@ current_command !byte 0
 BITMAP_DATA = 1
 COLOR_DATA = 2
 TWEET_DATA = 3
+ATTRACT_SCREEN = 4
 
 BITMAP_COMMAND_LENGTH = 8000
 BITMAP_STREAM_PTR_END = $4000 + BITMAP_COMMAND_LENGTH
@@ -78,10 +79,9 @@ command_handler_init_command
 
 .check_tweet_init
 	cmp #TWEET_DATA
-	bne .done
+	bne .check_attract_screen
 	sta current_command
 	jsr screen_switch_vic_bank_0
-	jsr screen_enable_lowercase_chars
 	jsr screen_enable_text_mode
 	jsr main_screen_enter
 
@@ -92,6 +92,16 @@ command_handler_init_command
 
 	lda #COLOR_LIGHT_GREY
 	jsr CHROUT
+	rts
+
+.check_attract_screen
+	cmp #ATTRACT_SCREEN
+	bne .done
+	sta current_command
+	jsr screen_switch_vic_bank_0
+	jsr screen_enable_text_mode
+	jsr main_screen_enter
+	jsr main_screen_render_architecture
 	rts
 
 .done

@@ -1,3 +1,8 @@
+
+hb_counter !byte 60
+color_tick !byte 5
+color_tick_enabled !byte 1
+
 irq_init       
 		sei             ; disable interrupts
 		ldy #$7f        ; 01111111 
@@ -23,8 +28,24 @@ irq_line_0
 		jsr mule_logo_sprite_update
 		jsr twitter_sprite_update
 
-		;lda current_command
-		;sta $d020
+		lda color_tick_enabled
+		beq irq_return
+
+		dec hb_counter
+		bne irq_return
+		lda #60
+		sta hb_counter
+		lda color_tick
+		eor #$9f
+		sta color_tick
+
+		ldx #255
+		lda color_tick
+-
+		sta $d800, x
+		dex
+		bne -
+
 irq_return
 		jmp $ea31			; system handler
 
