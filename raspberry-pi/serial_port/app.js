@@ -13,7 +13,7 @@ const fs = require('fs');
 
 const COMMAND_PROCESSED_CALLBACK_MSG = 1;
 const TWEET_END_MARKER = "~";
-const c64Channel = new C64SerialChannel(serialPortDevice, 1200);
+const c64Channel = new C64SerialChannel(serialPortDevice, 2400);
 
 var c64IsReady = true;
 var delayNextFetchUntil = 0;
@@ -69,7 +69,7 @@ function fetchAndProcessMessage() {
         logger.log('message recieved (base64)', msg.type);
       }
       else {
-        logger.log('message recieved', msg);
+        logger.log('message recieved', msg.type);
       }
 
       if (!msg.type) {
@@ -92,17 +92,16 @@ function fetchAndProcessMessage() {
           }
           var filename = msg.url;
           var timestamp = Date.now();
-          child_process.spawnSync('cp', [filename, '/tmp/img/' + timestamp + '-orig.png']);
-	        var outputfile = '/tmp/img/' + timestamp + '.png';
+          child_process.spawnSync('cp', [filename, '/tmp/c64-img-' + timestamp + '-orig.png']);
+	        var outputfile = '/tmp/c64-img-' + timestamp + '.png';
 
           //var imPath = 'convert ' + filename + ' -resize \'320x200>\' -background black -gravity center -extent 320x200 -monochrome /tmp/resized.png | tee /tmp/conv-output.txt' ;
           var imPath = 'convert ' + filename + ' -resize \'320\' -background black -gravity center -extent 320x200 -monochrome ' + outputfile + ' | tee /tmp/conv-output.txt' ;
           logger.log('Resizing and reducing colorspace...');
           child_process.execSync(imPath);
           logger.log('done');
-          //var execPath = 'node ../background-bitmap-generator/app.js /tmp/resized.png | tee /tmp/conv-output2.txt';
           logger.log('Generating c64 bitmap bitstream...');
-          return bitmapGenerator.generateFromFile(outputfile, 320, 192)
+          return bitmapGenerator.generateFromFile(outputfile, 320, 200)
             .then((pixelData) => {
               c64Channel.write(1, pixelData);
               logger.log('done');

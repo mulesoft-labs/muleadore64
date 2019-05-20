@@ -1,5 +1,5 @@
 [C64]
 RsDevice1="|../raspberry-pi/serial_port/app.js"
 RsUserEnable=1
-RsUserBaud=1200
+RsUserBaud=2400
 AutostartPrgMode=1

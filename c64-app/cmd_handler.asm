@@ -37,6 +37,7 @@ command_handler
  		bne .done
 
 		; BITMAP_STREAM_PTR = $5f40 - we've finished, reset for next command
+		;inc $d020
 		jsr command_handler_reset_for_next_command
  		rts
 

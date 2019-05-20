@@ -8,9 +8,13 @@ const logger = require('./logger');
 
 var list = [
   
+  // {
+  //   type: 'background-image',
+  //   url: '/Users/jeff/Downloads/IMG_0804.jpg'
+  // },
   {
-    type: 'background-image',
-    url: '/Users/jeff/IMG_0764.jpg'
+    type: 'tweet',
+    text: 'hello world'
   }
 
 ]
