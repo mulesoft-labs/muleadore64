@@ -99,11 +99,11 @@ command_handler_init_command
 .check_attract_screen
 	cmp #ATTRACT_SCREEN
 	bne .done
-	sta current_command
 	jsr screen_switch_vic_bank_0
 	jsr screen_enable_text_mode
 	jsr main_screen_enter
 	jsr main_screen_render_architecture
+	jsr command_handler_reset_for_next_command
 	rts
 
 .done

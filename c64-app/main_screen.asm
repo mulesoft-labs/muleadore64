@@ -9,8 +9,8 @@ title_text
 ;tweet_hashtag_1 !pet "Connected to MULESOFT #connect17 feed", 0
 
 tweet_hashtag_2 
-!pet "    tweet a message or a photo with ", 13, COLOR_GREEN
-!pet "     #tdx18 #c64", COLOR_LIGHT_BLUE, " to see it here!", 0
+!pet "       share your commodore selfie! ", 13, COLOR_GREEN
+!pet "            #mulesoft #c64", 0
 
 .str_banner !bin "resources/architecture.seq"
 !byte 0
