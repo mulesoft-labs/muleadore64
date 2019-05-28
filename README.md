@@ -19,8 +19,8 @@ Commodore 64 commercial from 1985: [Youtube](https://www.youtube.com/watch?v=ocn
 * `cd ~/muleadore64/raspberry-pi/serial_port`
 *  `npm install`
 * `cd ~/muleadore/c64-app`
-* `make build` to build binary
-* `make run` to run the emulator
+* `make` to build binary
+* `make run` to build + run the emulator
 * Congratulations!  You have now setup your machine as a Commodore64 demo emulator.  You can upload photos to the app directly at this URL (jpg only): http://c64-photo-ingest.cloudhub.io/static.
 
 Alternatively, you can hardcode an image in the `list` variable in `commandFetcher.js` (https://github.com/mulesoft-labs/muleadore64/blob/tdx-18/raspberry-pi/serial_port/commandFetcher.js#L12)
