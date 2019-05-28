@@ -14,7 +14,7 @@ Commodore 64 commercial from 1985: [Youtube](https://www.youtube.com/watch?v=ocn
 * Add this to your .bashrc: `export PATH=/Applications/Vice64/tools:$PATH`
 * Install ACME assembler: `brew install acme`
 * Install ImageMagick: `brew install imagemagick`
-* Install latest version of node
+* Install node: `brew install node`
 * Clone the commodore repo to the home dir: https://github.com/mulesoft-labs/muleadore64
 * `cd ~/muleadore64; git checkout tdx18`
 * `cd c64-app`
