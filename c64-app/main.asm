@@ -28,9 +28,12 @@ flash_screen_on_data !byte 0
 .end_of_command !byte 0
 .debug_output_offset !byte 0
 in_command !byte 0
+text !pet 13, "hello trailhead dx!", 0
 
 init
+	
 
+	
 	jsr screen_clear
 	
 	; disable BASIC rom
