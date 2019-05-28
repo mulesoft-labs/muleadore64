@@ -15,7 +15,7 @@ Commodore 64 commercial from 1985: [Youtube](https://www.youtube.com/watch?v=ocn
 * Install ACME assembler: `brew install acme`
 * Install ImageMagick: `brew install imagemagick`
 * Install node: `brew install node`
-* `cd ~/muleadore64; git checkout tdx18`
+* `cd ~/muleadore64; git checkout tdx-18`
 * `cd ~/muleadore64/raspberry-pi/serial_port`
 *  `npm install`
 * `cd ~/muleadore/c64-app`
