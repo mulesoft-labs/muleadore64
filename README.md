@@ -15,14 +15,12 @@ Commodore 64 commercial from 1985: [Youtube](https://www.youtube.com/watch?v=ocn
 * Install ACME assembler: `brew install acme`
 * Install ImageMagick: `brew install imagemagick`
 * Install node: `brew install node`
-* Clone the commodore repo to the home dir: https://github.com/mulesoft-labs/muleadore64
 * `cd ~/muleadore64; git checkout tdx18`
-* `cd c64-app`
-* `make build` to build binary
 * `cd ~/muleadore64/raspberry-pi/serial_port`
 *  `npm install`
 * `cd ~/muleadore/c64-app`
-* `make run`
+* `make build` to build binary
+* `make run` to run the emulator
 * Congratulations!  You have now setup your machine as a Commodore64 demo emulator.  You can upload photos to the app directly at this URL (jpg only): http://c64-photo-ingest.cloudhub.io/static.
 
 Alternatively, you can hardcode an image in the `list` variable in `commandFetcher.js` (https://github.com/mulesoft-labs/muleadore64/blob/tdx-18/raspberry-pi/serial_port/commandFetcher.js#L12)
