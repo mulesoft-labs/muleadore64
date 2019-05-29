@@ -4,14 +4,14 @@ MONITOR_CMD_OUTPUT=/tmp/monitor_commands
 VICE_MONITOR_COMMANDS=/tmp/vice_monitor_commands
 
 .PHONY: all
-all: 
+all:
 	@echo Building c64 binary...
 	@mkdir -p "$(BUILD_DIR)"
 	acme --outfile "$(BUILD_DIR)/app.prg" -l "$(BUILD_DIR)/labels.out" --format cbm --cpu 6510 main.asm
 	#pucrunch "$(BUILD_DIR)/app.prg" "$(BUILD_DIR)/app.prg"
 
 run: all
-	@/Applications/x64.app/Contents/MacOS/x64 -config vicerc "$(BUILD_DIR)/app.prg"
+	@/Applications/Vice64/x64.app/Contents/MacOS/x64 -config vicerc "$(BUILD_DIR)/app.prg"
 
 debug: all
 	@echo Writing vice monitor input file...

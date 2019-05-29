@@ -19,6 +19,16 @@ Commodore 64 commercial from 1985: [Youtube](https://www.youtube.com/watch?v=ocn
 * `cd ~/muleadore64/raspberry-pi/serial_port`
 *  `npm install`
 * `cd ~/muleadore/c64-app`
+* set these variables in your environment. Get twitter tokens from [here](https://developer.twitter.com/en/apps/12498349)
+    ```
+    export TWITTER_ACCESS_KEY=XXXX
+    export TWITTER_ACCESS_SECRET=XXX
+    export TWITTER_CONSUMER_KEY=XXXX
+    export TWITTER_CONSUMER_SECRET=XXX
+    export TWITTER_ENABLE=yes // If anything other than 'yes' we will not tweet
+    export TWITTER_COPY="text that will be tweeted with photo"
+    export CAPTURE_ARGS="-d 0 -w 0" // args to pass into screencapture
+    ```
 * `make` to build binary
 * `make run` to build + run the emulator
 * Congratulations!  You have now setup your machine as a Commodore64 demo emulator.  You can upload photos to the app directly at this URL (jpg only): http://c64-photo-ingest.cloudhub.io/static.

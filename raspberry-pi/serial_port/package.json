@@ -12,6 +12,7 @@
     "bluebird": "^3.3.5",
     "get-pixels": "^3.3.0",
     "request-promise": "^3.0.0",
-    "serialport": "^7.1.5"
+    "serialport": "^7.1.5",
+    "twitter": "^1.7.1"
   }
 }
